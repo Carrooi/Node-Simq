@@ -6,6 +6,10 @@
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git@bitbucket.org:sakren/simq.git"
+	},
 	"engines": {
 		"node": "*"
 	},
