@@ -1,0 +1,1 @@
+SimQ - simple require for javascript

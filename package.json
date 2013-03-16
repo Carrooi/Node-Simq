@@ -1,0 +1,19 @@
+{
+	"name": "SimQ",
+	"description": "Simple require for javascript",
+	"version": "0.0.1",
+	"author": {
+		"name": "David Kudera",
+		"email": "sakren@gmail.com"
+	},
+	"engines": {
+		"node": "*"
+	},
+	"main": "./main.js",
+	"bin": {
+		"simq": "./bin/simq"
+	},
+	"dependencies": {
+		"watch": "~0.6.0"
+	}
+}
