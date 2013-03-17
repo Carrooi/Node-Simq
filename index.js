@@ -1,6 +1,6 @@
 (function () {
 
-    var SimQ, s, argv;
+    var SimQ, s, argv, debug;
 
     SimQ = require('./lib/SimQ');
 
@@ -12,10 +12,12 @@
 		throw new Error('Do you want to watch or build application?');
 	}
 
+	debug = argv[3] && argv[3] === 'debug' ? true : false;
+
 	if (argv[2] === 'watch') {
-		s.watch();
+		s.watch(!debug);
 	} else if (argv[2] === 'build') {
-		s.build();
+		s.build(!debug);
 	} else {
 		throw new Error('Unknow action ' + argv[2] + '.');
 	}

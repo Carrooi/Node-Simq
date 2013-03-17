@@ -1,7 +1,7 @@
 {
 	"name": "simq",
 	"description": "Simple require for javascript",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
@@ -21,6 +21,7 @@
 		"simq": "./bin/simq"
 	},
 	"dependencies": {
-		"watch": "~0.6.0"
+		"watch": "~0.6.0",
+		"uglify-js": "~2.2.5"
 	}
 }

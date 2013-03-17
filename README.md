@@ -85,3 +85,11 @@ It is also very simple to tell the SimQ to watch your files for changes. This is
 $ cd /my/project/path
 $ simq watch
 ```
+
+## Compress result
+In default, SimQ automatically compress result javascript file, but sometimes (for example for debug reasons), you may want to see it uncompressed.
+This can be achieved by adding "debug" to build or watch command.
+
+```
+$ simq build debug
+```
