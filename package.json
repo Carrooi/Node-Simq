@@ -8,7 +8,9 @@
 	},
 	"keywords": [
 		"require",
-		"client"
+		"client",
+		"minify",
+		"compressor"
 	],
 	"repository": {
 		"type": "git",

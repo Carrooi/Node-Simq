@@ -9,7 +9,7 @@
 	argv = process.argv;
 
 	if (!argv[2]) {
-		throw new Error('Do you want to watch or build application?');
+		throw new Error('Do you want to watch or build application?');	// todo: needs better description
 	}
 
 	debug = argv[3] && argv[3] === 'debug' ? true : false;
