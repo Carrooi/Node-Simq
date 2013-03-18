@@ -1,4 +1,4 @@
-# SimQ - simple require for javascript
+# SimQ - simple require for javascript (client)
 
 ## Installing
 

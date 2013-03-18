@@ -1,13 +1,14 @@
 {
 	"name": "simq",
-	"description": "Simple require for javascript",
+	"description": "Simple require for javascript (client)",
 	"version": "0.1.1",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
 	},
 	"keywords": [
-		"require"
+		"require",
+		"client"
 	],
 	"repository": {
 		"type": "git",
