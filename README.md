@@ -29,7 +29,8 @@ The example below shows full configuration.
 	"modules": [
 		"./app/Application.js",
 		"./app/controllers/",
-		"./src/*.coffee"
+		"./src/*.coffee",
+		"./config/database.json"
 	],
 	"libs": {
 		"begin": [
@@ -44,9 +45,11 @@ The example below shows full configuration.
 
 Main section holds name of final file.
 
-Modules section is array with list of all your own modules. More informations about how to properly create module is bellow.
+Modules section is array with list of all your own modules. More information about how to properly create module is bellow.
 There are three ways how to define your modules. You can specify every module manually, or you can write just path to base dirs with slash in the end - this will load all modules in this folder recursively. The last possible way is to load everything from specified folder, but only files with given extension.
 Last section defines other libraries and the place where they should be inserted.
+
+In this example you can also see all supported files: js, coffee and json.
 
 ## Module
 
