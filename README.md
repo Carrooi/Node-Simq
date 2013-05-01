@@ -62,7 +62,7 @@ Every module is simple javascript file. Here is example for hello word applicati
 
 (function() {
 
-	return function() {
+	module.exports = function() {
 		alert('hello word');
 	};
 
@@ -90,7 +90,7 @@ If your are using coffee script, everything will be even much easier.
 
 # file app/helloWord.coffee
 
-return -> alert 'hello word'
+module.exports -> alert 'hello word'
 ```
 As you can see, module definition is just a class (or any other code) and return statement. This is done because of coffee-script itself, which automatically wrap all your code into it's own scope.
 
@@ -107,5 +107,5 @@ In default, SimQ automatically compress result javascript file, but sometimes (f
 This can be achieved by adding "debug" to build or watch command.
 
 ```
-$ simq build debug
+$ simq build --debug
 ```
