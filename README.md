@@ -90,7 +90,7 @@ If your are using coffee script, everything will be even much easier.
 
 # file app/helloWord.coffee
 
-module.exports -> alert 'hello word'
+module.exports = -> alert 'hello word'
 ```
 As you can see, module definition is just a class (or any other code) and return statement. This is done because of coffee-script itself, which automatically wrap all your code into it's own scope.
 
