@@ -76,7 +76,9 @@ Every module is simple javascript file. Here is example for hello word applicati
 
 <script type="text/javascript" src="Application.js"></script>
 <script type="text/javascript">
-	require('app/helloWord')();
+	var hello = require('app/helloWord');
+
+	hello();
 </script>
 ```
 
