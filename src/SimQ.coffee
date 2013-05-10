@@ -1,5 +1,6 @@
 fs = require 'fs'
 coffee = require 'coffee-script'
+eco = require 'eco'
 watch = require 'watch'
 
 class SimQ
@@ -11,7 +12,7 @@ class SimQ
 
 	configPath: 'setup.json'
 
-	supported: ['js', 'coffee', 'json']
+	supported: ['js', 'coffee', 'json', 'eco']
 
 	debug: false
 
@@ -111,6 +112,7 @@ class SimQ
 
 		switch extension
 			when 'coffee' then file = coffee.compile(file)
+			when 'eco' then file = eco.precompile(file)
 
 		file = file.replace(/^\s+|\s+$/g, '')
 

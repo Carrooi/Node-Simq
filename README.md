@@ -30,6 +30,7 @@ The example below shows full configuration.
 		"./app/Application.js",
 		"./app/controllers/",
 		"./src/*.coffee",
+		"./views/*.eco",
 		"./config/database.json"
 	],
 	"libs": {
@@ -49,7 +50,7 @@ Modules section is array with list of all your own modules. More information abo
 There are three ways how to define your modules. You can specify every module manually, or you can write just path to base dirs with slash in the end - this will load all modules in this folder recursively. The last possible way is to load everything from specified folder, but only files with given extension.
 Last section defines other libraries and the place where they should be inserted.
 
-In this example you can also see all supported files: js, coffee and json.
+In this example you can also see all supported files: js, coffee, json and eco for templating.
 
 ## Module
 
@@ -95,6 +96,21 @@ If your are using coffee script, everything will be even much easier.
 module.exports = -> alert 'hello word'
 ```
 As you can see, module definition is just a class (or any other code) and return statement. This is done because of coffee-script itself, which automatically wrap all your code into it's own scope.
+
+## Templating
+SimQ includes eco template engine, so you can really simply require also your templates [ECO](https://github.com/sstephenson/eco#eco-embedded-coffeescript-templates).
+
+Example of usage:
+```
+#!javascript
+
+var data = {
+	items: ['first', 'second', 'third']
+}
+
+$(require('views/menu')(data).appendTo('body')
+
+```
 
 ## Watching for changes
 It is also very simple to tell the SimQ to watch your files for changes. This is much easier than running 'simq build' after each change in your code.
