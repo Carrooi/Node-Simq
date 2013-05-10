@@ -98,7 +98,7 @@ module.exports = -> alert 'hello word'
 As you can see, module definition is just a class (or any other code) and return statement. This is done because of coffee-script itself, which automatically wrap all your code into it's own scope.
 
 ## Templating
-SimQ includes eco template engine, so you can really simply require also your templates [ECO](https://github.com/sstephenson/eco#eco-embedded-coffeescript-templates).
+SimQ includes eco template engine, so you can really simply require also your templates. Eco documentation: [link](https://github.com/sstephenson/eco#eco-embedded-coffeescript-templates).
 
 Example of usage:
 ```
@@ -108,7 +108,7 @@ var data = {
 	items: ['first', 'second', 'third']
 }
 
-$(require('views/menu')(data).appendTo('body')
+$(require('views/menu')(data)).appendTo('body')
 
 ```
 
