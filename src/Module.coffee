@@ -3,9 +3,12 @@ class Module
 
 	modules: null
 
+	cache: null
+
 
 	constructor: ->
 		@modules = {}
+		@cache = {}
 
 
 	register: (path, lib) ->
@@ -29,12 +32,16 @@ class Module
 		if typeof @modules[path] == 'string'
 			path = @modules[path]
 
-		module =
-			exports: null
+		if typeof @cache[path] == 'undefined'
+			module =
+				exports: {}
 
-		result = @modules[path].apply(@, [module])
+			@modules[path].apply(@, [module])
 
-		return if module.exports == null then result else module.exports
+			@cache[path] = module
+
+		return @cache[path].exports
+
 
 
 window._module = new Module
