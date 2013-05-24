@@ -65,11 +65,24 @@ class SimQ
 				result.push(@loadLibrary(@basePath + '/' + lib))
 
 		if config.aliases
+			aliases = new Array
 			for alias, module of config.aliases
 				if @modules.indexOf(module) == -1
 					throw new Error 'Module ' + module + ' was not found.'
 
-				result.push('this._module.addAlias(\'' + alias + '\', \'' + module + '\');')
+				aliases.push('this._module.addAlias(\'' + alias + '\', \'' + module + '\');')
+
+			result.push(aliases.join('\n'))
+
+		if config.run
+			run = new Array
+			for module in config.run
+				if @modules.indexOf(module) == -1
+					throw new Error 'Module ' + module + ' was not found.'
+
+				run.push('this._module.require(\'' + module + '\');')
+
+			result.push(run.join('\n'))
 
 		result = result.join('\n\n')
 
