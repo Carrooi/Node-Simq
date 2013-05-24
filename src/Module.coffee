@@ -13,9 +13,21 @@ class Module
 		return @
 
 
+	addAlias: (alias, module) ->
+		if typeof @modules[module] == 'undefined'
+			throw new Error 'Module ' + module + ' was not found.'
+
+		@modules[alias] = module
+
+		return @
+
+
 	require: (path) ->
 		if typeof @modules[path] == 'undefined'
 			throw new Error 'Module ' + path + ' was not found.'
+
+		if typeof @modules[path] == 'string'
+			path = @modules[path]
 
 		module =
 			exports: null

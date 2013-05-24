@@ -16,6 +16,8 @@ class SimQ
 
 	debug: false
 
+	modules: []
+
 
 	build: ->
 		fs.writeFileSync(@basePath + '/' + @getConfig().main, @parse())
@@ -62,6 +64,13 @@ class SimQ
 			for lib in config.libs.end
 				result.push(@loadLibrary(@basePath + '/' + lib))
 
+		if config.aliases
+			for alias, module of config.aliases
+				if @modules.indexOf(module) == -1
+					throw new Error 'Module ' + module + ' was not found.'
+
+				result.push('this._module.addAlias(\'' + alias + '\', \'' + module + '\');')
+
 		result = result.join('\n\n')
 
 		return result
@@ -99,6 +108,8 @@ class SimQ
 
 		name = name.replace(/^(\/)?(.\/)*/, '')
 		name = name.replace(supported, '')
+
+		@modules.push(name)
 
 		return 'this._module.register(\'' + name + '\',\n\t(function(module) {\n\t\treturn ' + lib + '\n\t})\n);'
 
