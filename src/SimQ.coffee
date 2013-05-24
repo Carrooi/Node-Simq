@@ -112,6 +112,8 @@ class SimQ
 	loadModule: (name) ->
 		lib = @loadLibrary(name)
 
+		extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+
 		lib = lib.replace(/\n/g, '\n\t\t')
 		lib = '\t' + lib
 
@@ -125,7 +127,11 @@ class SimQ
 
 		@modules.push(name)
 
-		return 'this._module.register(\'' + name + '\',\n\t(function(module) {\n\t\treturn ' + lib + '\n\t})\n);'
+		switch extension
+			when 'js', 'coffee' then content = 'return ' + lib
+			when 'json', 'eco' then content = 'module.exports = ' + lib
+
+		return 'this._module.register(\'' + name + '\',\n\t(function(module) {\n\t\t' + content + '\n\t})\n);'
 
 
 	loadLibrary: (path) ->
