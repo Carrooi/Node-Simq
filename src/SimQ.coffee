@@ -70,6 +70,7 @@ class SimQ
 				if @modules.indexOf(module) == -1
 					throw new Error 'Module ' + module + ' was not found.'
 
+				@modules.push(alias)
 				aliases.push('this._module.addAlias(\'' + alias + '\', \'' + module + '\');')
 
 			result.push(aliases.join('\n'))

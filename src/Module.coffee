@@ -36,7 +36,7 @@ class Module
 			module =
 				exports: {}
 
-			@modules[path].apply(@, [module])
+			@modules[path].apply(window, [module])
 
 			@cache[path] = module
 
