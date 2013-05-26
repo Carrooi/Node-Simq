@@ -34,9 +34,14 @@ class Module
 
 		if typeof @cache[path] == 'undefined'
 			module =
+				id: path
+				cached: true
 				exports: {}
 
 			@modules[path].apply(window, [module])
+
+			if module.cached == false
+				return module.exports
 
 			@cache[path] = module
 
