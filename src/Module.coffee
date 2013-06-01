@@ -1,54 +1,41 @@
-class Module
+if !@require
 
 
-	modules: null
+	modules = {}
 
-	cache: null
-
-
-	constructor: ->
-		@modules = {}
-		@cache = {}
+	cache = {}
 
 
-	register: (path, lib) ->
-		@modules[path] = lib
-		return @
+	require = (name) ->
+		if typeof modules[name] == 'undefined'
+			throw new Error 'Module ' + name + ' was not found.'
 
+		if typeof modules[name] == 'string'
+			name = modules[name]
 
-	addAlias: (alias, module) ->
-		if typeof @modules[module] == 'undefined'
-			throw new Error 'Module ' + module + ' was not found.'
-
-		@modules[alias] = module
-
-		return @
-
-
-	require: (path) ->
-		if typeof @modules[path] == 'undefined'
-			throw new Error 'Module ' + path + ' was not found.'
-
-		if typeof @modules[path] == 'string'
-			path = @modules[path]
-
-		if typeof @cache[path] == 'undefined'
+		if typeof cache[name] == 'undefined'
 			module =
-				id: path
+				id: name
 				cached: true
 				exports: {}
 
-			@modules[path].apply(window, [module])
+			modules[name].apply(window, [module.exports, (name) =>
+				return @require(name)
+			, module])
 
 			if module.cached == false
 				return module.exports
 
-			@cache[path] = module
+			cache[name] = module
 
-		return @cache[path].exports
+		return cache[name].exports
 
 
+	@require = (name) => require(name)
 
-window._module = new Module
-window.require = (path) ->
-	return window._module.require(path)
+	@require.define = (bundle) =>
+		for name, module of bundle
+			modules[name] = module
+		return
+
+return @require.define

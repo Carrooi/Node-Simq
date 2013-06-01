@@ -38,42 +38,43 @@ class SimQ
 		result = new Array
 		config = @getConfig()
 
-		result.push(@loadLibrary(__dirname + '/Module.js'))
-
 		if config.libs && config.libs.begin
 			for lib in config.libs.begin
 				result.push(@loadLibrary(@basePath + '/' + lib))
 
-		if config.modules
-			supported = new RegExp('\\*\\.(' + @supported.join('|') + ')$', 'i')
+		if config.modules || config.aliases
+			modules = new Array
 
-			for name in config.modules
-				ext = name.match(supported)
+			if config.modules
+				supported = new RegExp('\\*\\.(' + @supported.join('|') + ')$', 'i')
 
-				if ext
-					extension = ext[1]
-					name = name.replace(supported, '')
+				for name in config.modules
+					ext = name.match(supported)
 
-				if name.substr(name.length - 1) == '/'
-					result = result.concat(@loadModules(@basePath + '/' + name, extension))
-					extension = null
-				else
-					result.push(@loadModule(@basePath + '/' + name))
+					if ext
+						extension = ext[1]
+						name = name.replace(supported, '')
+
+					if name.substr(name.length - 1) == '/'
+						modules = modules.concat(@loadModules(@basePath + '/' + name, extension))
+						extension = null
+					else
+						modules.push(@loadModule(@basePath + '/' + name))
+
+			if config.aliases
+				for alias, module of config.aliases
+					if @modules.indexOf(module) == -1
+						throw new Error 'Module ' + module + ' was not found.'
+
+					@modules.push(alias)
+					modules.push('\'' + alias + '\': \'' + module + '\'')
+
+			module = @loadLibrary(__dirname + '/Module.js').replace(/\s+$/, '').replace(/;$/, '')
+			result.push(module + '({' + modules.join(',\n') + '\n});')
 
 		if config.libs && config.libs.end
 			for lib in config.libs.end
 				result.push(@loadLibrary(@basePath + '/' + lib))
-
-		if config.aliases
-			aliases = new Array
-			for alias, module of config.aliases
-				if @modules.indexOf(module) == -1
-					throw new Error 'Module ' + module + ' was not found.'
-
-				@modules.push(alias)
-				aliases.push('this._module.addAlias(\'' + alias + '\', \'' + module + '\');')
-
-			result.push(aliases.join('\n'))
 
 		if config.run
 			run = new Array
@@ -81,7 +82,7 @@ class SimQ
 				if @modules.indexOf(module) == -1
 					throw new Error 'Module ' + module + ' was not found.'
 
-				run.push('this._module.require(\'' + module + '\');')
+				run.push('this.require(\'' + module + '\');')
 
 			result.push(run.join('\n'))
 
@@ -131,7 +132,7 @@ class SimQ
 			when 'js', 'coffee' then content = 'return ' + lib
 			when 'json', 'eco' then content = 'module.exports = ' + lib
 
-		return 'this._module.register(\'' + name + '\',\n\t(function(module) {\n\t\t' + content + '\n\t})\n);'
+		return '\'' + name + '\': function(exports, require, module) {\n\t\t' + content + '\n\t}'
 
 
 	loadLibrary: (path) ->
