@@ -26,7 +26,7 @@ class SimQ
 
 
 	build: ->
-		fs.writeFileSync(@basePath + '/' + @getConfig().main, @parse())
+		fs.writeFileSync(@basePath + '/' + @getConfig().application, @parse())
 
 		return @
 
@@ -103,6 +103,10 @@ class SimQ
 				throw new Error 'Config file setup.json was not found.'
 
 			@config = JSON.parse(fs.readFileSync(@basePath + '/' + @configPath))
+
+			if @config.main		# back compatibility
+				@config.application = @config.main
+				delete @config.main
 
 		return @config
 
