@@ -12,7 +12,7 @@ class Parser
 	constructor: (@loader, @basePath) ->
 
 
-	parseApplication: (section) ->
+	parse: (section) ->
 		result = new Array
 
 		if section.libs && section.libs.begin
