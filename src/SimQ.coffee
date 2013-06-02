@@ -3,6 +3,7 @@ coffee = require 'coffee-script'
 eco = require 'eco'
 watch = require 'watch'
 _path = require 'path'
+Loader = require './Loader'
 
 class SimQ
 
@@ -13,11 +14,15 @@ class SimQ
 
 	configPath: 'setup.json'
 
-	supported: ['js', 'coffee', 'json', 'eco']
-
 	debug: false
 
 	modules: []
+
+	loader: null
+
+
+	constructor: ->
+		@loader = new Loader @
 
 
 	build: ->
@@ -41,26 +46,21 @@ class SimQ
 
 		if config.libs && config.libs.begin
 			for lib in config.libs.begin
-				result.push(@loadLibrary(@basePath + '/' + lib))
+				result.push(@loader.loadFile(@basePath + '/' + lib))
 
 		if config.modules || config.aliases
 			modules = new Array
 
 			if config.modules
-				supported = new RegExp('\\*\\.(' + @supported.join('|') + ')$', 'i')
+				for path in config.modules
+					ext = _path.extname(path)
+					name = path.replace(new RegExp('\\*?' + ext + '$'), '')
+					ext = if ext == '' then null else ext.substring(1)
 
-				for name in config.modules
-					ext = name.match(supported)
-
-					if ext
-						extension = ext[1]
-						name = name.replace(supported, '')
-
-					if name.substr(name.length - 1) == '/'
-						modules = modules.concat(@loadModules(@basePath + '/' + name, extension))
-						extension = null
+					if name.substring(name.length - 1) == '/'
+						modules = modules.concat(@loader.loadModules(@basePath + '/' + name, ext))
 					else
-						modules.push(@loadModule(@basePath + '/' + name))
+						modules.push(@loader.loadModule(@basePath + '/' + path))
 
 			if config.aliases
 				for alias, module of config.aliases
@@ -70,12 +70,12 @@ class SimQ
 					@modules.push(alias)
 					modules.push('\'' + alias + '\': \'' + module + '\'')
 
-			module = @loadLibrary(__dirname + '/Module.js').replace(/\s+$/, '').replace(/;$/, '')
+			module = @loader.loadFile(__dirname + '/Module.js').replace(/\s+$/, '').replace(/;$/, '')
 			result.push(module + '({' + modules.join(',\n') + '\n});')
 
 		if config.libs && config.libs.end
 			for lib in config.libs.end
-				result.push(@loadLibrary(@basePath + '/' + lib))
+				result.push(@loader.loadFile(@basePath + '/' + lib))
 
 		if config.run
 			run = new Array
@@ -92,66 +92,9 @@ class SimQ
 		return result
 
 
-	loadModules: (dir, extension = null) ->
-		files = fs.readdirSync(dir)
-		result = new Array
-
-		for name in files
-			name = dir + name
-			stats = fs.statSync(name)
-
-			if stats.isFile() && name.substring(name.length - 1) != '~'
-				if extension
-					continue if name.substring(name.lastIndexOf('.') + 1).toLowerCase() != extension
-
-				result.push(@loadModule(name))
-			else if stats.isDirectory()
-				result = result.concat(@loadModules(name + '/', extension))
-
-		return result
-
-
-	loadModule: (name) ->
-		lib = @loadLibrary(name)
-
-		extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-
-		lib = lib.replace(/\n/g, '\n\t\t')
-		lib = '\t' + lib
-
-		if name.substr(0, @basePath.length) == @basePath
-			name = name.substring(@basePath.length)
-
-		supported = new RegExp('\\.(' + @supported.join('|') + ')$', 'i')
-
-		name = name.replace(/^(\/)?(.\/)*/, '')
-		name = name.replace(supported, '')
-
-		@modules.push(name)
-
-		switch extension
-			when 'js', 'coffee' then content = 'return ' + lib
-			when 'json', 'eco' then content = 'module.exports = ' + lib
-
-		return '\'' + name + '\': function(exports, require, module) {\n\t\t' + content + '\n\t}'
-
-
-	loadLibrary: (path) ->
-		path = _path.resolve(path)
-
-		extension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
-		if @supported.indexOf(extension) == -1
-			return ''
-
-		file = fs.readFileSync(path).toString()
-
-		switch extension
-			when 'coffee' then file = coffee.compile(file, filename: path)
-			when 'eco' then file = eco.precompile(file)
-
-		file = file.replace(/^\s+|\s+$/g, '')
-
-		return file
+	getModuleName: (path) ->
+		path = _path.normalize(path)
+		return path.replace(new RegExp(_path.extname(path) + '$'), '')
 
 
 	getConfig: ->
