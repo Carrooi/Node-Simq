@@ -62,12 +62,19 @@ class Parser
 
 	parseStyles: (path, fn) ->
 		path = _path.resolve(path)
-		file = fs.readFileSync(path, 'utf8').toString()
+		file = fs.readFileSync(path).toString()
 
 		options =
-			compress: !@simq.debug
+			paths: [_path.dirname(path)]
+			optimization: 1
+			filename: path
+			rootpath: ''
+			relativeUrls: false
+			strictImports: false
 
-		less.render(file, options, (e, content) -> fn(content) )
+		less.render(file, options, (e, content) ->
+			fn(content)
+		)
 
 		return @
 
