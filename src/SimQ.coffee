@@ -23,7 +23,7 @@ class SimQ
 
 
 	build: ->
-		fs.writeFileSync(@basePath + '/' + @getConfig().application, @parser.parse(@getConfig()))
+		fs.writeFileSync(@basePath + '/' + @getConfig().application, @parser.parseApplication(@getConfig()))
 
 		return @
 
