@@ -2,6 +2,7 @@ fs = require 'fs'
 coffee = require 'coffee-script'
 eco = require 'eco'
 watch = require 'watch'
+_path = require 'path'
 
 class SimQ
 
@@ -136,6 +137,8 @@ class SimQ
 
 
 	loadLibrary: (path) ->
+		path = _path.resolve(path)
+
 		extension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
 		if @supported.indexOf(extension) == -1
 			return ''
@@ -143,7 +146,7 @@ class SimQ
 		file = fs.readFileSync(path).toString()
 
 		switch extension
-			when 'coffee' then file = coffee.compile(file)
+			when 'coffee' then file = coffee.compile(file, filename: path)
 			when 'eco' then file = eco.precompile(file)
 
 		file = file.replace(/^\s+|\s+$/g, '')
