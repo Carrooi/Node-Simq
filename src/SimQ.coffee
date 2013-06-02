@@ -26,7 +26,8 @@ class SimQ
 		config = @getConfig()
 
 		for name, pckg of config.packages
-			fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg))
+			if pckg.application
+				fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg))
 
 			if pckg.style && pckg.style.in && pckg.style.out
 				((pckg) =>
