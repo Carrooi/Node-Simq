@@ -36,8 +36,6 @@ class Loader
 		lib = @loadFile(path).replace(/\n/g, '\n\t\t')
 		name = @simq.getModuleName(path)
 
-		@simq.modules.push(name)
-
 		lib = @compilers[ext](lib)
 
 		return '\'' + name + '\': function(exports, require, module) {\n\t\t' + lib + '\n\t}'
