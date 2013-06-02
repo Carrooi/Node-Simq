@@ -1,15 +1,19 @@
 Loader = require './Loader'
 _path = require 'path'
+less = require 'less'
+fs = require 'fs'
 
 class Parser
 
 
-	basePath: null
+	simq: null
 
 	loader: null
 
+	basePath: null
 
-	constructor: (@loader, @basePath) ->
+
+	constructor: (@simq, @loader, @basePath) ->
 
 
 	parseApplication: (section) ->
@@ -54,6 +58,18 @@ class Parser
 		result = result.join('\n\n')
 
 		return result
+
+
+	parseStyles: (path, fn) ->
+		path = _path.resolve(path)
+		file = fs.readFileSync(path, 'utf8').toString()
+
+		options =
+			compress: !@simq.debug
+
+		less.render(file, options, (e, content) -> fn(content) )
+
+		return @
 
 
 module.exports = Parser

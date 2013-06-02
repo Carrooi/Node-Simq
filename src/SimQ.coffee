@@ -19,11 +19,18 @@ class SimQ
 
 
 	constructor: ->
-		@parser = new Parser(new Loader(@), @basePath)
+		@parser = new Parser(@, new Loader(@), @basePath)
 
 
 	build: ->
-		fs.writeFileSync(@basePath + '/' + @getConfig().application, @parser.parseApplication(@getConfig()))
+		config = @getConfig()
+
+		fs.writeFileSync(@basePath + '/' + config.application, @parser.parseApplication(config))
+
+		if config.style && config.style.in && config.style.out
+			@parser.parseStyles(config.style.in, (content) =>
+				fs.writeFileSync(@basePath + '/' + config.style.out, content)
+			)
 
 		return @
 

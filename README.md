@@ -26,6 +26,10 @@ The example below shows full configuration.
 
 {
 	"application": "./Application.js",
+	"style": {
+		"in": "./css/style.less",
+		"out": "./css/style.css"
+	}
 	"modules": [
 		"./app/Application.js",
 		"./app/controllers/",
@@ -52,6 +56,8 @@ The example below shows full configuration.
 ```
 
 Application section holds name of final file.
+
+SimQ can also compile you styles written in less css framework.
 
 Modules section is array with list of all your own modules. More information about how to properly create module is bellow.
 There are three ways how to define your modules. You can specify every module manually, or you can write just path to base dirs with slash in the end - this will load all modules in this folder recursively. The last possible way is to load everything from specified folder, but only files with given extension.
