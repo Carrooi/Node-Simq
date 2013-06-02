@@ -70,6 +70,28 @@ Last section defines other libraries and the place where they should be inserted
 
 In this example you can also see all supported files: js, coffee, json and eco for templating.
 
+## Packages
+
+Another way of defining your modules, is using packages. This is useful when you want to split your application to
+some independent packages (eg. admin application, frontend application).
+
+Just simply add "packages" section with names of your packages. The rest of configuration of each package is the same like above.
+
+```
+#!json
+
+{
+	"packages": {
+		"admin": {
+
+		},
+		"frontend": {
+
+		}
+	}
+}
+```
+
 ## Module
 
 Every module is simple javascript file. Here is example for hello word application.

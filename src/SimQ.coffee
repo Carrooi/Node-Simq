@@ -25,12 +25,15 @@ class SimQ
 	build: ->
 		config = @getConfig()
 
-		fs.writeFileSync(@basePath + '/' + config.application, @parser.parseApplication(config))
+		for name, pckg of config.packages
+			fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg))
 
-		if config.style && config.style.in && config.style.out
-			@parser.parseStyles(config.style.in, (content) =>
-				fs.writeFileSync(@basePath + '/' + config.style.out, content)
-			)
+			if pckg.style && pckg.style.in && pckg.style.out
+				((pckg) =>
+					@parser.parseStyles(pckg.style.in, (content) =>
+						fs.writeFileSync(@basePath + '/' + pckg.style.out, content)
+					)
+				)(pckg)
 
 		return @
 
@@ -60,6 +63,12 @@ class SimQ
 			if @config.main		# back compatibility
 				@config.application = @config.main
 				delete @config.main
+
+			if !@config.packages
+				newConfig =
+					packages:
+						__main__: @config
+				@config = newConfig
 
 		return @config
 
