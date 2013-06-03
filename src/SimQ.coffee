@@ -3,6 +3,7 @@ watch = require 'watch'
 _path = require 'path'
 Loader = require './Loader'
 Parser = require './Parser'
+Config = require './Config'
 
 class SimQ
 
@@ -20,10 +21,11 @@ class SimQ
 
 	constructor: ->
 		@parser = new Parser(@, new Loader(@), @basePath)
+		@config = new Config(@basePath + '/' + @configPath)
 
 
 	build: ->
-		config = @getConfig()
+		config = @config.load()
 
 		for name, pckg of config.packages
 			if pckg.application
@@ -52,26 +54,6 @@ class SimQ
 	getModuleName: (path) ->
 		path = _path.normalize(path)
 		return path.replace(new RegExp(_path.extname(path) + '$'), '')
-
-
-	getConfig: ->
-		if @config == null
-			if not fs.existsSync(@basePath + '/' + @configPath)
-				throw new Error 'Config file setup.json was not found.'
-
-			@config = JSON.parse(fs.readFileSync(@basePath + '/' + @configPath))
-
-			if @config.main		# back compatibility
-				@config.application = @config.main
-				delete @config.main
-
-			if !@config.packages
-				newConfig =
-					packages:
-						__main__: @config
-				@config = newConfig
-
-		return @config
 
 
 module.exports = SimQ
