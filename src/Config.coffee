@@ -7,6 +7,30 @@ class Config
 
 	data: null
 
+	defaults:
+		packages: {}
+		include: null
+		modules: []
+		aliases: {}
+		run: []
+		libs:
+			begin: {}
+			end: {}
+
+	defaultsPackage:
+		include: null
+		application: null
+		style:
+			in: null
+			out: null
+		modules: []
+		aliases: {}
+		run: []
+		libs:
+			begin: {}
+			end: {}
+
+
 
 	constructor: (@path) ->
 
