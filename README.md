@@ -22,8 +22,6 @@ $ simq build
 The only thing what SimQ needs for run, is setup.json file, which contains configuration for your application.
 The example below shows full configuration.
 ```
-#!json
-
 {
 	"application": "./Application.js",
 	"style": {
@@ -78,8 +76,6 @@ some independent packages (eg. admin application, frontend application).
 Just simply add "packages" section with names of your packages. The rest of configuration of each package is the same like above.
 
 ```
-#!json
-
 {
 	"packages": {
 		"admin": {
@@ -97,8 +93,6 @@ Just simply add "packages" section with names of your packages. The rest of conf
 Every module is simple javascript file. Here is example for hello word application.
 
 ```
-#!javascript
-
 // file app/helloWord.js
 
 (function() {
@@ -113,8 +107,6 @@ Every module is simple javascript file. Here is example for hello word applicati
 ## Using module
 
 ```
-#!html
-
 <script type="text/javascript" src="Application.js"></script>
 <script type="text/javascript">
 	var hello = require('app/helloWord');
@@ -129,8 +121,6 @@ You can notice that in require, we are not using any file extension - just like 
 If your are using coffee script, everything will be even much easier.
 
 ```
-#!coffee-script
-
 # file app/helloWord.coffee
 
 module.exports = -> alert 'hello word'
@@ -142,8 +132,6 @@ SimQ includes eco template engine, so you can really simply require also your te
 
 Example of usage:
 ```
-#!javascript
-
 var data = {
 	items: ['first', 'second', 'third']
 }
