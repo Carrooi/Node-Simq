@@ -137,7 +137,6 @@ var data = {
 }
 
 $(require('views/menu')(data)).appendTo('body')
-
 ```
 
 ## Watching for changes
