@@ -9,13 +9,6 @@ class Config
 
 	defaults:
 		packages: {}
-		include: null
-		modules: []
-		aliases: {}
-		run: []
-		libs:
-			begin: {}
-			end: {}
 
 	defaultsPackage:
 		include: null
