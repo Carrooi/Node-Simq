@@ -88,6 +88,30 @@ Just simply add "packages" section with names of your packages. The rest of conf
 }
 ```
 
+If you have got several similar packages, you can move same things from these packages to independent json config file
+and then, you will be able to use include keyword with path to this "base" config.
+
+```
+{
+	"packages": {
+		"admin": {
+			"application": "./public/admin.js",
+			"include": "./config/base.json",
+			"modules": [
+				"./app/admin/*coffee"
+			]
+		},
+		"frontend": {
+			"application": "./public/front.js",
+            "include": "./config/base.json",
+			"modules": [
+				"./app/front/*coffee"
+			]
+		}
+	}
+}
+```
+
 ## Module
 
 Every module is simple javascript file. Here is example for hello word application.
