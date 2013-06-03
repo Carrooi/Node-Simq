@@ -24,4 +24,6 @@ if argv.help
 switch argv.command
 	when 'build' then s.build()
 	when 'watch' then s.watch()
-	else console.log(s.parse())
+	else
+		optimist.showHelp()
+		process.exit()
