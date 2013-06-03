@@ -8,6 +8,7 @@ argv = optimist.usage([
 		'	--help: show this help'
 	].join('\n'))
 	.alias('d', 'debug').describe('d', 'all compilations use debug mode')
+	.alias('c', 'config').describe('c', 'set custom config file')
 	.argv
 
 argv.command = argv._[0]
@@ -16,6 +17,10 @@ argv.targets = argv._[1..]
 s = new SimQ
 
 s.debug = argv.debug and true or false
+
+if argv.config
+	s.configPath = argv.config
+	s.config.path = argv.config
 
 if argv.help
 	optimist.showHelp()

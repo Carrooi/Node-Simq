@@ -20,7 +20,7 @@ $ simq build
 ## Configuration - setup.json
 
 The only thing what SimQ needs for run, is setup.json file, which contains configuration for your application.
-The example below shows full configuration.
+The example below shows full configuration. Default file name is setup.json, but you can change it with --config param.
 ```
 {
 	"application": "./Application.js",
