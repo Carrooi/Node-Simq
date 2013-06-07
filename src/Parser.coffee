@@ -2,6 +2,7 @@ Loader = require './Loader'
 _path = require 'path'
 less = require 'less'
 fs = require 'fs'
+Uglify = require 'uglify-js'
 
 class Parser
 
@@ -16,7 +17,7 @@ class Parser
 	constructor: (@simq, @loader, @basePath) ->
 
 
-	parseApplication: (section) ->
+	parseApplication: (section, minify = true) ->
 		result = new Array
 
 		if section.libs && section.libs.begin
@@ -57,10 +58,12 @@ class Parser
 
 		result = result.join('\n\n')
 
+		if minify then result = Uglify.minify(result, fromString: true).code
+
 		return result
 
 
-	parseStyles: (path, fn) ->
+	parseStyles: (path, minify = true, fn) ->
 		path = _path.resolve(path)
 		file = fs.readFileSync(path).toString()
 
@@ -71,6 +74,7 @@ class Parser
 			rootpath: ''
 			relativeUrls: false
 			strictImports: false
+			compress: minify
 
 		less.render(file, options, (e, content) ->
 			fn(content)
