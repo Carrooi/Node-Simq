@@ -23,32 +23,36 @@ The only thing what SimQ needs for run, is setup.json file, which contains confi
 The example below shows full configuration. Default file name is setup.json, but you can change it with --config param.
 ```
 {
-	"application": "./Application.js",
-	"style": {
-		"in": "./css/style.less",
-		"out": "./css/style.css"
-	}
-	"modules": [
-		"./app/Application.js",
-		"./app/controllers/",
-		"./src/*.coffee",
-		"./views/*.eco",
-		"./config/database.json",
-		"./lib/Spine/*.coffee"
-	],
-	"aliases": {
-		"spine": "lib/Spine/spine"
-	},
-	"run": [
-		"lib/Spine/ajax"
-	],
-	"libs": {
-		"begin": [
-			"./lib/jquery.js"
-		],
-		"end": [
-			"./lib/ckeditor.js"
-		]
+	"packages": {
+		"application": {
+			"application": "./Application.js",
+			"style": {
+				"in": "./css/style.less",
+				"out": "./css/style.css"
+			}
+			"modules": [
+				"./app/Application.js",
+				"./app/controllers/",
+				"./src/*.coffee",
+				"./views/*.eco",
+				"./config/database.json",
+				"./lib/Spine/*.coffee"
+			],
+			"aliases": {
+				"spine": "lib/Spine/spine"
+			},
+			"run": [
+				"lib/Spine/ajax"
+			],
+			"libs": {
+				"begin": [
+					"./lib/jquery.js"
+				],
+				"end": [
+					"./lib/ckeditor.js"
+				]
+			}
+		}
 	}
 }
 ```
@@ -70,10 +74,8 @@ In this example you can also see all supported files: js, coffee, json and eco f
 
 ## Packages
 
-Another way of defining your modules, is using packages. This is useful when you want to split your application to
-some independent packages (eg. admin application, frontend application).
-
-Just simply add "packages" section with names of your packages. The rest of configuration of each package is the same like above.
+In example above, we have got just one package called "application", but you can create as many independent packages,
+as you wish.
 
 ```
 {
@@ -88,29 +90,10 @@ Just simply add "packages" section with names of your packages. The rest of conf
 }
 ```
 
-If you have got several similar packages, you can move same things from these packages to independent json config file
-and then, you will be able to use include keyword with path to this "base" config.
+## Including other config files
 
-```
-{
-	"packages": {
-		"admin": {
-			"application": "./public/admin.js",
-			"include": "./config/base.json",
-			"modules": [
-				"./app/admin/*coffee"
-			]
-		},
-		"frontend": {
-			"application": "./public/front.js",
-            "include": "./config/base.json",
-			"modules": [
-				"./app/front/*coffee"
-			]
-		}
-	}
-}
-```
+Look to the full documentation of [Easy Configuration](https://npmjs.org/package/easy-configuration#readme),
+which is used for configuring SimQ.
 
 ## Module
 

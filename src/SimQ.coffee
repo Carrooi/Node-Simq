@@ -3,16 +3,17 @@ watch = require 'watch'
 _path = require 'path'
 Loader = require './Loader'
 Parser = require './Parser'
-Config = require './Config'
+Configurator = require 'easy-configuration'
+PackageExtension = require './PackageExtension'
 
 class SimQ
 
 
 	basePath: '.'
 
-	config: null
-
 	configPath: 'setup.json'
+
+	config: null
 
 	debug: false
 
@@ -21,7 +22,9 @@ class SimQ
 
 	constructor: ->
 		@parser = new Parser(@, new Loader(@), @basePath)
-		@config = new Config(@basePath + '/' + @configPath)
+
+		@config = new Configurator(@basePath + '/config/' + @configPath)
+		@config.addExtension('packages', new PackageExtension)
 
 
 	build: ->
