@@ -38,6 +38,25 @@ class Loader
 
 		lib = @compilers[ext](lib)
 
+		# todo: move to own compiler
+		# this snippet of code is from spine/hem package
+		if ext == 'eco' && @simq.config.load().template.jquerify == true
+			lib =
+				"""
+				module.exports = function (values, data) {
+					var $  = jQuery, result = $();
+					values = $.makeArray(values);
+					data = data || {};
+					for (var i=0; i < values.length; i++) {
+						var value = $.extend({}, values[i], data, {index: i});
+						var elem  = $((#{lib})(value));
+						elem.data('item', value);
+						$.merge(result, elem);
+					}
+					return result;
+				};
+				"""
+
 		return '\'' + name + '\': function(exports, require, module) {\n\t\t' + lib + '\n\t}'
 
 

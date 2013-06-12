@@ -3,8 +3,7 @@ watch = require 'watch'
 _path = require 'path'
 Loader = require './Loader'
 Parser = require './Parser'
-Configurator = require 'easy-configuration'
-PackageExtension = require './PackageExtension'
+Configurator = require './Config/Configurator'
 
 class SimQ
 
@@ -21,10 +20,8 @@ class SimQ
 
 
 	constructor: ->
-		@parser = new Parser(@, new Loader(@), @basePath)
-
 		@config = new Configurator(@basePath + '/config/' + @configPath)
-		@config.addExtension('packages', new PackageExtension)
+		@parser = new Parser(@, new Loader(@), @basePath)
 
 
 	build: ->

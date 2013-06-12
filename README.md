@@ -146,6 +146,25 @@ var data = {
 $(require('views/menu')(data)).appendTo('body')
 ```
 
+You can even tell SimQ to wrap automatically all templates into jQuery function. Example of config file:
+
+```
+{
+	"packages": {
+
+	},
+	"template": {
+		"jquerify": true
+	}
+}
+```
+
+Usage:
+
+```
+var html = (require('views/menu')(data)).html()
+```
+
 ## Watching for changes
 It is also very simple to tell the SimQ to watch your files for changes. This is much easier than running 'simq build' after each change in your code.
 
