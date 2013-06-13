@@ -1,6 +1,7 @@
 fs = require 'fs'
 watch = require 'watch'
 _path = require 'path'
+ncp = require 'ncp'
 Loader = require './Loader'
 Parser = require './Parser'
 Configurator = require './Config/Configurator'
@@ -46,6 +47,19 @@ class SimQ
 
 		watch.watchTree(@basePath, { persistent: true, interval: 1000 },  (file, curr, prev) =>
 			@build() if curr and (curr.nlink is 0 or +curr.mtime isnt +prev?.mtime)
+		)
+
+		return @
+
+
+	create: (name) ->
+		if !name then throw new Error 'Please enter name of new application.'
+
+		path = _path.resolve(name)
+		if fs.existsSync(path) then throw new Error 'Directory with ' + name + ' name is already exists.'
+
+		ncp.ncp(__dirname + '/sandbox', path, (err) ->
+			if err then throw new Error 'There is some error with creating new application.'
 		)
 
 		return @

@@ -165,6 +165,13 @@ Usage:
 var html = (require('views/menu')(data)).html()
 ```
 
+## Creating new application
+SimQ can also help you with creating new application.
+
+```
+$ simq create my-application
+```
+
 ## Watching for changes
 It is also very simple to tell the SimQ to watch your files for changes. This is much easier than running 'simq build' after each change in your code.
 

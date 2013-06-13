@@ -3,6 +3,7 @@ optimist = require 'optimist'
 
 argv = optimist.usage([
 		'simq COMMAND'
+		'	creare: create and prepare new application'
 		'	build:  save all changes to disk'
 		'	watch:  watch for new changes and save them automatically to disk\n'
 		'	--help: show this help'
@@ -29,6 +30,7 @@ if argv.help
 switch argv.command
 	when 'build' then s.build()
 	when 'watch' then s.watch()
+	when 'create' then s.create(argv.targets[0])
 	else
 		optimist.showHelp()
 		process.exit()

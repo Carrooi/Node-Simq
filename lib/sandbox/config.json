@@ -1,0 +1,31 @@
+{
+	"template": {
+		"jquerify": true
+	},
+	"packages": {
+		"application": {
+			"application": "./public/application.js",
+			"style": {
+				"in": "./css/style.less",
+				"out": "./public/style.css"
+			},
+			"modules": [
+				"./app/*.coffee"
+			],
+			"aliases": {
+
+			},
+			"run": [
+
+			],
+			"libs": {
+				"begin": [
+
+				],
+				"end": [
+
+				]
+			}
+		}
+	}
+}
