@@ -2,6 +2,10 @@
 	"template": {
 		"jquerify": true
 	},
+	"debugger": {
+		"styles": true,
+		"scripts": true
+	},
 	"packages": {
 		"application": {
 			"application": "./public/application.js",

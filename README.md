@@ -20,7 +20,7 @@ $ simq build
 ## Configuration - setup.json
 
 The only thing what SimQ needs for run, is setup.json file, which contains configuration for your application.
-The example below shows full configuration. Default file name is setup.json, but you can change it with --config param.
+The example below shows full configuration. Default file name is ./config/setup.json, but you can change it with --config param.
 ```
 {
 	"packages": {
@@ -53,6 +53,13 @@ The example below shows full configuration. Default file name is setup.json, but
 				]
 			}
 		}
+	},
+	"template": {
+		"jquerify": true
+	},
+	"debugger": {
+		"styles": true,
+		"scripts": true
 	}
 }
 ```
@@ -71,6 +78,8 @@ In section 'run', you can set names of modules, which should be called automatic
 Last section defines other libraries and the place where they should be inserted.
 
 In this example you can also see all supported files: js, coffee, json and eco for templating.
+
+Other main sections (template and debugger) are explained bellow.
 
 ## Packages
 
@@ -186,4 +195,15 @@ This can be achieved by adding "debug" to build or watch command.
 
 ```
 $ simq build --debug
+```
+
+Other way is to define it via config file, where you can set if you want to minify scripts, styles or both.
+
+```
+{
+	"debugger": {
+		"scripts": true,
+		"styles": true
+	}
+}
 ```

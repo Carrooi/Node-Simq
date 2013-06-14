@@ -11,7 +11,7 @@ class SimQ
 
 	basePath: '.'
 
-	configPath: 'setup.json'
+	configPath: 'config/setup.json'
 
 	config: null
 
@@ -20,8 +20,11 @@ class SimQ
 	parser: null
 
 
-	constructor: ->
-		@config = new Configurator(@basePath + '/config/' + @configPath)
+	constructor: (@debug, configPath = null) ->
+		if !configPath then configPath = @configPath
+		@configPath = configPath
+
+		@config = new Configurator(@basePath + '/' + @configPath, @debug)
 		@parser = new Parser(@, new Loader(@), @basePath)
 
 
@@ -30,11 +33,11 @@ class SimQ
 
 		for name, pckg of config.packages
 			if pckg.application
-				fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !@debug))
+				fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !config.debugger.scripts || !@debug))
 
 			if pckg.style && pckg.style.in && pckg.style.out
 				((pckg) =>
-					@parser.parseStyles(pckg.style.in, !@debug, (content) =>
+					@parser.parseStyles(pckg.style.in, !config.debugger.styles || !@debug, (content) =>
 						fs.writeFileSync(@basePath + '/' + pckg.style.out, content)
 					)
 				)(pckg)
@@ -52,17 +55,15 @@ class SimQ
 		return @
 
 
-	create: (name) ->
+	@create: (name) ->
 		if !name then throw new Error 'Please enter name of new application.'
 
 		path = _path.resolve(name)
 		if fs.existsSync(path) then throw new Error 'Directory with ' + name + ' name is already exists.'
 
-		ncp.ncp(__dirname + '/sandbox', path, (err) ->
+		ncp.ncp(_path.normalize(__dirname + '/../sandbox'), path, (err) ->
 			if err then throw new Error 'There is some error with creating new application.'
 		)
-
-		return @
 
 
 	getModuleName: (path) ->

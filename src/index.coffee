@@ -15,22 +15,18 @@ argv = optimist.usage([
 argv.command = argv._[0]
 argv.targets = argv._[1..]
 
-s = new SimQ
-
-s.debug = argv.debug and true or false
-
-if argv.config
-	s.configPath = argv.config
-	s.config.path = argv.config
-
 if argv.help
 	optimist.showHelp()
-	process.exit()
 
-switch argv.command
-	when 'build' then s.build()
-	when 'watch' then s.watch()
-	when 'create' then s.create(argv.targets[0])
-	else
-		optimist.showHelp()
-		process.exit()
+else if argv.command == 'create'
+	SimQ.create(argv.targets[0])
+
+else
+	debug = argv.debug and true or false
+
+	s = new SimQ(debug, argv.config)
+
+	switch argv.command
+		when 'build' then s.build()
+		when 'watch' then s.watch()
+		else optimist.showHelp()
