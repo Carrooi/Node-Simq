@@ -33,11 +33,11 @@ class SimQ
 
 		for name, pckg of config.packages
 			if pckg.application
-				fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !config.debugger.scripts || !@debug))
+				fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !config.debugger.scripts))
 
 			if pckg.style && pckg.style.in && pckg.style.out
 				((pckg) =>
-					@parser.parseStyles(pckg.style.in, !config.debugger.styles || !@debug, (content) =>
+					@parser.parseStyles(pckg.style.in, !config.debugger.styles, (content) =>
 						fs.writeFileSync(@basePath + '/' + pckg.style.out, content)
 					)
 				)(pckg)
