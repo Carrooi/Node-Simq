@@ -1,10 +1,7 @@
-Loader = require './Loader'
 _path = require 'path'
-less = require 'less'
-fs = require 'fs'
 Uglify = require 'uglify-js'
 
-class Parser
+class Application
 
 
 	simq: null
@@ -17,7 +14,7 @@ class Parser
 	constructor: (@simq, @loader, @basePath) ->
 
 
-	parseApplication: (section, minify = true) ->
+	parse: (section, minify = true) ->
 		result = new Array
 
 		if section.libs && section.libs.begin
@@ -42,7 +39,7 @@ class Parser
 				for alias, module of section.aliases
 					modules.push('\'' + alias + '\': \'' + module + '\'')
 
-			module = @loader.loadFile(__dirname + '/Module.js').replace(/\s+$/, '').replace(/;$/, '')
+			module = @loader.loadFile(__dirname + '/../Module.js').replace(/\s+$/, '').replace(/;$/, '')
 			result.push(module + '({' + modules.join(',\n') + '\n});')
 
 		if section.libs && section.libs.end
@@ -63,24 +60,4 @@ class Parser
 		return result
 
 
-	parseStyles: (path, minify = true, fn) ->
-		path = _path.resolve(path)
-		file = fs.readFileSync(path).toString()
-
-		options =
-			paths: [_path.dirname(path)]
-			optimization: 1
-			filename: path
-			rootpath: ''
-			relativeUrls: false
-			strictImports: false
-			compress: minify
-
-		less.render(file, options, (e, content) ->
-			fn(content)
-		)
-
-		return @
-
-
-module.exports = Parser
+module.exports = Application

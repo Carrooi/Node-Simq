@@ -3,7 +3,7 @@ watch = require 'watch'
 _path = require 'path'
 ncp = require 'ncp'
 Loader = require './Loader'
-Parser = require './Parser'
+Parser = require './Parser/Parser'
 Configurator = require './Config/Configurator'
 
 class SimQ
@@ -37,7 +37,7 @@ class SimQ
 
 			if pckg.style && pckg.style.in && pckg.style.out
 				((pckg) =>
-					@parser.parseStyles(pckg.style.in, !config.debugger.styles, (content) =>
+					@parser.parseStyle(pckg.style.in, !config.debugger.styles, (content) =>
 						fs.writeFileSync(@basePath + '/' + pckg.style.out, content)
 					)
 				)(pckg)
