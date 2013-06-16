@@ -48,8 +48,15 @@ class SimQ
 	watch: ->
 		@build()
 
-		watch.watchTree(@basePath, { persistent: true, interval: 1000 },  (file, curr, prev) =>
-			@build() if curr and (curr.nlink is 0 or +curr.mtime isnt +prev?.mtime)
+		ignore = new Array
+		for name, pckg of @config.load().packages
+			if pckg.application then ignore.push(_path.resolve(pckg.application))
+			if pckg.style.out then ignore.push(_path.resolve(pckg.style.out))
+
+		watch.watchTree(@basePath, {},  (file, curr, prev) =>
+			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^./) == null && ignore.indexOf(_path.resolve(file)) == -1		# filter in option is not working...
+				console.log file
+				@build()
 		)
 
 		return @

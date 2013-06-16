@@ -27,6 +27,12 @@ else
 	s = new SimQ(debug, argv.config)
 
 	switch argv.command
-		when 'build' then s.build()
-		when 'watch' then s.watch()
+		when 'build'
+			console.log 'Building application'
+			s.build()
+
+		when 'watch'
+			console.log 'Watching application'
+			s.watch()
+
 		else optimist.showHelp()
