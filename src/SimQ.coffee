@@ -32,15 +32,15 @@ class SimQ
 		config = @config.load()
 
 		for name, pckg of config.packages
-			if pckg.application
-				fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !config.debugger.scripts))
+			((pckg) =>
+				if pckg.application
+					fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !config.debugger.scripts))
 
-			if pckg.style && pckg.style.in && pckg.style.out
-				((pckg) =>
-					@parser.parseStyle(pckg.style.in, !config.debugger.styles, (content) =>
-						fs.writeFileSync(@basePath + '/' + pckg.style.out, content)
-					)
-				)(pckg)
+				if pckg.style && pckg.style.in && pckg.style.out
+					@parser.parseStyle(pckg.style.in, !config.debugger.styles).then( (content) =>
+						fs.writeFile(@basePath + '/' + pckg.style.out, content)
+					).done()
+			)(pckg)
 
 		return @
 

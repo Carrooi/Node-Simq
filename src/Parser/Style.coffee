@@ -1,38 +1,40 @@
 _path = require 'path'
 less = require 'less'
 fs = require 'fs'
+Q = require 'q'
 
 class Style
 
 
-	simq: null
-
-	loader: null
-
 	basePath: null
 
 
-	constructor: (@simq, @loader, @basePath) ->
+	constructor: (@basePath) ->
 
 
-	parse: (path, minify = true, fn) ->
-		path = _path.resolve(path)
-		file = fs.readFileSync(path).toString()
+	parse: (path, minify = true) ->
+		load = (path) ->
+			path = _path.resolve(path)
+			return Q.nfcall(fs.readFile, path, 'utf-8')
 
-		options =
-			paths: [_path.dirname(path)]
-			optimization: 1
-			filename: path
-			rootpath: ''
-			relativeUrls: false
-			strictImports: false
-			compress: minify
+		parse = (content) ->
+			deferred = Q.defer()
+			path = _path.resolve(path)
 
-		less.render(file, options, (e, content) ->
-			fn(content)
-		)
+			options =
+				paths: [_path.dirname(path)]
+				optimization: 1
+				filename: path
+				rootpath: ''
+				relativeUrls: false
+				strictImports: false
+				compress: minify
 
-		return @
+			less.render(content, options, (e, content) -> if e then deferred.reject(new Error(e)) else deferred.resolve(content) )
+
+			return deferred.promise
+
+		return load(path).then(parse)
 
 
 module.exports = Style
