@@ -34,7 +34,9 @@ class SimQ
 		for name, pckg of config.packages
 			((pckg) =>
 				if pckg.application
-					fs.writeFileSync(@basePath + '/' + pckg.application, @parser.parseApplication(pckg, !config.debugger.scripts))
+					@parser.parseApplication(pckg, !config.debugger.scripts).then( (content) =>
+						fs.writeFile(@basePath + '/' + pckg.application, content)
+					).done()
 
 				if pckg.style && pckg.style.in && pckg.style.out
 					@parser.parseStyle(pckg.style.in, !config.debugger.styles).then( (content) =>

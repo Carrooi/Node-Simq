@@ -1,5 +1,6 @@
 _path = require 'path'
 Uglify = require 'uglify-js'
+Q = require 'q'
 
 class Application
 
@@ -15,52 +16,64 @@ class Application
 
 
 	parse: (section, minify = true) ->
-		result = new Array
-
-		@addLibraries(section, 'begin', result)
-		@addModules(section, result)
-		@addLibraries(section, 'end', result)
-		@addRun(section, result)
-
-		result = result.join('\n\n')
-
-		if minify then result = Uglify.minify(result, fromString: true).code
-
-		return result
-
-
-	addLibraries: (section, part, result) ->
-		if section.libs && section.libs[part]
-			for lib in section.libs[part]
+		return ( ->
+			deferred = Q.defer()
+			deferred.resolve(new Array)
+			return deferred.promise
+		)().then( (result) =>
+			for lib in section.libs.begin
 				result.push(@loader.loadFile(@basePath + '/' + lib))
 
+			deferred = Q.defer()
+			deferred.resolve(result)
+			return deferred.promise
+		).then( (result) =>
+			modules = new Array
 
-	addRun: (section, result) ->
-		run = new Array
-		for module in section.run
-			run.push('this.require(\'' + module + '\');')
+			for path in section.modules
+				ext = _path.extname(path)
+				name = path.replace(new RegExp('\\*?' + ext + '$'), '')
+				ext = if ext == '' then null else ext.substring(1)
 
-		result.push(run.join('\n'))
+				if name.substring(name.length - 1) == '/'
+					modules = modules.concat(@loader.loadModules(@basePath + '/' + name, ext))
+				else
+					modules.push(@loader.loadModule(@basePath + '/' + path))
 
+			for alias, module of section.aliases
+				modules.push('\'' + alias + '\': \'' + module + '\'')
 
-	addModules: (section, result) ->
-		modules = new Array
+			module = @loader.loadFile(__dirname + '/../Module.js').replace(/\s+$/, '').replace(/;$/, '')
+			result.push(module + '({' + modules.join(',\n') + '\n});')
 
-		for path in section.modules
-			ext = _path.extname(path)
-			name = path.replace(new RegExp('\\*?' + ext + '$'), '')
-			ext = if ext == '' then null else ext.substring(1)
+			deferred = Q.defer()
+			deferred.resolve(result)
+			return deferred.promise
+		).then( (result) =>
+			for lib in section.libs.end
+				result.push(@loader.loadFile(@basePath + '/' + lib))
 
-			if name.substring(name.length - 1) == '/'
-				modules = modules.concat(@loader.loadModules(@basePath + '/' + name, ext))
-			else
-				modules.push(@loader.loadModule(@basePath + '/' + path))
+			deferred = Q.defer()
+			deferred.resolve(result)
+			return deferred.promise
+		).then( (result) =>
+			run = new Array
+			for module in section.run
+				run.push('this.require(\'' + module + '\');')
 
-		for alias, module of section.aliases
-			modules.push('\'' + alias + '\': \'' + module + '\'')
+			result.push(run.join('\n'))
 
-		module = @loader.loadFile(__dirname + '/../Module.js').replace(/\s+$/, '').replace(/;$/, '')
-		result.push(module + '({' + modules.join(',\n') + '\n});')
+			deferred = Q.defer()
+			deferred.resolve(result)
+			return deferred.promise
+		).then( (result) =>
+			result = result.join('\n\n')
+			if minify then result = Uglify.minify(result, fromString: true).code
+
+			deferred = Q.defer()
+			deferred.resolve(result)
+			return deferred.promise
+		)
 
 
 module.exports = Application
