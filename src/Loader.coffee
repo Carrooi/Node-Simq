@@ -20,7 +20,12 @@ class Loader
 			throw new Error 'File .' + ext + ' is not supported'
 
 		file = fs.readFileSync(path, 'utf8').toString()
-		file = @loaders[ext](file)
+
+		try
+			file = @loaders[ext](file)
+		catch e
+			throw new Error(e.toString() + ' in ' + path)
+
 		file = @normalize(file)
 
 		return file
