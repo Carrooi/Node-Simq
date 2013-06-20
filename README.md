@@ -99,6 +99,22 @@ as you wish.
 }
 ```
 
+## Base namespace
+
+If you have more packages in different folders and want to access your modules without prefixing them with base folder
+name, you can set "base" in your package configuration. Path in "base" directive will be also prepended to all
+external libraries
+
+```
+{
+	"packages": {
+		"new_site": {
+			"base": "_NEW_SITE_FOLDER_"
+		}
+	}
+}
+```
+
 ## Including other config files
 
 Look to the full documentation of [Easy Configuration](https://npmjs.org/package/easy-configuration#readme),

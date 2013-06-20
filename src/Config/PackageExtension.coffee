@@ -5,6 +5,7 @@ class PackageExtension extends Extension
 
 	defaultsPackage:
 		application: null
+		base: null
 		style:
 			in: null
 			out: null

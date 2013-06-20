@@ -26,7 +26,7 @@ class Loader
 		return file
 
 
-	loadModule: (path) ->
+	loadModule: (path, base = null) ->
 		path = _path.normalize(path)
 		ext = _path.extname(path).substring(1).toLowerCase()
 
@@ -35,6 +35,8 @@ class Loader
 
 		lib = @loadFile(path).replace(/\n/g, '\n\t\t')
 		name = @simq.getModuleName(path)
+
+		if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
 		lib = @compilers[ext](lib)
 
@@ -60,7 +62,7 @@ class Loader
 		return '\'' + name + '\': function(exports, require, module) {\n\t\t' + lib + '\n\t}'
 
 
-	loadModules: (dir, type = null) ->
+	loadModules: (dir, type = null, base = null) ->
 		dir = _path.normalize(dir)
 
 		files = fs.readdirSync(dir)
@@ -74,9 +76,9 @@ class Loader
 				if type
 					continue if _path.extname(name).toLowerCase() != '.' + type
 
-				result.push(@loadModule(name))
+				result.push(@loadModule(name, base))
 			else if stats.isDirectory()
-				result = result.concat(@loadModules(name + '/', type))
+				result = result.concat(@loadModules(name + '/', type, base))
 
 		return result
 
