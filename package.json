@@ -1,7 +1,7 @@
 {
 	"name": "simq",
 	"description": "Simple require for javascript (client)",
-	"version": "1.4.1",
+	"version": "1.4.2",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
