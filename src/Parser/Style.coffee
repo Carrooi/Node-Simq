@@ -30,7 +30,7 @@ class Style
 				strictImports: false
 				compress: minify
 
-			less.render(content, options, (e, content) -> if e then deferred.reject(new Error(e)) else deferred.resolve(content) )
+			less.render(content, options, (e, content) -> if e then deferred.reject(e) else deferred.resolve(content) )
 
 			return deferred.promise
 

@@ -5,6 +5,7 @@ ncp = require 'ncp'
 Loader = require './Loader'
 Parser = require './Parser/Parser'
 Configurator = require './Config/Configurator'
+less = require 'less'
 
 class SimQ
 
@@ -41,7 +42,9 @@ class SimQ
 				if pckg.style && pckg.style.in && pckg.style.out
 					@parser.parseStyle(pckg.style.in, !config.debugger.styles).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.style.out, content)
-					)
+					, (e) ->
+						less.writeError(e)
+					).done()
 			)(pckg)
 
 		return @
