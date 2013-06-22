@@ -8,8 +8,6 @@ class Style
 
 	loader: null
 
-	basePath: null
-
 
 	constructor: (@loader) ->
 
