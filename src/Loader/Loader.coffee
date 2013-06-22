@@ -1,6 +1,7 @@
 Q = require 'q'
 _path = require 'path'
 fs = require 'fs'
+http = require 'http'
 Compilers = require './Compilers'
 
 class Loader
@@ -19,12 +20,22 @@ class Loader
 		return ( ->
 			deferred = Q.defer()
 
-			path = _path.resolve(path)
 			ext = _path.extname(path).substr(1)
 
-			fs.readFile(path, 'utf-8', (e, data) ->
-				if e then deferred.reject(new Error e) else deferred.resolve(ext: ext, content: data)
-			)
+			if path.match(/^https?\:\/\//) == null
+				path = _path.resolve(path)
+
+				fs.readFile(path, 'utf-8', (e, data) ->
+					if e then deferred.reject(new Error e) else deferred.resolve(ext: ext, content: data)
+				)
+			else
+				http.get(path, (res) ->
+					data = ''
+					res.setEncoding('utf-8')
+					res.on('data', (chunk) -> data += chunk )
+					res.on('end', -> deferred.resolve(ext: ext, content: data))
+				).on('error', (e) -> deferred.reject(new Error e))
+
 			return deferred.promise
 		)().then( (file) =>
 			return Q.resolve(@compilers.prepare(file.ext, file.content))
