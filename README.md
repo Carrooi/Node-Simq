@@ -129,13 +129,9 @@ Every module is simple javascript file. Here is example for hello word applicati
 ```
 // file app/helloWord.js
 
-(function() {
-
-	module.exports = function() {
-		alert('hello word');
-	};
-
-}).call(this);
+module.exports = function() {
+	alert('hello word');
+};
 ```
 
 ## Using module
@@ -152,14 +148,12 @@ Every module is simple javascript file. Here is example for hello word applicati
 You can notice that in require, we are not using any file extension - just like in node.
 
 ## Coffee script modules
-If your are using coffee script, everything will be even much easier.
 
 ```
 # file app/helloWord.coffee
 
 module.exports = -> alert 'hello word'
 ```
-As you can see, module definition is just a class (or any other code) and return statement. This is done because of coffee-script itself, which automatically wrap all your code into it's own scope.
 
 ## Templating
 SimQ includes eco template engine, so you can really simply require also your templates. Eco documentation: [link](https://github.com/sstephenson/eco#eco-embedded-coffeescript-templates).

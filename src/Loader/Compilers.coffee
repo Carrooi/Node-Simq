@@ -69,15 +69,13 @@ class Compilers
 		return deferred.promise
 
 
-	jsCompiler: (content) -> return Q.resolve('return ' + content)
+	jsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
 
 	coffeeCompiler: (content) -> return Q.resolve('return ' + content)
 
 	jsonCompiler: (content) -> return Q.resolve('module.exports = ' + content)
 
 	ecoCompiler: (content) ->
-		module = 'module.exports = ' + content
-
 		if @simq.config.load().template.jquerify == true
 			module =			# this snippet of code is from spine/hem package
 				"""
@@ -87,13 +85,15 @@ class Compilers
 					data = data || {};
 					for (var i=0; i < values.length; i++) {
 						var value = $.extend({}, values[i], data, {index: i});
-						var elem  = $((#{module})(value));
+						var elem  = $((#{content})(value));
 						elem.data('item', value);
 						$.merge(result, elem);
 					}
 					return result;
 				};
 				"""
+		else
+			module = 'module.exports = ' + content
 
 		return Q.resolve(module)
 
