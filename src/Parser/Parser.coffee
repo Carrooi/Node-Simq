@@ -1,6 +1,7 @@
+Q = require 'q'
 Application = require './Application'
 Style = require './Style'
-Q = require 'q'
+Loader = require '../Loader/Loader'
 
 class Parser
 
@@ -12,7 +13,8 @@ class Parser
 	basePath: null
 
 
-	constructor: (@simq, @loader, @basePath) ->
+	constructor: (@simq, @basePath) ->
+		@loader = new Loader(@simq)
 
 
 	parseApplication: (section, minify = true) ->

@@ -2,10 +2,9 @@ fs = require 'fs'
 watch = require 'watch'
 _path = require 'path'
 ncp = require 'ncp'
-Loader = require './Loader'
+less = require 'less'
 Parser = require './Parser/Parser'
 Configurator = require './Config/Configurator'
-less = require 'less'
 
 class SimQ
 
@@ -26,7 +25,7 @@ class SimQ
 		@configPath = configPath
 
 		@config = new Configurator(@basePath + '/' + @configPath, @debug)
-		@parser = new Parser(@, new Loader(@), @basePath)
+		@parser = new Parser(@, @basePath)
 
 
 	build: ->
