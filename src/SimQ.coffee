@@ -34,12 +34,12 @@ class SimQ
 		for name, pckg of config.packages
 			((pckg) =>
 				if pckg.application
-					@parser.parseApplication(pckg, !config.debugger.scripts).then( (content) =>
+					@parser.parseApplication(pckg).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.application, content)
 					).done()
 
 				if pckg.style && pckg.style.in && pckg.style.out
-					@parser.parseStyle(pckg.style.in, !config.debugger.styles).then( (content) =>
+					@parser.parseStyle(pckg.style.in).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.style.out, content)
 					, (e) ->
 						less.writeError e

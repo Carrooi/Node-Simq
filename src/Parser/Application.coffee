@@ -15,7 +15,7 @@ class Application
 	constructor: (@simq, @loader, @basePath) ->
 
 
-	parse: (section, minify = true) ->
+	parse: (section) ->
 		base = @basePath + '/' + (if section.base then section.base + '/' else '')
 
 		processLib = (result, libs, num, finish) =>
@@ -81,7 +81,7 @@ class Application
 			return Q.resolve(result)
 		).then( (result) =>
 			result = result.join('\n\n')
-			if minify then result = Uglify.minify(result, fromString: true).code
+			if !@simq.config.load().debugger.scripts then result = Uglify.minify(result, fromString: true).code
 
 			return Q.resolve(result)
 		)

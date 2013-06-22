@@ -1,5 +1,8 @@
 coffee = require 'coffee-script'
 eco = require 'eco'
+less = require 'less'
+Q = require 'q'
+path = require 'path'
 
 class Compilers
 
@@ -10,34 +13,67 @@ class Compilers
 	constructor: (@simq) ->
 
 
-	hasLoader: (name) ->
-		return typeof @[name + 'Loader'] != 'undefined'
+	hasLoader: (ext) ->
+		ext = ext.toLowerCase()
+		return typeof @[ext + 'Loader'] != 'undefined'
 
 
-	prepare: (name, content) ->
-		content = if @hasLoader(name) then @[name + 'Loader'](content) else content
-		return content.replace(/^\s+|\s+$/g, '')
+	prepare: (file, content) ->
+		deferred = Q.defer()
+		file = path.resolve(file)
+		ext = path.extname(file).substr(1).toLowerCase()
+
+		if @hasLoader(ext)
+			@[ext + 'Loader'](content, file).then( (content) -> deferred.resolve(content.replace(/^\s+|\s+$/g, '')) )
+		else
+			deferred.resolve(content.replace(/^\s+|\s+$/g, ''))
+		return deferred.promise
 
 
-	hasCompiler: (name) ->
-		return typeof @[name + 'Compiler'] != 'undefined'
+	hasCompiler: (ext) ->
+		ext = ext.toLowerCase()
+		return typeof @[ext + 'Compiler'] != 'undefined'
 
 
-	compile: (name, content) ->
-		if !@hasCompiler(name) then throw new Error 'File type ' + name + ' is not supported.'
-		return @[name + 'Compiler'](content)
+	compile: (file, content) ->
+		deferred = Q.defer()
+		file = path.resolve(file)
+		ext = path.extname(file).substr(1).toLowerCase()
+
+		if !@hasCompiler(ext) then throw new Error 'File type ' + ext + ' is not supported.'
+
+		@[ext + 'Compiler'](content, file).then( (content) -> deferred.resolve(content) )
+		return deferred.promise
 
 
-	coffeeLoader: (content) -> return coffee.compile(content)
+	coffeeLoader: (content) -> return Q.resolve(coffee.compile(content))
 
-	ecoLoader: (content) -> return eco.precompile(content)
+	ecoLoader: (content) -> return Q.resolve(eco.precompile(content))
+
+	lessLoader: (content, file) ->
+		deferred = Q.defer()
+
+		options =
+			paths: [path.dirname(file)]
+			optimization: 1
+			filename: file
+			rootpath: ''
+			relativeUrls: false
+			strictImports: false
+			compress: !@simq.config.load().debugger.styles
+
+		less.render(content, options, (e, content) ->
+			if e then deferred.reject(e) else deferred.resolve(content)
+		)
+
+		return deferred.promise
 
 
-	jsCompiler: (content) -> return 'return ' + content
+	jsCompiler: (content) -> return Q.resolve('return ' + content)
 
-	coffeeCompiler: (content) -> return 'return ' + content
+	coffeeCompiler: (content) -> return Q.resolve('return ' + content)
 
-	jsonCompiler: (content) -> return 'module.exports = ' + content
+	jsonCompiler: (content) -> return Q.resolve('module.exports = ' + content)
 
 	ecoCompiler: (content) ->
 		module = 'module.exports = ' + content
@@ -59,7 +95,7 @@ class Compilers
 				};
 				"""
 
-		return module
+		return Q.resolve(module)
 
 
 module.exports = Compilers

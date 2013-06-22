@@ -17,6 +17,7 @@ class Loader
 
 
 	loadFile: (path) ->
+		if path.match(/^https?\:\/\//) == null then path = _path.resolve(path)
 		return ( ->
 			deferred = Q.defer()
 
@@ -38,7 +39,9 @@ class Loader
 
 			return deferred.promise
 		)().then( (file) =>
-			return Q.resolve(@compilers.prepare(file.ext, file.content))
+			deferred = Q.defer()
+			@compilers.prepare(path, file.content).then( (content) -> deferred.resolve(content) )
+			return deferred.promise
 		)
 
 
@@ -52,18 +55,20 @@ class Loader
 			if !@compilers.hasCompiler(ext)
 				deferred.reject(new Error 'File type' + ext + ' is not supported')
 			else
-				@loadFile(path).then((content) -> deferred.resolve(path: path, ext: ext, content: content) )
+				@loadFile(path).then((content) -> deferred.resolve(path: path, content: content) )
 
 			return deferred.promise
 		)().then( (file) =>
+			deferred = Q.defer()
 			name = @simq.getModuleName(file.path)
 
 			if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
-			module = @compilers.compile(file.ext, file.content)
-			module = '\'' + name + '\': function(exports, require, module) {\n\t\t' + module + '\n\t}'
+			@compilers.compile(file.path, file.content).then( (content) ->
+				deferred.resolve('\'' + name + '\': function(exports, require, module) {\n\t\t' + content + '\n\t}')
+			)
 
-			return Q.resolve(module)
+			return deferred.promise
 		)
 
 

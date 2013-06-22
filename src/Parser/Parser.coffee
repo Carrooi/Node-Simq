@@ -22,7 +22,7 @@ class Parser
 
 
 	parseStyle: (path, minify = true) ->
-		return (new Style(@basePath)).parse(path, minify)
+		return (new Style(@loader)).parse(path, minify)
 
 
 module.exports = Parser
