@@ -4,6 +4,7 @@ less = require 'less'
 Q = require 'q'
 path = require 'path'
 stylus = require 'stylus'
+sass = require 'node-sass'
 
 class Compilers
 
@@ -100,6 +101,21 @@ class Compilers
 
 		return deferred.promise
 
+	scssLoader: (content, file) ->
+		deferred = Q.defer()
+
+		try
+			content = sass.renderSync(
+				data: content
+				includePaths: [path.dirname(file)]
+				#outputStyle: if @simq.config.load().debugger.styles then 'compact' else 'compressed'		bug in sass
+			)
+			deferred.resolve(content)
+		catch e
+			deferred.reject(@parseSassError(e, file))
+
+		return deferred.promise
+
 
 	jsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
 
@@ -147,6 +163,18 @@ class Compilers
 
 		err = new Error message + ' in '  + file + ':' + line
 		err.type = e.name
+		err.filename = file
+		err.line = line
+
+		return err
+
+
+	parseSassError: (e, file) ->
+		data = e.message.split('\n')[0].match(/^\:(\d+)\:\serror\:\s(.*)/)
+		line = data[1]
+		message = data[2]
+
+		err = new Error message + ' in ' + file + ':' + line
 		err.filename = file
 		err.line = line
 
