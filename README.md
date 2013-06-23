@@ -219,3 +219,17 @@ Other way is to define it via config file, where you can set if you want to mini
 	}
 }
 ```
+
+## Source maps
+In debugger section, you can also allow source maps. For now, these are working only for less styles, which are using
+sass source map syntax.
+Source maps will be turned on only if debugger mode for styles is set to true.
+
+```
+{
+	"debugger": {
+		"styles": true,
+		"sourceMap": true
+	}
+}
+```

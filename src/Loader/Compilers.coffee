@@ -65,6 +65,7 @@ class Compilers
 
 	lessLoader: (content, file) ->
 		deferred = Q.defer()
+		debug = @simq.config.load().debugger
 
 		options =
 			paths: [path.dirname(file)]
@@ -73,7 +74,9 @@ class Compilers
 			rootpath: ''
 			relativeUrls: false
 			strictImports: false
-			compress: !@simq.config.load().debugger.styles
+			compress: !debug.styles
+
+		if debug.styles && debug.sourceMap then options.dumpLineNumbers = 'mediaquery'
 
 		try
 			less.render(content, options, (e, content) =>

@@ -6,6 +6,7 @@ class DebuggerExtension extends Extension
 	defaults:
 		styles: null
 		scripts: null
+		sourceMap: false
 
 	debug: false
 
