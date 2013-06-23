@@ -70,9 +70,9 @@ class Compilers
 		file = path.resolve(file)
 		dir = path.dirname(file)
 		name = path.basename(file, path.extname(file))
-		fileName = dir + '/.' + name + '.js'
+		fileName = dir + '/' + name + '.js'
 		ts = path.resolve(__dirname + '/../../node_modules/typescript/bin/tsc.js')
-		exec('node ' + ts + ' ' + file + ' --out ' + fileName, (e, stdout, stderr) =>
+		exec('node ' + ts + ' ' + file, (e, stdout, stderr) =>
 			if e then deferred.reject(@parseTsError(e, file))
 			else
 				fs.readFile(fileName, 'utf-8', (e, content) =>
