@@ -40,7 +40,11 @@ class Loader
 			return deferred.promise
 		)().then( (file) =>
 			deferred = Q.defer()
-			@compilers.prepare(path, file.content).then( (content) -> deferred.resolve(content) )
+			@compilers.prepare(path, file.content).then( (content) ->
+				deferred.resolve(content)
+			, (e) ->
+				deferred.reject(e)
+			)
 			return deferred.promise
 		)
 
@@ -55,7 +59,11 @@ class Loader
 			if !@compilers.hasCompiler(ext)
 				deferred.reject(new Error 'File type' + ext + ' is not supported')
 			else
-				@loadFile(path).then((content) -> deferred.resolve(path: path, content: content) )
+				@loadFile(path).then((content) ->
+					deferred.resolve(path: path, content: content)
+				, (e) ->
+					deferred.reject(e)
+				)
 
 			return deferred.promise
 		)().then( (file) =>
@@ -76,6 +84,8 @@ class Loader
 		deferred = Q.defer()
 		@processModules([], modules, 0, base, (result) ->
 			deferred.resolve(result)
+		, (e) ->
+			deferred.reject(e)
 		)
 		return deferred.promise
 
@@ -100,14 +110,16 @@ class Loader
 		return result
 
 
-	processModules: (result, files, num, base = null, finish) ->
+	processModules: (result, files, num, base = null, finish, error) ->
 		if files.length == 0 || num == files.length
 			finish(result)
 			return true
 
 		@loadModule(files[num], base).then( (content) =>
 			result.push(content)
-			@processModules(result, files, num + 1, base, finish)
+			@processModules(result, files, num + 1, base, finish, error)
+		, (e) ->
+			error(e)
 		)
 
 

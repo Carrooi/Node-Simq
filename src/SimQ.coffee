@@ -36,6 +36,8 @@ class SimQ
 				if pckg.application
 					@parser.parseApplication(pckg).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.application, content)
+					, (e) ->
+						throw e
 					).done()
 
 				if pckg.style && pckg.style.in && pckg.style.out

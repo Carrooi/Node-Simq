@@ -24,7 +24,11 @@ class Compilers
 		ext = path.extname(file).substr(1).toLowerCase()
 
 		if @hasLoader(ext)
-			@[ext + 'Loader'](content, file).then( (content) -> deferred.resolve(content.replace(/^\s+|\s+$/g, '')) )
+			@[ext + 'Loader'](content, file).then( (content) ->
+				deferred.resolve(content.replace(/^\s+|\s+$/g, ''))
+			, (e) ->
+				deferred.reject(e)
+			)
 		else
 			deferred.resolve(content.replace(/^\s+|\s+$/g, ''))
 		return deferred.promise
@@ -46,7 +50,15 @@ class Compilers
 		return deferred.promise
 
 
-	coffeeLoader: (content) -> return Q.resolve(coffee.compile(content))
+	coffeeLoader: (content, file) ->
+		deferred = Q.defer()
+
+		try
+			deferred.resolve(coffee.compile(content, filename: file, literate: false))
+		catch e
+			deferred.reject(e)
+
+		return deferred.promise
 
 	ecoLoader: (content) -> return Q.resolve(eco.precompile(content))
 
@@ -64,10 +76,10 @@ class Compilers
 
 		try
 			less.render(content, options, (e, content) =>
-				if e then throw @parseLessError(e, false) else deferred.resolve(content)
+				if e then deferred.reject(@parseLessError(e)) else deferred.resolve(content)
 			)
 		catch e
-			throw @parseLessError(e)
+			deferred.reject(@parseLessError(e))
 
 		return deferred.promise
 

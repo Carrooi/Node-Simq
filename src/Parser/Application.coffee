@@ -18,21 +18,27 @@ class Application
 	parse: (section) ->
 		base = @basePath + '/' + (if section.base then section.base + '/' else '')
 
-		processLib = (result, libs, num, finish) =>
+		processLib = (result, libs, num, finish, error) =>
 			if libs.length == 0 || num == libs.length
 				finish(result)
 				return true
 			file = if libs[num].match(/^https?\:\/\//) == null then base + libs[num] else libs[num]
 			@loader.loadFile(file).then( (content) ->
 				result.push(content)
-				processLib(result, libs, num + 1, finish)
+				processLib(result, libs, num + 1, finish, error)
+			, (e) ->
+				error(e)
 			)
 
 		return ( ->
 			return Q.resolve([])
 		)().then( (result) =>
 			deferred = Q.defer()
-			processLib(result, section.libs.begin, 0, (result) -> deferred.resolve(result) )
+			processLib(result, section.libs.begin, 0, (result) ->
+				deferred.resolve(result)
+			, (e) ->
+				deferred.reject(e)
+			)
 			return deferred.promise
 		).then( (result) =>
 			buf = []
@@ -52,6 +58,8 @@ class Application
 			deferred = Q.defer()
 			@loader.loadModules(buf, section.base).then( (modules) ->
 				deferred.resolve(result: result, modules: modules)
+			, (e) ->
+				deferred.reject(e)
 			)
 			return deferred.promise
 		).then( (data) =>
@@ -62,6 +70,8 @@ class Application
 			@loader.loadFile(__dirname + '/../Module.js').then( (content) ->
 				content = content.replace(/\s+$/, '').replace(/;$/, '')
 				deferred.resolve(module: content, result: data.result, modules: data.modules)
+			, (e) ->
+				deferred.reject(e)
 			)
 			return deferred.promise
 		).then( (data) ->
@@ -69,7 +79,11 @@ class Application
 			return Q.resolve(data.result)
 		).then( (result) =>
 			deferred = Q.defer()
-			processLib(result, section.libs.end, 0, (result) -> deferred.resolve(result) )
+			processLib(result, section.libs.end, 0, (result) ->
+				deferred.resolve(result)
+			, (e) ->
+				deferred.reject(e)
+			)
 			return deferred.promise
 		).then( (result) =>
 			run = []
