@@ -3,6 +3,7 @@ eco = require 'eco'
 less = require 'less'
 Q = require 'q'
 path = require 'path'
+stylus = require 'stylus'
 
 class Compilers
 
@@ -83,6 +84,19 @@ class Compilers
 
 		return deferred.promise
 
+	stylLoader: (content, file) ->
+		deferred = Q.defer()
+
+		stylus(content)
+			.include(path.dirname(file))
+			.set('include css', ('--includeCss' in process.argv))
+			.set('compress', !@simq.config.load().debugger.styles)
+			.render( (e, content) =>
+				if e then deferred.reject(@parseStylusError(e, file)) else deferred.resolve(content)
+			)
+
+		return deferred.promise
+
 
 	jsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
 
@@ -113,14 +127,25 @@ class Compilers
 		return Q.resolve(module)
 
 
-	parseLessError: (e, transform = true) ->
+	parseLessError: (e) ->
 		err = new Error e.type + 'Error: ' + e.message.replace(/[\s\.]+$/, '') + ' in ' + e.filename + ':' + e.line + ':' + e.column
 		err.type = e.type
 		err.filename = e.filename
 		err.line = e.line
 		err.column = e.column
 
-		if transform == false then err.message = e.message
+		return err
+
+
+	parseStylusError: (e, file) ->
+		data = e.message.split('\n')
+		line = data[0].split(':')[1]
+		message = data[data.length - 2]
+
+		err = new Error message + ' in '  + file + ':' + line
+		err.type = e.name
+		err.filename = file
+		err.line = line
 
 		return err
 
