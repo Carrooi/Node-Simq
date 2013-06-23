@@ -42,7 +42,7 @@ class SimQ
 					@parser.parseStyle(pckg.style.in).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.style.out, content)
 					, (e) ->
-						less.writeError e
+						throw e
 					).done()
 			)(pckg)
 

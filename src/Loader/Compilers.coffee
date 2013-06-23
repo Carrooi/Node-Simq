@@ -62,9 +62,12 @@ class Compilers
 			strictImports: false
 			compress: !@simq.config.load().debugger.styles
 
-		less.render(content, options, (e, content) ->
-			if e then deferred.reject(e) else deferred.resolve(content)
-		)
+		try
+			less.render(content, options, (e, content) =>
+				if e then throw @parseLessError(e, false) else deferred.resolve(content)
+			)
+		catch e
+			throw @parseLessError(e)
 
 		return deferred.promise
 
@@ -96,6 +99,18 @@ class Compilers
 			module = 'module.exports = ' + content
 
 		return Q.resolve(module)
+
+
+	parseLessError: (e, transform = true) ->
+		err = new Error e.type + 'Error: ' + e.message.replace(/[\s\.]+$/, '') + ' in ' + e.filename + ':' + e.line + ':' + e.column
+		err.type = e.type
+		err.filename = e.filename
+		err.line = e.line
+		err.column = e.column
+
+		if transform == false then err.message = e.message
+
+		return err
 
 
 module.exports = Compilers
