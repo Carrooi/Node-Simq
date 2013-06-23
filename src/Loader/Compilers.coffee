@@ -73,7 +73,7 @@ class Compilers
 		fileName = dir + '/.' + name + '.js'
 		ts = path.resolve(__dirname + '/../../node_modules/typescript/bin/tsc.js')
 		exec('node ' + ts + ' ' + file + ' --out ' + fileName, (e, stdout, stderr) =>
-			if e then deferred.reject(e)
+			if e then deferred.reject(@parseTsError(e, file))
 			else
 				fs.readFile(fileName, 'utf-8', (e, content) =>
 					fs.unlink(fileName)
@@ -206,6 +206,13 @@ class Compilers
 		err = new Error message + ' in ' + file + ':' + line
 		err.filename = file
 		err.line = line
+
+		return err
+
+
+	parseTsError: (e, file) ->
+		err = new Error e.message.replace(/^Command\sfailed\:\s/, '')
+		err.filename = file
 
 		return err
 
