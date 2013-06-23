@@ -79,7 +79,8 @@ In section 'run', you can set names of modules, which should be called automatic
 Last section defines other libraries and the place where they should be inserted. These libraries can also be
 on some remote server, the only think what you have to do, is prefix them with proper protocol ("http://", "https://").
 
-In this example you can also see all supported files: js, coffee, json and eco for templating.
+In this example you can also see all supported files: js, coffee, json and eco for templating. You can use even typescript
+files, but this is little slow, because typescript package doesn't provide any API for other programmers.
 
 Other main sections (template and debugger) are explained bellow.
 

@@ -24,7 +24,7 @@ class Application
 				return true
 			file = if libs[num].match(/^https?\:\/\//) == null then base + libs[num] else libs[num]
 			@loader.loadFile(file).then( (content) ->
-				result.push(content)
+				if content != null then result.push(content)
 				processLib(result, libs, num + 1, finish, error)
 			, (e) ->
 				error(e)

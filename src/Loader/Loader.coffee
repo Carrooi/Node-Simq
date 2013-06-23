@@ -18,6 +18,10 @@ class Loader
 
 	loadFile: (path) ->
 		if path.match(/^https?\:\/\//) == null then path = _path.resolve(path)
+
+		if _path.basename(path, _path.extname(path)).substr(0, 1) == '.' || path.substring(path.length - 1) == '~'
+			return Q.resolve(null)
+
 		return ( ->
 			deferred = Q.defer()
 
@@ -57,16 +61,18 @@ class Loader
 			ext = _path.extname(path).substr(1)
 
 			if !@compilers.hasCompiler(ext)
-				deferred.reject(new Error 'File type' + ext + ' is not supported')
+				deferred.reject(new Error 'File type ' + ext + ' is not supported')
 			else
 				@loadFile(path).then((content) ->
-					deferred.resolve(path: path, content: content)
+					if content == null then deferred.resolve(null) else deferred.resolve(path: path, content: content)
 				, (e) ->
 					deferred.reject(e)
 				)
 
 			return deferred.promise
 		)().then( (file) =>
+			if file == null then return Q.resolve(null)
+
 			deferred = Q.defer()
 			name = @simq.getModuleName(file.path)
 
@@ -116,7 +122,7 @@ class Loader
 			return true
 
 		@loadModule(files[num], base).then( (content) =>
-			result.push(content)
+			if content != null then result.push(content)
 			@processModules(result, files, num + 1, base, finish, error)
 		, (e) ->
 			error(e)

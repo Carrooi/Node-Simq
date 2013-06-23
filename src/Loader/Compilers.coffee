@@ -5,6 +5,9 @@ Q = require 'q'
 path = require 'path'
 stylus = require 'stylus'
 sass = require 'node-sass'
+fs = require 'fs'
+exec = require('child_process').exec
+
 
 class Compilers
 
@@ -59,6 +62,30 @@ class Compilers
 			deferred.resolve(coffee.compile(content, filename: file, literate: false))
 		catch e
 			deferred.reject(e)
+
+		return deferred.promise
+
+	tsLoader: (content, file) ->
+		deferred = Q.defer()
+		file = path.resolve(file)
+		dir = path.dirname(file)
+		name = path.basename(file, path.extname(file))
+		fileName = dir + '/.' + name + '.js'
+		ts = path.resolve(__dirname + '/../../node_modules/typescript/bin/tsc.js')
+		exec('node ' + ts + ' ' + file + ' --out ' + fileName, (e, stdout, stderr) =>
+			if e then deferred.reject(e)
+			else
+				fs.readFile(fileName, 'utf-8', (e, content) =>
+					fs.unlink(fileName)
+					if e then deferred.reject(e)
+					else
+						@prepare(fileName, content).then( (content) ->
+							deferred.resolve(content)
+						, (e) ->
+							deferred.reject(e)
+						)
+				)
+		)
 
 		return deferred.promise
 
@@ -120,6 +147,8 @@ class Compilers
 	jsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
 
 	coffeeCompiler: (content) -> return Q.resolve('return ' + content)
+
+	tsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
 
 	jsonCompiler: (content) -> return Q.resolve('module.exports = ' + content)
 
