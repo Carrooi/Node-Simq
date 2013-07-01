@@ -6,7 +6,9 @@ if !@require
 	cache = {}
 
 
-	require = (name) ->
+	require = (name, parent = null) ->
+		name = resolve(name, parent)
+
 		if typeof modules[name] == 'undefined'
 			throw new Error 'Module ' + name + ' was not found.'
 
@@ -19,8 +21,8 @@ if !@require
 				cached: true
 				exports: {}
 
-			modules[name].apply(window, [module.exports, (name) =>
-				return @require(name)
+			modules[name].apply(modules[name], [module.exports, (name, parent = null) =>
+				return @require(name, parent)
 			, module])
 
 			if module.cached == false
@@ -31,11 +33,39 @@ if !@require
 		return cache[name].exports
 
 
-	@require = (name) => require(name)
+	resolve = (name, parent = null) ->
+		if name[0] == '.' && parent != null
+			num = parent.lastIndexOf('/')
+			num = if num == -1 then 0 else num
 
-	@require.define = (bundle) =>
+			name = parent.substring(0, num) + '/' + name
+
+		parts = name.split('/')
+
+		result = []
+		prev = null
+
+		for part in parts
+			if part == '.' || part == ''
+				continue
+			else if part == '..' && prev
+				result.pop()
+			else
+				result.push(part)
+
+			prev = part
+
+		return result.join('/')
+
+
+	@require = (name, parent = null) ->
+		return require(name, parent)
+
+
+	@require.define = (bundle) ->
 		for name, module of bundle
 			modules[name] = module
 		return
+
 
 return @require.define

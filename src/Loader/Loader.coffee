@@ -79,7 +79,7 @@ class Loader
 			if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
 			@compilers.compile(file.path, file.content).then( (content) ->
-				deferred.resolve('\'' + name + '\': function(exports, require, module) {\n\t\t' + content + '\n\t}')
+				deferred.resolve('\'' + name + '\': function(exports, _r, module) {\nvar require = function(name) {return _r(name, \'' + name + '\');};\n\t\t' + content + '\n\t}')
 			)
 
 			return deferred.promise

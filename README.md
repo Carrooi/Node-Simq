@@ -147,6 +147,18 @@ module.exports = function() {
 ```
 
 You can notice that in require, we are not using any file extension - just like in node.
+In SimQ you can also use relative paths. Here is an example of loading module validator from the same folder like form's
+folder.
+
+```
+// module app/controllers/form/controls/form
+
+(function() {
+
+	var Validator = require('./validator');
+
+})();
+```
 
 ## Coffee script modules
 
