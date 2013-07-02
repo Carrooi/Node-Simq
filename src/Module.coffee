@@ -13,7 +13,7 @@ if !@require
 			throw new Error 'Module ' + name + ' was not found.'
 
 		if typeof modules[name] == 'string'
-			name = modules[name]
+			name = resolve(modules[name])
 
 		if typeof cache[name] == 'undefined'
 			module =
