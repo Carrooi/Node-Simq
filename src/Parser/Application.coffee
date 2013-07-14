@@ -1,6 +1,7 @@
 _path = require 'path'
 Uglify = require 'uglify-js'
 Q = require 'q'
+Finder = require 'fs-finder'
 
 class Application
 
@@ -45,13 +46,14 @@ class Application
 
 			for path in section.modules
 				if section.base != null then path = './' + section.base + '/' + path
+				filter = (stat, file) -> return file.substr(file.length - 1) != '~'
 
-				ext = _path.extname(path)
-				name = path.replace(new RegExp('\\*?' + ext + '$'), '')
-				ext = if ext == '' then null else ext.substring(1)
-
-				if name.substring(name.length - 1) == '/'
-					buf = buf.concat(@loader.getModulesInDir(@basePath + '/' + name, ext))
+				if (asterisk = path.indexOf('*')) != -1
+					baseDir = _path.resolve(path.substr(0, asterisk))
+					mask = path.substr(asterisk)
+					buf = buf.concat((new Finder(baseDir)).recursively().filter(filter).findFiles(mask))
+				else if path.substr(path.length - 1) == '/'
+					buf = buf.concat((new Finder(_path.resolve(path))).recursively().filter(filter).findFiles())
 				else
 					buf.push(@basePath + '/' + path)
 

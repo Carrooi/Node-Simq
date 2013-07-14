@@ -96,26 +96,6 @@ class Loader
 		return deferred.promise
 
 
-	getModulesInDir: (dir, type = null) ->
-		dir = _path.resolve(dir)
-		files = fs.readdirSync(dir)
-		result = []
-
-		for name in files
-			name = dir + '/' + name
-			stats = fs.statSync(name)
-
-			if stats.isFile() && name.substring(name.length - 1) != '~'
-				if type
-					continue if _path.extname(name) != '.' + type
-
-				result.push(name)
-			else if stats.isDirectory()
-				result = result.concat(@getModulesInDir(name, type))
-
-		return result
-
-
 	processModules: (result, files, num, base = null, finish, error) ->
 		if files.length == 0 || num == files.length
 			finish(result)
