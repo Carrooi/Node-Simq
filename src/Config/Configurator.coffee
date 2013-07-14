@@ -1,6 +1,7 @@
 EasyConfigurator = require 'easy-configuration'
 PackageExtension = require './PackageExtension'
 TemplateExtension = require './TemplateExtension'
+CacheExtension = require './CacheExtension'
 DebuggerExtension = require './DebuggerExtension'
 
 class Configurator extends EasyConfigurator
@@ -11,6 +12,7 @@ class Configurator extends EasyConfigurator
 
 		@addExtension('packages', new PackageExtension)
 		@addExtension('template', new TemplateExtension)
+		@addExtension('cache', new CacheExtension)
 		@addExtension('debugger', new DebuggerExtension(debug))
 
 

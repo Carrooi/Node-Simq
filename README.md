@@ -80,7 +80,8 @@ Last section defines other libraries and the place where they should be inserted
 on some remote server, the only think what you have to do, is prefix them with proper protocol ("http://", "https://").
 
 In this example you can also see all supported files: js, coffee, json and eco for templating. You can use even typescript
-files, but this is little slow, because typescript package doesn't provide any API for other programmers.
+files, but this is little bit slow, because typescript package doesn't provide any API for other programmers. But cache
+can help you with this (see below).
 
 Other main sections (template and debugger) are explained bellow.
 
@@ -232,6 +233,20 @@ Other way is to define it via config file, where you can set if you want to mini
 	}
 }
 ```
+
+## Cache
+Large applications may be little slow, so there is posibility to turn on cache.
+
+```
+{
+	"cache": {
+		"directory": "./temp"
+	}
+}
+```
+
+You have to create temp directory and then set name of that directory to your config file. Than every file
+(except style files) will be cached, so there is no need for rebuilding them every time.
 
 ## Source maps
 In debugger section, you can also allow source maps. For now, these are working only for less styles, which are using
