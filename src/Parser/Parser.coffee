@@ -17,12 +17,12 @@ class Parser
 		@loader = new Loader(@simq)
 
 
-	parseApplication: (section, minify = true) ->
-		return (new Application(@simq, @loader, @basePath)).parse(section, minify)
+	parseApplication: (section, name) ->
+		return (new Application(@simq, @loader, @basePath)).parse(section, name)
 
 
-	parseStyle: (path, minify = true) ->
-		return (new Style(@loader)).parse(path, minify)
+	parseStyle: (path, name) ->
+		return (new Style(@loader)).parse(path, name)
 
 
 module.exports = Parser

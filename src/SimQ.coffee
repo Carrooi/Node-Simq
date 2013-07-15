@@ -32,16 +32,17 @@ class SimQ
 		config = @config.load()
 
 		for name, pckg of config.packages
+			pckg.name = name
 			((pckg) =>
 				if pckg.application
-					@parser.parseApplication(pckg).then( (content) =>
+					@parser.parseApplication(pckg, pckg.name).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.application, content)
 					, (e) ->
 						throw e
 					).done()
 
 				if pckg.style && pckg.style.in && pckg.style.out
-					@parser.parseStyle(pckg.style.in).then( (content) =>
+					@parser.parseStyle(pckg.style.in, pckg.name).then( (content) =>
 						fs.writeFile(@basePath + '/' + pckg.style.out, content)
 					, (e) ->
 						throw e

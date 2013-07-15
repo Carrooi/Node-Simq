@@ -4,6 +4,7 @@ fs = require 'fs'
 http = require 'http'
 Cache = require 'cache-storage'
 FileStorage = require 'cache-storage/Storage/FileStorage'
+Finder = require 'fs-finder'
 Compilers = require './Compilers'
 
 class Loader
@@ -27,17 +28,23 @@ class Loader
 			@cache = new Cache(new FileStorage(_path.resolve(cacheDirectory)), Loader.CACHE_NAMESPACE)
 
 
-	isCacheAllowed: (path) ->
-		return @cache != null && _path.extname(path) not in ['.less', '.scss', '.styl']		# because of imports
+	isCacheAllowed: (path, packageName = null) ->
+		return false if @cache == null
+		return true if _path.extname(path) not in ['.less', '.scss', '.styl']
+		return false if packageName == null
+
+		dependencies = @simq.config.load().packages[packageName].style.dependencies
+
+		return if dependencies.length > 0 then dependencies else false
 
 
-	loadFile: (path) ->
+	loadFile: (path, packageName = null) ->
 		if path.match(/^https?\:\/\//) == null then path = _path.resolve(path)
 
 		if _path.basename(path, _path.extname(path)).substr(0, 1) == '.' || path.substring(path.length - 1) == '~'
 			return Q.resolve(null)
 
-		if @isCacheAllowed(path) && (data = @cache.load(_path.resolve(path))) != null
+		if @isCacheAllowed(path, packageName) != false && (data = @cache.load(_path.resolve(path))) != null
 			return Q.resolve(data)
 
 		return ( ->
@@ -63,9 +70,14 @@ class Loader
 		)().then( (file) =>
 			deferred = Q.defer()
 			@compilers.prepare(path, file.content).then( (content) =>
-				if @isCacheAllowed(file.path) && @cache.load(file.path) == null
+				if (dependencies = @isCacheAllowed(file.path, packageName)) != false && @cache.load(file.path) == null
+					files = [file.path]
+					if dependencies != true
+						for path in dependencies
+							files = files.concat(Finder.findFiles(path))
+
 					@cache.save(file.path, content,
-						files: [file.path]
+						files: files
 					)
 
 				deferred.resolve(content)

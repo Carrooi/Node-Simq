@@ -9,6 +9,7 @@ class PackageExtension extends Extension
 		style:
 			in: null
 			out: null
+			dependencies: []
 		modules: []
 		aliases: {}
 		run: []

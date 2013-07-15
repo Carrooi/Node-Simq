@@ -258,6 +258,26 @@ Large applications may be little slow, so there is posibility to turn on cache.
 You have to create temp directory and then set name of that directory to your config file. Than every file
 (except style files) will be cached, so there is no need for rebuilding them every time.
 
+Caching styles is little bit difficult because of the way style frameworks working (live importing files), so you need
+to define all dependent style files for turn on cache for styles.
+You can write each file or use regular expression ([documentation of fs-finder](https://npmjs.org/package/fs-finder)).
+
+```
+{
+	"packages": {
+		"styles": {
+			"style": {
+				"in": "./css/style.less",
+				"out": "./css/style.css",
+				"dependencies": [
+					"./css/<*.less$>"
+				]
+			}
+		}
+	}
+}
+```
+
 ## Source maps
 In debugger section, you can also allow source maps. For now, these are working only for less styles, which are using
 sass source map syntax.

@@ -12,8 +12,8 @@ class Style
 	constructor: (@loader) ->
 
 
-	parse: (path) ->
-		return @loader.loadFile(_path.resolve(path))
+	parse: (path, packageName) ->
+		return @loader.loadFile(_path.resolve(path), packageName)
 
 
 module.exports = Style

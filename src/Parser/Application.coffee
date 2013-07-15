@@ -17,7 +17,7 @@ class Application
 	constructor: (@simq, @loader, @basePath) ->
 
 
-	parse: (section) ->
+	parse: (section, packageName) ->
 		base = @basePath + '/' + (if section.base then section.base + '/' else '')
 
 		processLib = (result, libs, num, finish, error) =>
