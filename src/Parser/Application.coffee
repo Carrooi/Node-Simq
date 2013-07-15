@@ -2,6 +2,7 @@ _path = require 'path'
 Uglify = require 'uglify-js'
 Q = require 'q'
 Finder = require 'fs-finder'
+fs = require 'fs'
 
 class Application
 
@@ -46,16 +47,14 @@ class Application
 
 			for path in section.modules
 				if section.base != null then path = './' + section.base + '/' + path
-				filter = (stat, file) -> return file.substr(file.length - 1) != '~'
+				path = _path.resolve(@basePath + '/' + path)
 
-				if (asterisk = path.indexOf('*')) != -1
-					baseDir = _path.resolve(path.substr(0, asterisk))
-					mask = path.substr(asterisk)
-					buf = buf.concat((new Finder(baseDir)).recursively().filter(filter).findFiles(mask))
-				else if path.substr(path.length - 1) == '/'
-					buf = buf.concat((new Finder(_path.resolve(path))).recursively().filter(filter).findFiles())
+				if fs.existsSync(path) && fs.statSync(path).isFile()
+					buf.push(path)
 				else
-					buf.push(@basePath + '/' + path)
+					filter = (stat, file) -> return file.substr(file.length - 1) != '~'
+					path = Finder.parseDirectory(path)
+					buf = buf.concat((new Finder(path.directory)).recursively().filter(filter).findFiles(path.mask))
 
 			deferred = Q.defer()
 			@loader.loadModules(buf, section.base).then( (modules) ->

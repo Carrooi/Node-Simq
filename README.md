@@ -85,6 +85,16 @@ can help you with this (see below).
 
 Other main sections (template and debugger) are explained bellow.
 
+In modules section you can also use regular expressions enclosed with <>. Documentation in [fs-finder](https://npmjs.org/package/fs-finder).
+
+```
+"modules": {
+	"./<(app|lib)>/*.<(coffee|eco)$>"
+}
+```
+
+This will load all .coffee and .eco files in app or lib directory.
+
 ## Packages
 
 In example above, we have got just one package called "application", but you can create as many independent packages,
