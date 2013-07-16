@@ -105,6 +105,7 @@ Based on file extension if `in` variable, the right css framework will be chosen
 
 SimQ currently supports only [eco](https://npmjs.org/package/eco) templating system. Template files are defined in `modules`
 section and you can use them just like every other module (see below).
+
 There is also configuration which can save you few characters and wrap your eco templates automatically into jquery.
 
 `./config/setup.json`
@@ -250,6 +251,7 @@ In large applications or in applications with typescript (explanation above) it 
 Now when there is request for rebuild application, SimQ will first try to load result files (compiled) from cache and
 only if they are not in cache, they will be processed and saved to cache. Next time there is no need to recompile every
 file again, so they will be loaded from cache.
+
 This is little bit harder with styles, because they importing other files into itselfs, so cache do not know which files
 must be invalidated. If you also want to use cache in styles, you have to define dependent files in your config file.
 Luckily you don't have to write every file on your own, but let [fs-finder](https://npmjs.org/package/fs-finder) do
