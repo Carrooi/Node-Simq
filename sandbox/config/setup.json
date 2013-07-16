@@ -6,6 +6,9 @@
 		"styles": true,
 		"scripts": true
 	},
+	"cache": {
+		"directory": "./temp"
+	},
 	"packages": {
 		"application": {
 			"application": "./public/application.js",
