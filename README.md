@@ -6,17 +6,17 @@ Same also for your style files.
 ## Supported files
 
 Javascript:
-- .js (plain javascript)
-- .coffee ([coffee-script](http://coffeescript.org/))
-- .ts ([TypeScript](http://www.typescriptlang.org/))
+* .js (plain javascript)
+* .coffee ([coffee-script](http://coffeescript.org/))
+* .ts ([TypeScript](http://www.typescriptlang.org/))
 
 Styles:
-- .less ([Less](http://lesscss.org/))
-- .scss ([Sass](http://sass-lang.com/))
-- .styl ([Stylus](http://learnboost.github.io/stylus/))
+* .less ([Less](http://lesscss.org/))
+* .scss ([Sass](http://sass-lang.com/))
+* .styl ([Stylus](http://learnboost.github.io/stylus/))
 
 Templates:
-- .eco ([eco](https://npmjs.org/package/eco), [documentation](https://github.com/sstephenson/eco/blob/master/README.md))
+* .eco ([eco](https://npmjs.org/package/eco), [documentation](https://github.com/sstephenson/eco/blob/master/README.md))
 
 Unfortenatelly typescript is really slow for processing by SimQ. This is because of typescript does not provide any
 public API for other programmers, so there is just some slow workaround. This is really good point to use cache (see below).
