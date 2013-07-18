@@ -6,16 +6,19 @@ Same also for your style files.
 ## Supported files
 
 Javascript:
+
 * .js (plain javascript)
 * .coffee ([coffee-script](http://coffeescript.org/))
 * .ts ([TypeScript](http://www.typescriptlang.org/))
 
 Styles:
+
 * .less ([Less](http://lesscss.org/))
 * .scss ([Sass](http://sass-lang.com/))
 * .styl ([Stylus](http://learnboost.github.io/stylus/))
 
 Templates:
+
 * .eco ([eco](https://npmjs.org/package/eco), [documentation](https://github.com/sstephenson/eco/blob/master/README.md))
 
 Unfortenatelly typescript is really slow for processing by SimQ. This is because of typescript does not provide any
@@ -23,14 +26,14 @@ public API for other programmers, so there is just some slow workaround. This is
 
 ## Installing
 
-`terminal`
+`terminal`:
 ```
 $ npm install -g simq
 ```
 
 ## Creating application
 
-`terminal`
+`terminal`:
 ```
 $ simq create name-of-my-new-application
 ```
@@ -46,7 +49,7 @@ There are several sections in your config files, but the main one is section `pa
 about your modules and external libraries which will be packed into your final javascript or css file.
 The name `packages` also suggests, that you can got more independent packages in one application.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"packages": {
@@ -87,7 +90,7 @@ If you are using some CSS framework, you can let SimQ to handle these files to. 
 and it is good to separete javascript application into one package and your styles into another, but in this example, we
 will add styles definition in our first package.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -108,7 +111,7 @@ section and you can use them just like every other module (see below).
 
 There is also configuration which can save you few characters and wrap your eco templates automatically into jquery.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"packages": {
@@ -122,7 +125,7 @@ There is also configuration which can save you few characters and wrap your eco 
 
 ## Building application
 
-`terminal`
+`terminal`:
 ```
 $ cd /var/www/my-application
 $ simq build
@@ -130,7 +133,7 @@ $ simq build
 
 Or auto watching for changes:
 
-`terminal`
+`terminal`:
 ```
 $ simq watch
 ```
@@ -139,7 +142,7 @@ $ simq watch
 
 In your application you can use modules you defined just like you used to in node js.
 
-`index.html`
+`index.html`:
 ```
 <script type="text/javascript" src="path/to/the/result/javascript/file.js"></script>
 <script type="text/javascript">
@@ -156,7 +159,7 @@ Here we created instance of my/first/module and stored it in window object (wind
 Paths for modules have to be absolute from directory where you run `simq build` command. Exception are other modules,
 if you want to use module inside another module, you can require them also relativelly.
 
-`lib/form.coffee`
+`lib/form.coffee`:
 ```
 var FormValidator = require('./validator');
 var SomethingElse = require('../../SomethingElse');
@@ -167,7 +170,7 @@ var SomethingElse = require('../../SomethingElse');
 Maybe you will want to shorten some frequently used modules like jQuery. For example our jquery is in ./lib/jquery directory,
 so every time we want to use jquery, we have to write `require('lib/jquery/jquery')`. Solution for this is to use alises.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -193,7 +196,7 @@ If you have got more packages in your application, than writing some paths may b
 your application and when you have got your new js files for example in `./_NEW_` directory. It is not good to write
 anything like this: `require('_NEW_/app/Bootstrap')`. So you can set base "namespace" of every package.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -204,7 +207,7 @@ anything like this: `require('_NEW_/app/Bootstrap')`. So you can set base "names
 
 ## Changing config path
 
-`terminal`
+`terminal`:
 ```
 $ simq build --config my/own/path/to/config.json
 ```
@@ -214,14 +217,14 @@ $ simq build --config my/own/path/to/config.json
 In default, SimQ automatically minify all your scripts and styles, but for developer it would be better to see not-minified
 versions. Most simple way is to set it in build command.
 
-`terminal`
+`terminal`:
 ```
 $ simq build --debug
 ```
 
 But if you want debug mode only for styles and not for javascript, you have to write it in your config file.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"packages": {
@@ -239,7 +242,7 @@ But if you want debug mode only for styles and not for javascript, you have to w
 In large applications or in applications with typescript (explanation above) it is good to turn on cache. SimQ using
 [cache-storage](https://npmjs.org/package/cache-storage) module.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"cache": {
@@ -257,7 +260,7 @@ must be invalidated. If you also want to use cache in styles, you have to define
 Luckily you don't have to write every file on your own, but let [fs-finder](https://npmjs.org/package/fs-finder) do
 the job for you.
 
-`./config/setup.json`nameOfYourFirstModule
+`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -277,7 +280,7 @@ the job for you.
 Less can also generate source maps with sass source maps syntax. If you want this function, you have to turn no debug
 mode for styles.
 
-`./config/setup.json`
+`./config/setup.json`:
 ```
 {
 	"debugger": {
