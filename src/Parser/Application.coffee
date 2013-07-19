@@ -20,86 +20,111 @@ class Application
 	parse: (section, packageName) ->
 		base = @basePath + '/' + (if section.base then section.base + '/' else '')
 
-		processLib = (result, libs, num, finish, error) =>
-			if libs.length == 0 || num == libs.length
-				finish(result)
-				return true
-			file = if libs[num].match(/^https?\:\/\//) == null then base + libs[num] else libs[num]
-			@loader.loadFile(file).then( (content) ->
-				if content != null then result.push(content)
-				processLib(result, libs, num + 1, finish, error)
-			, (e) ->
-				error(e)
-			)
+		data =
+			data: section
+			result:
+				modules: []
+				final: []
 
-		return ( ->
-			return Q.resolve([])
-		)().then( (result) =>
+		return Q.resolve(data).then( (data) =>
 			deferred = Q.defer()
-			processLib(result, section.libs.begin, 0, (result) ->
-				deferred.resolve(result)
-			, (e) ->
-				deferred.reject(e)
+			@loadFiles(data.data.libs.begin, base).then( (result) ->
+				data.result.final = result
+				deferred.resolve(data)
 			)
 			return deferred.promise
-		).then( (result) =>
-			buf = []
-
-			for path in section.modules
-				if section.base != null then path = './' + section.base + '/' + path
-				path = _path.resolve(@basePath + '/' + path)
-
-				if fs.existsSync(path) && fs.statSync(path).isFile()
-					buf.push(path)
-				else
-					filter = (stat, file) -> return file.substr(file.length - 1) != '~'
-					path = Finder.parseDirectory(path)
-					buf = buf.concat((new Finder(path.directory)).recursively().filter(filter).findFiles(path.mask))
+		).then( (data) =>
+			modules = @findModules(section.modules, section.base)
 
 			deferred = Q.defer()
-			@loader.loadModules(buf, section.base).then( (modules) ->
-				deferred.resolve(result: result, modules: modules)
+			@loader.loadModules(modules, section.base).then( (modules) ->
+				data.result.modules = modules
+				deferred.resolve(data)
 			, (e) ->
 				deferred.reject(e)
 			)
 			return deferred.promise
 		).then( (data) =>
-			for alias, module of section.aliases
-				data.modules.push('\'' + alias + '\': \'' + module + '\'')
+			for alias, module of data.data.aliases
+				data.result.modules.push('\'' + alias + '\': \'' + module + '\'')
 
 			deferred = Q.defer()
 			@loader.loadFile(__dirname + '/../Module.js').then( (content) ->
 				content = content.replace(/\s+$/, '').replace(/;$/, '')
-				deferred.resolve(module: content, result: data.result, modules: data.modules)
+				data.result.final.push(content + '({' + data.result.modules.join(',\n') + '\n});')
+				deferred.resolve(data)
 			, (e) ->
 				deferred.reject(e)
 			)
 			return deferred.promise
-		).then( (data) ->
-			data.result.push(data.module + '({' + data.modules.join(',\n') + '\n});')
-			return Q.resolve(data.result)
-		).then( (result) =>
+		).then( (data) =>
 			deferred = Q.defer()
-			processLib(result, section.libs.end, 0, (result) ->
-				deferred.resolve(result)
-			, (e) ->
-				deferred.reject(e)
+			@loadFiles(data.data.libs.end, base).then( (result) ->
+				data.result.final = data.result.final.concat(result)
+				deferred.resolve(data)
 			)
 			return deferred.promise
-		).then( (result) =>
+		).then( (data) =>
 			run = []
 			for module in section.run
 				run.push('this.require(\'' + module + '\');')
 
-			result.push(run.join('\n'))
+			data.result.final.push(run.join('\n'))
 
-			return Q.resolve(result)
-		).then( (result) =>
-			result = result.join('\n\n')
+			return Q.resolve(data)
+		).then( (data) =>
+			result = data.result.final.join('\n\n')
 			if !@simq.config.load().debugger.scripts then result = Uglify.minify(result, fromString: true).code
 
 			return Q.resolve(result)
 		)
+
+
+	loadFiles: (files, base) ->
+		data =
+			result: []
+			progress: null
+			files: files
+
+		fn = (data) =>
+			deferred = Q.defer()
+			actual = if data.progress == null then 0 else data.progress
+			file = if data.files[actual].match(/^https?\:\/\//) == null then base + data.files[actual] else data.files[actual]
+			@loader.loadFile(file).then( (content) ->
+				if content != null then data.result.push(content)
+				deferred.resolve(data)
+			, (e) ->
+				deferred.reject(e)
+			)
+			data.progress++
+			return deferred.promise
+
+		fns = []
+		fns.push(fn) for i in [1..files.length]
+
+		deferred = Q.defer()
+		buf = fns.reduce( (soFar, f) ->
+			return soFar.then(f)
+		, Q.resolve(data))
+		buf.then((libs) -> deferred.resolve(libs.result) )
+		return deferred.promise
+
+
+	findModules: (paths, base = null) ->
+		result = []
+
+		for path in paths
+			if base != null then path = './' + base + '/' + path
+			path = _path.resolve(@basePath + '/' + path)
+
+			if fs.existsSync(path) && fs.statSync(path).isFile()
+				result.push(path)
+			else
+				filter = (stat, file) -> return file.substr(file.length - 1) != '~'
+				path = Finder.parseDirectory(path)
+				result = result.concat((new Finder(path.directory)).recursively().filter(filter).findFiles(path.mask))
+
+		return result
 
 
 module.exports = Application
