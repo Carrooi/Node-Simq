@@ -18,7 +18,7 @@ class Parser
 
 
 	parseApplication: (section, name) ->
-		return (new Application(@simq, @loader, @basePath)).parse(section, name)
+		return (new Application(@simq, @loader, @basePath, section, name)).parse()
 
 
 	parseStyle: (path, name) ->

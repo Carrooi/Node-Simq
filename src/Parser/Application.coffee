@@ -1,9 +1,7 @@
-_path = require 'path'
+path = require 'path'
 Uglify = require 'uglify-js'
 Q = require 'q'
-Finder = require 'fs-finder'
-fs = require 'fs'
-required = require 'required'
+Helpers = require './ApplicationHelpers'
 
 class Application
 
@@ -14,267 +12,73 @@ class Application
 
 	basePath: null
 
+	section: null
 
-	constructor: (@simq, @loader, @basePath) ->
+	packageName: null
 
 
-	parse: (section, packageName) ->
-		base = @basePath + '/' + (if section.base then section.base + '/' else '')
+	constructor: (@simq, @loader, @basePath, @section, @backageName) ->
 
-		data =
-			data: section
-			result:
-				modules: []
-				nodeModules: {}
-				final: []
 
-		return Q.resolve(data).then( (data) =>
-			deferred = Q.defer()
-			@loadFiles(data.data.libs.begin, base).then( (result) ->
-				data.result.final = result
-				deferred.resolve(data)
-			)
-			return deferred.promise
-		).then( (data) =>
-			modules = @findModules(section.modules, section.base)
+	parseLibraries: (type) ->
+		return Helpers.loadLibraries(@loader, @section.libs[type], @basePath)
 
-			deferred = Q.defer()
-			@loader.loadModules(modules, section.base).then( (modules) ->
-				data.result.modules = modules
-				deferred.resolve(data)
-			, (e) ->
-				deferred.reject(e)
-			)
-			return deferred.promise
-		).then( (data) =>
-			if fs.existsSync(@basePath + '/node_modules')
-				deferred = Q.defer()
-				@findNodeModules().then( (modulesData) =>
-					core = modulesData.core.join(', ')
-					if core.length > 0
-						console.warn 'Package "' + packageName + '" may will not work, due to usage of these core modules: ' + core + '.'
 
-					info = {}
-					for infoData in modulesData.info
-						info[infoData.moduleBase] =
-							name: infoData.module
-							path: infoData.modulePath
-					data.result.nodeModules = info
+	parseModules: ->
+		deferred = Q.defer()
+		Helpers.findDependentModulesFromList(@section.modules, @basePath).then( (data) =>
+			Helpers.loadModules(@loader, data.files, @section.base).then( (modules) =>
+				for alias, module of @section.aliases
+					modules.push('\'' + alias + '\': \'' + module + '\'')
 
-					@loader.loadModules(modulesData.files).then( (modules) ->
-						data.result.modules = data.result.modules.concat(modules)
-						deferred.resolve(data)
-					)
+				@loader.loadFile(__dirname + '/../Module.js').then( (content) =>
+					content = content.replace(/\s+$/, '').replace(/;$/, '')
+					base = path.resolve(@basePath)
+
+					node = {}
+					for module, info of data.node
+						main = path.relative(base, info.main).replace(/\.[a-zA-Z]+$/, '')
+						name = path.relative(base, module)
+
+						node[name] =
+							name: info.name
+							path: main
+
+					result =
+						modules: content + '({' + modules.join(',\n') + '\n});'
+						node: 'require._setNodeInfo(' + JSON.stringify(node) + ');\n'
+
+					deferred.resolve(result)
+				, (e) ->
+					deferred.reject(e)
 				)
-				return deferred.promise
-			else
-				return Q.resolve(data)
-		).then( (data) =>
-			for alias, module of data.data.aliases
-				data.result.modules.push('\'' + alias + '\': \'' + module + '\'')
-
-			deferred = Q.defer()
-			@loader.loadFile(__dirname + '/../Module.js').then( (content) ->
-				content = content.replace(/\s+$/, '').replace(/;$/, '')
-				data.result.final.push(content + '({' + data.result.modules.join(',\n') + '\n});')
-				data.result.final.push('require._setNodeInfo(' + JSON.stringify(data.result.nodeModules) + ');\n')
-				deferred.resolve(data)
-			, (e) ->
-				deferred.reject(e)
 			)
-			return deferred.promise
-		).then( (data) =>
-			deferred = Q.defer()
-			@loadFiles(data.data.libs.end, base).then( (result) ->
-				data.result.final = data.result.final.concat(result)
-				deferred.resolve(data)
-			)
-			return deferred.promise
-		).then( (data) =>
-			run = []
-			for module in section.run
-				run.push('this.require(\'' + module + '\');')
+		)
+		return deferred.promise
 
-			data.result.final.push(run.join('\n'))
 
-			return Q.resolve(data)
-		).then( (data) =>
-			result = data.result.final.join('\n\n')
+	parseRun: ->
+		run = []
+		for module in @section.run
+			run.push('this.require(\'' + module + '\');')
+
+		return Q.resolve(run)
+
+
+	parse: ->
+		return Q.all([
+			@parseLibraries('begin')
+			@parseModules()
+			@parseLibraries('end')
+			@parseRun()
+		]).then( (data) =>
+			result = [].concat(data[0], data[1].modules, data[1].node, data[2], data[3])
+			result = result.join('\n\n')
+
 			if !@simq.config.load().debugger.scripts then result = Uglify.minify(result, fromString: true).code
 
 			return Q.resolve(result)
 		)
-
-
-	loadFiles: (paths, base) ->
-		files = []
-		for path in paths
-			if path.match(/^https?\:\/\//) == null
-				path = _path.resolve(base + path)
-				if fs.existsSync(path)
-					files.push(path)
-				else
-					files = files.concat(Finder.findFiles(path))
-
-		data =
-			result: []
-			progress: null
-			files: files
-
-		fn = (data) =>
-			deferred = Q.defer()
-			actual = if data.progress == null then 0 else data.progress
-			file = data.files[actual]
-			@loader.loadFile(file).then( (content) ->
-				if content != null then data.result.push(content)
-				deferred.resolve(data)
-			, (e) ->
-				deferred.reject(e)
-			)
-			data.progress++
-			return deferred.promise
-
-		fns = []
-		if files.length > 0
-			fns.push(fn) for i in [0..files.length - 1]
-
-		deferred = Q.defer()
-		buf = fns.reduce( (soFar, f) ->
-			return soFar.then(f)
-		, Q.resolve(data))
-		buf.then((libs) -> deferred.resolve(libs.result) )
-		return deferred.promise
-
-
-	findModules: (paths, base = null) ->
-		result = []
-
-		for path in paths
-			if base != null then path = './' + base + '/' + path
-			path = _path.resolve(@basePath + '/' + path)
-
-			if fs.existsSync(path) && fs.statSync(path).isFile()
-				result.push(path)
-			else
-				filter = (stat, file) -> return file.substr(file.length - 1) != '~'
-				path = Finder.parseDirectory(path)
-				result = result.concat((new Finder(path.directory)).recursively().filter(filter).findFiles(path.mask))
-
-		return result
-
-
-	findNodeModules: ->
-		deferred = Q.defer()
-		modules =
-			files: []
-			info: []
-
-		for file in Finder.findFiles(_path.resolve(@basePath + '/node_modules/*/package.json'))
-			info = @getMainNodeModule(file, JSON.parse(fs.readFileSync(file, encoding: 'utf8')))
-			modules.files.push(info.file)
-			modules.info.push(info)
-
-		@loadNodeModuleDependencies(modules.files).then( (data) =>
-			deferred.resolve(files: data.files, info: modules.info, core: data.core)
-		)
-
-		return deferred.promise
-
-
-	findNodeFile: (path) ->
-		path = _path.resolve(path)
-		if fs.existsSync(path)
-			if fs.statSync(path).isDirectory()
-				return @findNodeFile(path + '/index')
-			else
-				return path
-		else if fs.existsSync(path + '.js')
-			return path + '.js'
-		else if fs.existsSync(path + '.json')
-			return path + '.json'
-		else
-			return null
-
-
-	loadNodeModuleDependencies: (files) ->
-		data =
-			result: []
-			core: []
-			progress: null
-			files: files
-
-		fn = (data) =>
-			deferred = Q.defer()
-			actual = if data.progress == null then 0 else data.progress
-			data.result.push(data.files[actual])
-			required(data.files[actual], ignoreMissing: true, (e, deps) =>
-				if e
-					deferred.reject(e)
-				else
-					result = []
-					for dep in deps
-						if dep.core == true
-							if data.core.indexOf(dep.id) == -1 then data.core.push(dep.id)
-						else
-							result.push(dep.filename)
-							if dep.deps.length > 0
-								result = result.concat(@parseDependencies(dep))
-					result = result.filter( (el, pos, self) ->
-						return self.indexOf(el) == pos
-					)
-
-					data.result = data.result.concat(result)
-					deferred.resolve(data)
-			)
-
-			data.progress++
-			return deferred.promise
-
-		fns = []
-		fns.push(fn) for i in [1..files.length]
-
-		deferred = Q.defer()
-		buf = fns.reduce( (soFar, f) ->
-			return soFar.then(f)
-		, Q.resolve(data))
-		buf.then((data) ->
-			deferred.resolve(core: data.core, files: data.result)
-		)
-		return deferred.promise
-
-
-	getMainNodeModule: (file, pckgInfo) ->
-		result =
-			file: null
-			moduleBase: null
-			modulePath: null
-			module: null
-
-		main = if typeof pckgInfo.main == 'undefined' then './index' else pckgInfo.main
-		main = _path.resolve(_path.dirname(file), main)
-		result.file = main = @findNodeFile(main)
-
-		result.moduleBase = _path.relative(@basePath, _path.dirname(file))
-
-		main = _path.relative(_path.resolve(@basePath), main)
-		result.modulePath = main.substring(0, main.length - _path.extname(main).length)
-
-		match = result.modulePath.match(/node_modules\/([a-z0-9-_]+)/g)
-		result.module = match[match.length - 1].split('/')[1]
-
-		return result
-
-
-	parseDependencies: (dep) ->
-		result = []
-		for sub in dep.deps
-			if sub.core != true
-				result.push(sub.filename)
-				if sub.deps.length > 0
-					result = result.concat(@parseDependencies(sub))
-		return result
-
-
 
 
 module.exports = Application

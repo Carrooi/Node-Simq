@@ -8,6 +8,7 @@ Same also for your style files.
 Javascript:
 
 * .js (plain javascript)
+* .json
 * .coffee ([coffee-script](http://coffeescript.org/))
 * .ts ([TypeScript](http://www.typescriptlang.org/))
 
@@ -84,6 +85,10 @@ The name `packages` also suggests, that you can got more independent packages in
 This is the basic configuration, where you can see how to load your modules and libraries. Plus modules can be loaded with
 one by one or with asterisk or with regular expression, which have to be enclosed in <> (see full documentation of
 [fs-finder](https://npmjs.org/package/fs-finder)).
+
+If you are programing in plain javascript, maybe it will be enough for you, to define just base main js file. This is
+because of SimQ automatically looks for dependecies and include other dependent files automatically. Now this is only for
+.js files.
 
 ## External libraries
 
@@ -176,10 +181,7 @@ var SomethingElse = require('../../SomethingElse');
 ## NPM modules
 
 You can also use modules from npm, but be carefull with this, because of usages of internal modules, which are not
-implemented in browser or in SimQ. If SimQ finds dopendency on some core module, it will show you message in terminal.
-
-These modules are not configured in any config file, but are loaded automatically when there is node_module folder. SimQ
-will look for depenedencies of these modules and pack them also to your package automatically. Then you can require them.
+implemented in browser or in SimQ.
 
 `terminal`:
 ```
