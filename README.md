@@ -173,6 +173,12 @@ implemented in browser or in SimQ. If SimQ finds dopendency on some core module,
 These modules are not configured in any config file, but are loaded automatically when there is node_module folder. SimQ
 will look for depenedencies of these modules and pack them also to your package automatically. Then you can require them.
 
+`terminal`:
+```
+$ cd /var/www/my-application
+$ npm install moment
+```
+
 `lib/form.coffee`:
 ```
 var moment = require('moment');
