@@ -109,11 +109,12 @@ class Application
 	loadFiles: (paths, base) ->
 		files = []
 		for path in paths
-			path = _path.resolve(path)
-			if fs.existsSync(path)
-				files.push(path)
-			else
-				files = files.concat(Finder.findFiles(path))
+			if path.match(/^https?\:\/\//) == null
+				path = _path.resolve(base + path)
+				if fs.existsSync(path)
+					files.push(path)
+				else
+					files = files.concat(Finder.findFiles(path))
 
 		data =
 			result: []
@@ -123,7 +124,7 @@ class Application
 		fn = (data) =>
 			deferred = Q.defer()
 			actual = if data.progress == null then 0 else data.progress
-			file = if data.files[actual].match(/^https?\:\/\//) == null then base + data.files[actual] else data.files[actual]
+			file = data.files[actual]
 			@loader.loadFile(file).then( (content) ->
 				if content != null then data.result.push(content)
 				deferred.resolve(data)
