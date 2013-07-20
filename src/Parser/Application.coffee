@@ -26,14 +26,15 @@ class Application
 
 	parseModules: ->
 		deferred = Q.defer()
-		Helpers.findDependentModulesFromList(@section.modules, @basePath).then( (data) =>
+		base = if @section.base == null then @basePath else @basePath + '/' + @section.base
+		Helpers.findDependentModulesFromList(@section.modules, base).then( (data) =>
 			Helpers.loadModules(@loader, data.files, @section.base).then( (modules) =>
 				for alias, module of @section.aliases
 					modules.push('\'' + alias + '\': \'' + module + '\'')
 
 				@loader.loadFile(__dirname + '/../Module.js').then( (content) =>
 					content = content.replace(/\s+$/, '').replace(/;$/, '')
-					base = path.resolve(@basePath)
+					base = path.resolve(base)
 
 					node = {}
 					for module, info of data.node
