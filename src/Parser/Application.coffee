@@ -50,6 +50,10 @@ class Application
 			if fs.existsSync(@basePath + '/node_modules')
 				deferred = Q.defer()
 				@findNodeModules().then( (modulesData) =>
+					core = modulesData.core.join(', ')
+					if core.length > 0
+						console.warn 'Package "' + packageName + '" may will not work, due to usage of these core modules: ' + core + '.'
+
 					info = {}
 					for infoData in modulesData.info
 						info[infoData.moduleBase] =
@@ -161,8 +165,8 @@ class Application
 			modules.files.push(info.file)
 			modules.info.push(info)
 
-		@loadNodeModuleDependencies(modules.files).then( (files) =>
-			deferred.resolve(files: files, info: modules.info)
+		@loadNodeModuleDependencies(modules.files).then( (data) =>
+			deferred.resolve(files: data.files, info: modules.info, core: data.core)
 		)
 
 		return deferred.promise
@@ -186,6 +190,7 @@ class Application
 	loadNodeModuleDependencies: (files) ->
 		data =
 			result: []
+			core: []
 			progress: null
 			files: files
 
@@ -199,7 +204,9 @@ class Application
 				else
 					result = []
 					for dep in deps
-						if dep.core != true
+						if dep.core == true
+							if data.core.indexOf(dep.id) == -1 then data.core.push(dep.id)
+						else
 							result.push(dep.filename)
 							if dep.deps.length > 0
 								result = result.concat(@parseDependencies(dep))
@@ -221,7 +228,9 @@ class Application
 		buf = fns.reduce( (soFar, f) ->
 			return soFar.then(f)
 		, Q.resolve(data))
-		buf.then((data) -> deferred.resolve(data.result) W)
+		buf.then((data) ->
+			deferred.resolve(core: data.core, files: data.result)
+		)
 		return deferred.promise
 
 

@@ -165,6 +165,19 @@ var FormValidator = require('./validator');
 var SomethingElse = require('../../SomethingElse');
 ```
 
+## NPM modules
+
+You can also use modules from npm, but be carefull with this, because of usages of internal modules, which are not
+implemented in browser or in SimQ. If SimQ finds dopendency on some core module, it will show you message in terminal.
+
+These modules are not configured in any config file, but are loaded automatically when there is node_module folder. SimQ
+will look for depenedencies of these modules and pack them also to your package automatically. Then you can require them.
+
+`lib/form.coffee`:
+```
+var moment = require('moment');
+```
+
 ## Aliases
 
 Maybe you will want to shorten some frequently used modules like jQuery. For example our jquery is in ./lib/jquery directory,

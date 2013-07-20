@@ -50,6 +50,14 @@ if !@require
 			# continue
 		else
 			count = parent.split('/').length - 1
+
+			num = name.indexOf('/')
+			if num == -1
+				nameRest = null
+			else
+				nameRest = name.substr(num + 1)
+				name = name.substr(0, num)
+
 			for i in [0..count]
 				num = parent.lastIndexOf('/')
 				num = if num == -1 then 0 else num
@@ -59,7 +67,11 @@ if !@require
 				moduleName = moduleName.replace(/^\//, '')
 
 				if typeof nodeInfo[moduleName] != 'undefined' && nodeInfo[moduleName].name == name
-					name = nodeInfo[moduleName].path
+					if nameRest == null
+						name = nodeInfo[moduleName].path
+					else
+						name = moduleName + '/' + nameRest
+
 					break
 
 		parts = name.split('/')
