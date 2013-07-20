@@ -66,7 +66,8 @@ The name `packages` also suggests, that you can got more independent packages in
 			"libs": {
 				"begin": [
 					"./some/external/library/in/the/beginning/of/the/result/file.js",
-					"http://some.library/in/remote/server.js"
+					"http://some.library/in/remote/server.js",
+					"./and/some/other/files/*.js"
 				],
 				"end": [
 					"./some/external/library/in/the/end/of/the/result/file.js"
@@ -82,7 +83,14 @@ The name `packages` also suggests, that you can got more independent packages in
 
 This is the basic configuration, where you can see how to load your modules and libraries. Plus modules can be loaded with
 one by one or with asterisk or with regular expression, which have to be enclosed in <> (see full documentation of
-[fs-finder](https://npmjs.org/package/fs-finder)). This option will be added also to libraries section.
+[fs-finder](https://npmjs.org/package/fs-finder)).
+
+## External libraries
+
+In example abowe, you could see `libs` section with two sub sections `begin` and `end`. There you can set some external
+libraries and their position in result file (begining or the end of the file).
+
+There you can also use asterisk or regular expressions like in `modules` sections.
 
 ## Styles
 

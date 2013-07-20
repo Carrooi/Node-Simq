@@ -106,7 +106,15 @@ class Application
 		)
 
 
-	loadFiles: (files, base) ->
+	loadFiles: (paths, base) ->
+		files = []
+		for path in paths
+			path = _path.resolve(path)
+			if fs.existsSync(path)
+				files.push(path)
+			else
+				files = files.concat(Finder.findFiles(path))
+
 		data =
 			result: []
 			progress: null
