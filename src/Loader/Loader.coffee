@@ -121,27 +121,4 @@ class Loader
 		)
 
 
-	loadModules: (modules, base = null) ->
-		deferred = Q.defer()
-		@processModules([], modules, 0, base, (result) ->
-			deferred.resolve(result)
-		, (e) ->
-			deferred.reject(e)
-		)
-		return deferred.promise
-
-
-	processModules: (result, files, num, base = null, finish, error) ->
-		if files.length == 0 || num == files.length
-			finish(result)
-			return true
-
-		@loadModule(files[num], base).then( (content) =>
-			if content != null then result.push(content)
-			@processModules(result, files, num + 1, base, finish, error)
-		, (e) ->
-			error(e)
-		)
-
-
 module.exports = Loader
