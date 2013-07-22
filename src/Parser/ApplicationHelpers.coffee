@@ -9,11 +9,16 @@ class ApplicationHelpers
 
 	@findDependentModules: (from) ->
 		if path.extname(from) != '.js'
-			return Q.resolve(
+			result =
 				files: [from]
 				core: []
 				node: {}
-			)
+			if (info = @findPackageInfo(from)) != null
+				result.node[info.dir] =
+					name: info.name
+					main: info.main
+
+			return Q.resolve(result)
 
 		parse = (dep) ->
 			result =
@@ -38,29 +43,27 @@ class ApplicationHelpers
 			if e
 				deferred.reject(e)
 			else
-				result =
+				res =
 					files: [from]
 					core: []
 					node: {}
 
 				for dep in deps
 					ext = parse(dep)
-					result.files = result.files.concat(ext.files)
-					result.core = result.core.concat(ext.core)
+					res.files = res.files.concat(ext.files)
+					res.core = res.core.concat(ext.core)
 
-				result.files = result.files.filter( (el, pos, self) -> return self.indexOf(el) == pos )
-				result.core = result.core.filter( (el, pos, self) -> return self.indexOf(el) == pos )
-
-				for file in result.files
-					pckg = @findNodePackage(file)
-					if pckg != null
-						pckg = JSON.parse(fs.readFileSync(pckg, encoding: 'utf8'))
-						info = @getModuleInfo(file, pckg)
-						result.node[info.dir] =
+				for file in res.files
+					if (info = @findPackageInfo(file)) != null
+						res.files.push(info.main)
+						res.node[info.dir] =
 							name: info.name
 							main: info.main
 
-				deferred.resolve(result)
+				#res.files = res.files.filter( (item, index) -> return res.files.indexOf(item) != index )
+				#res.core = res.core.filter( (item, index) -> return res.core.indexOf(item) != index )
+
+				deferred.resolve(res)
 		)
 		return deferred.promise
 
@@ -119,6 +122,15 @@ class ApplicationHelpers
 			return @getModuleBaseDir(file) + '/package.json'
 
 		return null
+
+
+	@findPackageInfo: (file) ->
+		pckg = @findNodePackage(file)
+		if pckg == null
+			return null
+		else
+			pckg = JSON.parse(fs.readFileSync(pckg, encoding: 'utf8'))
+			return @getModuleInfo(file, pckg)
 
 
 	@parseModulesList: (list, basePath) ->

@@ -17,7 +17,7 @@ class Application
 	packageName: null
 
 
-	constructor: (@simq, @loader, @basePath, @section, @backageName) ->
+	constructor: (@simq, @loader, @basePath, @section, @packageName) ->
 
 
 	parseLibraries: (type) ->
@@ -40,6 +40,9 @@ class Application
 					for module, info of data.node
 						main = path.relative(base, info.main).replace(/\.[a-zA-Z]+$/, '')
 						name = path.relative(base, module)
+
+						main = main.replace(/^[./]+/, '')
+						name = name.replace(/^[./]+/, '')
 
 						node[name] =
 							name: info.name

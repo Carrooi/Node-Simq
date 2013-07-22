@@ -49,6 +49,7 @@ if !@require
 		else if typeof modules[name] != 'undefined'
 			# continue
 		else
+			if parent == null then parent = ''
 			count = parent.split('/').length - 1
 
 			num = name.indexOf('/')
