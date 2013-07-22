@@ -2,6 +2,7 @@ Q = require 'q'
 _path = require 'path'
 fs = require 'fs'
 http = require 'http'
+https = require 'https'
 Cache = require 'cache-storage'
 FileStorage = require 'cache-storage/Storage/FileStorage'
 Finder = require 'fs-finder'
@@ -59,7 +60,8 @@ class Loader
 					if e then deferred.reject(new Error e) else deferred.resolve(path: path, ext: ext, content: data)
 				)
 			else
-				http.get(path, (res) ->
+				protocol = if path.match(/^https/) == null then http else https
+				protocol.get(path, (res) ->
 					data = ''
 					res.setEncoding('utf-8')
 					res.on('data', (chunk) -> data += chunk )

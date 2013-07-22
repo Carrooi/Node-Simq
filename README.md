@@ -97,6 +97,8 @@ libraries and their position in result file (begining or the end of the file).
 
 There you can also use asterisk or regular expressions like in `modules` sections.
 
+For libraries on remote server you can use http or https protocol.
+
 ## Styles
 
 If you are using some CSS framework, you can let SimQ to handle these files to. Styles definitions are also in packages
