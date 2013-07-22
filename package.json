@@ -1,7 +1,7 @@
 {
 	"name": "simq",
 	"description": "Simple require for javascript (client)",
-	"version": "3.2.7",
+	"version": "3.2.8",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
@@ -17,6 +17,7 @@
 		"type": "git",
 		"url": "git@github.com:sakren/node-simq.git"
 	},
+	"licence": "MIT",
 	"engines": {
 		"node": "*"
 	},
