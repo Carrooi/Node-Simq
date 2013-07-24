@@ -46,8 +46,6 @@ if !@require
 			num = if num == -1 then 0 else num
 
 			name = parent.substring(0, num) + '/' + name
-		else if typeof modules[name] != 'undefined'
-			# continue
 		else
 			if parent == null then parent = ''
 			count = parent.split('/').length - 1
@@ -90,7 +88,26 @@ if !@require
 
 			prev = part
 
-		return result.join('/')
+
+		name = result.join('/')
+
+		checkName = (name) ->
+			if typeof modules[name] != 'undefined'
+				return name
+			else if typeof modules[name + '.js'] != 'undefined'
+				return name + '.js'
+			else if typeof modules[name + '.json'] != 'undefined'
+				return name + '.json'
+			else if typeof modules[name + '.coffee'] != 'undefined'
+				return name + '.coffee'
+			else if typeof modules[name + '.ts'] != 'undefined'
+				return name + '.ts'
+			else if typeof modules[name + '.eco'] != 'undefined'
+				return name + '.eco'
+			else
+				return name
+
+		return checkName(name)
 
 
 	@require = (name, parent = null) ->

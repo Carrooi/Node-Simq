@@ -39,7 +39,7 @@ class Application
 
 					node = {}
 					for module, info of data.node
-						main = path.relative(base, info.main).replace(/\.[a-zA-Z]+$/, '')
+						main = path.relative(base, info.main)
 						name = path.relative(base, module)
 
 						main = main.replace(/^[./]+/, '')

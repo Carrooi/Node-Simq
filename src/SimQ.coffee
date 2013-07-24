@@ -84,7 +84,6 @@ class SimQ
 	getModuleName: (path) ->
 		path = _path.resolve(path)
 		path = path.replace(new RegExp('^' + process.cwd() + '\/'), '')
-		path = path.replace(new RegExp(_path.extname(path) + '$'), '')
 		return path
 
 

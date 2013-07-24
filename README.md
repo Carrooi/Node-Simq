@@ -174,10 +174,12 @@ Here we created instance of my/first/module and stored it in window object (wind
 Paths for modules have to be absolute from directory where you run `simq build` command. Exception are other modules,
 if you want to use module inside another module, you can require them also relativelly.
 
+File extensions are also optional.
+
 `lib/form.coffee`:
 ```
 var FormValidator = require('./validator');
-var SomethingElse = require('../../SomethingElse');
+var SomethingElse = require('../../SomethingElseWithExtension.js');
 ```
 
 ## NPM modules
