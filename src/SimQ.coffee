@@ -22,9 +22,9 @@ class SimQ
 
 	constructor: (@debug, configPath = null) ->
 		if !configPath then configPath = @configPath
-		@configPath = configPath
+		@configPath = _path.resolve(@basePath + '/' + configPath)
 
-		@config = new Configurator(@basePath + '/' + @configPath, @debug)
+		@config = new Configurator(@configPath, @debug)
 		@parser = new Parser(@, @basePath)
 
 
