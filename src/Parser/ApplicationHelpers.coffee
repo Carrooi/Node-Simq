@@ -176,7 +176,6 @@ class ApplicationHelpers
 		return Q.all(result)
 
 
-
 	@findLibrariesFromList: (list, basePath) ->
 		libraries = []
 		for file in list

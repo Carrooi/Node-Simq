@@ -36,6 +36,7 @@ class Compilers
 			)
 		else
 			deferred.resolve(content.replace(/^\s+|\s+$/g, ''))
+
 		return deferred.promise
 
 
@@ -52,6 +53,7 @@ class Compilers
 		if !@hasCompiler(ext) then throw new Error 'File type ' + ext + ' is not supported.'
 
 		@[ext + 'Compiler'](content, file).then( (content) -> deferred.resolve(content) )
+
 		return deferred.promise
 
 
