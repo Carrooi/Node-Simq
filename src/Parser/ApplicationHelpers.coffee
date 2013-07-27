@@ -20,24 +20,6 @@ class ApplicationHelpers
 
 			return Q.resolve(result)
 
-		parse = (dep) ->
-			result =
-				files: []
-				core: []
-
-			if dep.core == true
-				result.core.push(dep.id)
-			else
-				result.files.push(dep.filename)
-				if dep.deps.length > 0
-					for sub in dep.deps
-						ext =
-							parse(sub)
-						result.files = result.files.concat(ext.files)
-						result.core = result.core.concat(ext.core)
-
-			return result
-
 		deferred = Q.defer()
 		required(from, ignoreMissing: true, (e, deps) =>
 			if e
@@ -49,7 +31,7 @@ class ApplicationHelpers
 					node: {}
 
 				for dep in deps
-					ext = parse(dep)
+					ext = @parseDependencies(dep)
 					res.files = res.files.concat(ext.files)
 					res.core = res.core.concat(ext.core)
 
@@ -60,12 +42,29 @@ class ApplicationHelpers
 							name: info.name
 							main: info.main
 
-				#res.files = res.files.filter( (item, index) -> return res.files.indexOf(item) != index )
-				#res.core = res.core.filter( (item, index) -> return res.core.indexOf(item) != index )
+				res.files = @removeDuplicates(res.files)
+				res.core = @removeDuplicates(res.core)
 
 				deferred.resolve(res)
 		)
 		return deferred.promise
+
+
+	@parseDependencies: (dep) ->
+		result =
+			files: []
+			core: []
+
+		if dep.core == true
+			result.core.push(dep.id)
+		else
+			result.files.push(dep.filename)
+			for sub in dep.deps
+				ext = @parseDependencies(sub)
+				result.files = result.files.concat(ext.files)
+				result.core = result.core.concat(ext.core)
+
+		return result
 
 
 	@isInModule: (file) ->
@@ -73,34 +72,25 @@ class ApplicationHelpers
 
 
 	@getModuleName: (file) ->
+		if !@isInModule(file)
+			return null
+
 		buf = file.substr(file.lastIndexOf('/node_modules/') + 14)
 		return buf.substr(0, buf.indexOf('/'))
 
 
 	@getModuleBaseDir: (file) ->
+		if !@isInModule(file)
+			return null
+
 		return file.substr(0, file.lastIndexOf('/node_modules/') + 14) + @getModuleName(file)
-
-
-	@getModuleInfo: (file, pckg) ->
-		main = if typeof pckg.main == 'undefined' then './index' else pckg.main
-		dir = @getModuleBaseDir(file)
-		main = dir + '/' + main
-		main = @resolveNodeFile(main)
-
-		result =
-			file: file
-			name: @getModuleName(file)
-			main: path.normalize(main)
-			dir: dir
-
-		return result
 
 
 	@resolveNodeFile: (_path) ->
 		_path = path.resolve(_path)
 		if fs.existsSync(_path)
 			if fs.statSync(_path).isDirectory()
-				return @findNodeFile(_path + '/index')
+				return @resolveNodeFile(_path + '/index')
 			else
 				return _path
 		else if fs.existsSync(_path + '.js')
@@ -118,19 +108,32 @@ class ApplicationHelpers
 
 
 	@findNodePackage: (file) ->
-		if @isInModule(file)
-			return @getModuleBaseDir(file) + '/package.json'
+		if !@isInModule(file)
+			return null
 
-		return null
+		return @getModuleBaseDir(file) + '/package.json'
 
 
 	@findPackageInfo: (file) ->
-		pckg = @findNodePackage(file)
-		if pckg == null
+		if !@isInModule(file)
 			return null
-		else
-			pckg = JSON.parse(fs.readFileSync(pckg, encoding: 'utf8'))
-			return @getModuleInfo(file, pckg)
+
+		pckg = @findNodePackage(file)
+		pckg = JSON.parse(fs.readFileSync(pckg, encoding: 'utf8'))
+
+		main = if typeof pckg.main == 'undefined' then './index' else pckg.main
+		dir = @getModuleBaseDir(file)
+		main = dir + '/' + main
+		main = @resolveNodeFile(main)
+
+		result =
+			file: file
+			name: @getModuleName(file)
+			main: path.normalize(main)
+			dir: dir
+
+		return result
+
 
 
 	@parseModulesList: (list, basePath) ->
@@ -141,6 +144,8 @@ class ApplicationHelpers
 				modules.push(module)
 			else
 				modules = modules.concat(Finder.findFiles(module))
+
+		modules = @removeDuplicates(modules)
 
 		return modules
 
@@ -188,6 +193,8 @@ class ApplicationHelpers
 			else
 				libraries.push(file)
 
+		libraries = @removeDuplicates(libraries)
+
 		return libraries
 
 
@@ -199,6 +206,10 @@ class ApplicationHelpers
 			result.push(loader.loadFile(library))
 
 		return Q.all(result)
+
+
+	@removeDuplicates: (array) ->
+		return array.filter( (el, pos) -> return array.indexOf(el) == pos)
 
 
 module.exports = ApplicationHelpers

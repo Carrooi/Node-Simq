@@ -20,7 +20,7 @@ class SimQ
 	parser: null
 
 
-	constructor: (@debug, configPath = null) ->
+	constructor: (@debug = false, @basePath = '.', configPath = null) ->
 		if !configPath then configPath = @configPath
 		@configPath = _path.resolve(@basePath + '/' + configPath)
 

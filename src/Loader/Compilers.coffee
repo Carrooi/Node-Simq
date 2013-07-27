@@ -146,11 +146,11 @@ class Compilers
 		return deferred.promise
 
 
-	jsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
+	jsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n}).call(this);')
 
 	coffeeCompiler: (content) -> return Q.resolve('return ' + content)
 
-	tsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n\t\t}).call(this);')
+	tsCompiler: (content) -> return Q.resolve('return (function() {\n' + content + '\n}).call(this);')
 
 	jsonCompiler: (content) -> return Q.resolve('module.exports = ' + content)
 

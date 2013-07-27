@@ -1,7 +1,7 @@
 {
 	"name": "simq",
 	"description": "Simple require for javascript (client)",
-	"version": "3.3.1",
+	"version": "3.4.0",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
@@ -41,5 +41,8 @@
 		"easy-configuration": "latest",
 		"fs-finder": "latest",
 		"cache-storage": "latest"
+	},
+	"devDependencies": {
+		"should": "1.2.2"
 	}
 }

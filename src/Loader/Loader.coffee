@@ -137,7 +137,8 @@ class Loader
 				if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
 				@compilers.compile(data.path, data.content).then( (content) ->
-					deferred.resolve('\'' + name + '\': function(exports, _r, module) {\nvar require = function(name) {return _r(name, \'' + name + '\');};\n\t\t' + content + '\n\t}')
+					deferred.resolve('\'' + name + '\': function(exports, _r, module) {\nvar require = function(name) {return _r(name, \'' + name + '\');};\n' + content + '\n};')
+					#deferred.resolve('\'' + name + '\': function(exports, _r, module) {\nvar require = function(name) {return _r(name, \'' + name + '\');};\n\t\t' + content + '\n\t}')
 				)
 		)
 

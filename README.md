@@ -3,6 +3,10 @@
 Join and minify all your javascript files into one (even remote ones) and use them in browser just like in node server.
 Same also for your style files.
 
+## Changelog
+
+Changelog is in the bottom of readme.
+
 ## Supported files
 
 Javascript:
@@ -322,3 +326,10 @@ mode for styles.
 	}
 }
 ```
+
+## Changelog list
+
+* 3.4.0:
+	+ Added changelog
+	+ Created some tests for bulding js application
+	+ Fixed bugs in js building

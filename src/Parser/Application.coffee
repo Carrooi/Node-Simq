@@ -50,7 +50,7 @@ class Application
 							path: main
 
 					result =
-						modules: content + '({' + modules.join(',\n') + '\n});'
+						modules: content + '({\n' + modules.join(',\n') + '\n});'
 						node: 'require._setNodeInfo(' + JSON.stringify(node) + ');\n'
 
 					deferred.resolve(result)

@@ -24,7 +24,7 @@ else if argv.command == 'create'
 else
 	debug = argv.debug and true or false
 
-	s = new SimQ(debug, argv.config)
+	s = new SimQ(debug, '.', argv.config)
 
 	switch argv.command
 		when 'build'
