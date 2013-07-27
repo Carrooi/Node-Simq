@@ -22,7 +22,7 @@ class Application
 
 	parseLibraries: (type) ->
 		base = if @section.base == null then @basePath else @basePath + '/' + @section.base
-		return Helpers.loadLibraries(@loader, @section.libs[type], base)
+		return Helpers.loadLibraries(@loader, @section.libraries[type], base)
 
 
 	parseModules: ->

@@ -68,7 +68,7 @@ The name `packages` also suggests, that you can got more independent packages in
 				"./even/more/modules/here/*.<(coffee|js|ts)$>",
 				"./libs/jquery/jquery.js"
 			],
-			"libs": {
+			"libraries": {
 				"begin": [
 					"./some/external/library/in/the/beginning/of/the/result/file.js",
 					"http://some.library/in/remote/server.js",
@@ -96,7 +96,7 @@ because of SimQ automatically looks for dependecies and include other dependent 
 
 ## External libraries
 
-In example abowe, you could see `libs` section with two sub sections `begin` and `end`. There you can set some external
+In example abowe, you could see `libraries` section with two sub sections `begin` and `end`. There you can set some external
 libraries and their position in result file (begining or the end of the file).
 
 There you can also use asterisk or regular expressions like in `modules` sections.
@@ -333,3 +333,6 @@ mode for styles.
 	+ Added changelog
 	+ Created some tests for bulding js application
 	+ Fixed bugs in js building
+
+* 3.5.0
+	+ Libs section renamed to libraries

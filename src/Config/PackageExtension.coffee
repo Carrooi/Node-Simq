@@ -13,7 +13,7 @@ class PackageExtension extends Extension
 		modules: []
 		aliases: {}
 		run: []
-		libs:
+		libraries:
 			begin: []
 			end: []
 
