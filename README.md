@@ -340,3 +340,6 @@ mode for styles.
 
 * 3.5.1
 	+ Bug with generating modules
+
+* 3.5.2
+	+ Section run is compiled before libraries - end

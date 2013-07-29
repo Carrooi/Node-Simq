@@ -74,8 +74,8 @@ class Application
 		return Q.all([
 			@parseLibraries('begin')
 			@parseModules()
-			@parseLibraries('end')
 			@parseRun()
+			@parseLibraries('end')
 		]).then( (data) =>
 			result = [].concat(data[0], data[1].modules, data[1].node, data[2], data[3])
 			result = result.join('\n\n')
