@@ -337,3 +337,6 @@ mode for styles.
 * 3.5.0
 	+ Libs section renamed to libraries
 	+ Tests can be run throw `npm test` command
+
+* 3.5.1
+	+ Bug with generating modules
