@@ -216,7 +216,12 @@
 		describe('#loadModules()', function() {
 			it('should return prepared module file', function(done) {
 				ApplicationHelpers.loadModules(loader, [simq.basePath + '/modules/1.js'], simq.basePath).then(function(data) {
-					var content = '\'data/package/modules/1.js\': function(exports, _r, module) {\nvar require = function(name) {return _r(name, \'data/package/modules/1.js\');};\nreturn (function() {\nrequire(\'./2\');\n}).call(this);\n}';
+					var globals =
+						"var require = function(name) {return __require(name, 'data/package/modules/1.js');};\n" +
+						"var __filename = 'data/package/modules/1.js';\n" +
+						"var __dirname = 'data/package/modules';";
+					var content = "'data/package/modules/1.js': function(exports, __require, module) {\n" + globals + "\nreturn (function() {\nrequire('./2');\n}).call(this);\n}";
+
 					data.should.eql([content]);
 					done();
 				}).done();
