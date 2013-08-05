@@ -144,6 +144,8 @@ There is also configuration which can save you few characters and wrap your eco 
 
 ## Building application
 
+There are three options how to build your application: build to disk, watch for changes and then build and create server.
+
 `terminal`:
 ```
 $ cd /var/www/my-application
@@ -156,6 +158,44 @@ Or auto watching for changes:
 ```
 $ simq watch
 ```
+
+`terminal`:
+```
+$ simq server
+```
+
+## Server
+
+Server has got it's own setup in your config file. You can set port of your server (default is 3000) and custom routes.
+
+`./config/setup.json`:
+```
+{
+	"server": {
+		"port": 4000
+	},
+	"routes": {
+		"main": "./index.html",
+		"prefix": "app/",
+		"routes": {
+			"data-in-directory": "./someDataOnMyDisk",
+			"source-file": "./someRandomFileOnMyDisk"
+		}
+	}
+}
+```
+
+Both these sections server and routes are top level sections in config file (like packages section).
+
+In routes section, we've set main index html file (default is `./public/index.html`), prefix for our application and routes.
+If you set prefix, then every route url will be prefixed with it (default is `/`). And I guess that routes doesn't need any other explanation.
+
+SimQ will also automatically set routes for your result javascript and style files.
+
+In this example there will be just free urls (if index.html file exists):
+* http://localhost:4000/app/
+* http://localhost:4000/app/data-in-directory/<some file>
+* http://localhost:4000/app/source-file
 
 ## Using modules
 
@@ -226,7 +266,6 @@ It would be great if some modules can be started automatically after script is l
 one Bootstrap.js module, which do not export anything but just load for example Application.js module and prepare your
 application. With this in most cases you don't have to got any javascript code in your HTML files!
 
-
 ## Base namespace
 
 If you have got more packages in your application, than writing some paths may be boring. Good example is when you rewriting
@@ -272,6 +311,14 @@ But if you want debug mode only for styles and not for javascript, you have to w
 		"scripts": false
 	}
 }
+```
+
+## Verbose mode
+
+SimQ can also tell you some more informations in command line.
+
+```
+$ simq server -v
 ```
 
 ## Caching
@@ -329,17 +376,22 @@ mode for styles.
 
 ## Changelog list
 
-* 3.4.0:
-	+ Added changelog
-	+ Created some tests for bulding js application
-	+ Fixed bugs in js building
+* 3.6.0
+	+ Added server command
+	+ Added verbose option
+	+ Updated sandbox
+
+* 3.5.2
+	+ Section run is compiled before libraries - end
+
+* 3.5.1
+	+ Bug with generating modules
 
 * 3.5.0
 	+ Libs section renamed to libraries
 	+ Tests can be run throw `npm test` command
 
-* 3.5.1
-	+ Bug with generating modules
-
-* 3.5.2
-	+ Section run is compiled before libraries - end
+* 3.4.0:
+	+ Added changelog
+	+ Created some tests for bulding js application
+	+ Fixed bugs in js building

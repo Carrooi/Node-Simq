@@ -4,12 +4,14 @@ optimist = require 'optimist'
 argv = optimist.usage([
 		'simq COMMAND'
 		'	creare: create and prepare new application'
+		'	server: create server'
 		'	build:  save all changes to disk'
 		'	watch:  watch for new changes and save them automatically to disk\n'
 		'	--help: show this help'
 	].join('\n'))
 	.alias('d', 'debug').describe('d', 'all compilations use debug mode')
 	.alias('c', 'config').describe('c', 'set custom config file')
+	.alias('v', 'verbose').describe('v', 'make SimQ more talkative')
 	.argv
 
 argv.command = argv._[0]
@@ -25,8 +27,13 @@ else
 	debug = argv.debug and true or false
 
 	s = new SimQ(debug, '.', argv.config)
+	s.v = !!argv.v
 
 	switch argv.command
+		when 'server'
+			console.log 'Creating server'
+			s.server()
+
 		when 'build'
 			console.log 'Building application'
 			s.build()
