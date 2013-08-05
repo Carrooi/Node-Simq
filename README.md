@@ -376,6 +376,10 @@ mode for styles.
 
 ## Changelog list
 
+* 3.7.0
+	+ Module objects is almost the same like in node
+	+ Added __filename and __dirname variables
+
 * 3.6.0
 	+ Added server command
 	+ Added verbose option

@@ -136,12 +136,26 @@ class Loader
 
 				if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
-				@compilers.compile(data.path, data.content).then( (content) ->
-					deferred.resolve('\'' + name + '\': function(exports, _r, module) {\nvar require = function(name) {return _r(name, \'' + name + '\');};\n' + content + '\n}')
+				@compilers.compile(data.path, data.content).then( (content) =>
+					globals = @getGlobalsForModule(name).join('\n')
+					deferred.resolve("'#{name}': function(exports, __require, module) {\n#{globals}\n#{content}\n}")
 				)
 		)
 
 		return deferred.promise
+
+
+	getGlobalsForModule: (name) ->
+		globals =
+			require: "function(name) {return __require(name, '#{name}');}"
+			__filename: "'#{name}'"
+			__dirname: '\'' + _path.dirname(name) + '\''
+
+		result = []
+		for key, value of globals
+			result.push("var #{key} = #{value};")
+
+		return result
 
 
 module.exports = Loader

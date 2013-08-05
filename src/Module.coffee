@@ -19,16 +19,18 @@ if !@require
 
 		if typeof cache[name] == 'undefined'
 			module =
-				id: name
-				cached: true
 				exports: {}
+				id: name
+				filename: name
+				loaded: false
+				parent: null
+				children: null
 
 			modules[name].apply(modules[name], [module.exports, (name, parent = null) =>
 				return @require(name, parent)
 			, module])
 
-			if module.cached == false
-				return module.exports
+			module.loaded = false
 
 			cache[name] = module
 

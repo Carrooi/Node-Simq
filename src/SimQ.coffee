@@ -139,8 +139,6 @@ class SimQ
 	build: ->
 		config = @config.load()
 
-		console.log 'Building application'
-
 		for name, pckg of config.packages
 			pckg.name = name
 			((pckg) =>
