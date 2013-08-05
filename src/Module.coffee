@@ -122,6 +122,13 @@ if !@require
 		return
 
 
+	@require.resolve = (name, parent = null) ->
+		return resolve(name, parent)
+
+
+	@require.cache = cache
+
+
 	@require._setNodeInfo = (data) ->
 		nodeInfo = data
 		return

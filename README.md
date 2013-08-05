@@ -359,6 +359,26 @@ the job for you.
 }
 ```
 
+## Compatibility with node
+
+Global objects:
+* [require](http://nodejs.org/api/globals.html#globals_require): yes
+* [require.resolve](http://nodejs.org/api/globals.html#globals_require_resolve): yes
+* [require.cache](http://nodejs.org/api/globals.html#globals_require_cache): yes
+* [__filename](http://nodejs.org/api/globals.html#globals_filename): yes
+* [__dirname](http://nodejs.org/api/globals.html#globals_dirname): yes
+* [module](http://nodejs.org/api/globals.html#globals_module): yes (partialy)
+* [exports](http://nodejs.org/api/globals.html#globals_exports): yes
+
+Module object:
+* [module.exports](http://nodejs.org/api/modules.html#modules_module_exports): yes
+* [module.require](http://nodejs.org/api/modules.html#modules_module_require_id): no
+* [module.id](http://nodejs.org/api/modules.html#modules_module_id): yes
+* [module.filename](http://nodejs.org/api/modules.html#modules_module_filename): yes
+* [module.loaded](http://nodejs.org/api/modules.html#modules_module_loaded): yes
+* [module.parent](http://nodejs.org/api/modules.html#modules_module_parent): no
+* [module.children](http://nodejs.org/api/modules.html#modules_module_children): no
+
 ## Source maps
 
 Less can also generate source maps with sass source maps syntax. If you want this function, you have to turn no debug
@@ -375,6 +395,11 @@ mode for styles.
 ```
 
 ## Changelog list
+
+* 3.7.1
+	+ Added informations about compatibility with node
+	+ Exposed require.resolve function
+	+ Exposed require.cache object
 
 * 3.7.0
 	+ Module objects is almost the same like in node
