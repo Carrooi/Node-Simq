@@ -377,22 +377,22 @@ the job for you.
 ## Compatibility with node
 
 Global objects:
-* [require](http://nodejs.org/api/globals.html#globals_require): yes
-* [require.resolve](http://nodejs.org/api/globals.html#globals_require_resolve): yes
-* [require.cache](http://nodejs.org/api/globals.html#globals_require_cache): yes
-* [__filename](http://nodejs.org/api/globals.html#globals_filename): yes
-* [__dirname](http://nodejs.org/api/globals.html#globals_dirname): yes
-* [module](http://nodejs.org/api/globals.html#globals_module): yes (partialy)
-* [exports](http://nodejs.org/api/globals.html#globals_exports): yes
+* require ([link](http://nodejs.org/api/globals.html#globals_require)): yes
+* require.resolve ([link](http://nodejs.org/api/globals.html#globals_require_resolve)): yes
+* require.cache ([link](http://nodejs.org/api/globals.html#globals_require_cache)): yes
+* __filename ([link](http://nodejs.org/api/globals.html#globals_filename)): yes
+* __dirname ([link](http://nodejs.org/api/globals.html#globals_dirname)): yes
+* module ([link](http://nodejs.org/api/globals.html#globals_module)): yes (partialy)
+* exports ([link](http://nodejs.org/api/globals.html#globals_exports)): yes
 
 Module object:
-* [module.exports](http://nodejs.org/api/modules.html#modules_module_exports): yes
-* [module.require](http://nodejs.org/api/modules.html#modules_module_require_id): no
-* [module.id](http://nodejs.org/api/modules.html#modules_module_id): yes
-* [module.filename](http://nodejs.org/api/modules.html#modules_module_filename): yes
-* [module.loaded](http://nodejs.org/api/modules.html#modules_module_loaded): yes
-* [module.parent](http://nodejs.org/api/modules.html#modules_module_parent): no
-* [module.children](http://nodejs.org/api/modules.html#modules_module_children): no
+* module.exports ([link](http://nodejs.org/api/modules.html#modules_module_exports)): yes
+* module.require ([link](http://nodejs.org/api/modules.html#modules_module_require_id)): no
+* module.id ([link](http://nodejs.org/api/modules.html#modules_module_id)): yes
+* module.filename ([link](http://nodejs.org/api/modules.html#modules_module_filename)): yes
+* module.loaded ([link](http://nodejs.org/api/modules.html#modules_module_loaded)): yes
+* module.parent ([link](http://nodejs.org/api/modules.html#modules_module_parent)): no
+* module.children ([link](http://nodejs.org/api/modules.html#modules_module_children)): no
 
 ## Source maps
 
