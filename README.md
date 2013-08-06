@@ -376,23 +376,23 @@ the job for you.
 
 ## Compatibility with node
 
-Global objects:
-* require ([link](http://nodejs.org/api/globals.html#globals_require)): yes
-* require.resolve ([link](http://nodejs.org/api/globals.html#globals_require_resolve)): yes
-* require.cache ([link](http://nodejs.org/api/globals.html#globals_require_cache)): yes
-* __filename ([link](http://nodejs.org/api/globals.html#globals_filename)): yes
-* __dirname ([link](http://nodejs.org/api/globals.html#globals_dirname)): yes
-* module ([link](http://nodejs.org/api/globals.html#globals_module)): yes (partialy)
-* exports ([link](http://nodejs.org/api/globals.html#globals_exports)): yes
+Global objects [link](http://nodejs.org/api/globals.html):
+* require: yes
+* require.resolve: yes
+* require.cache: yes
+* __filename: yes
+* __dirname: yes
+* module: yes (partialy)
+* exports: yes
 
 Module object:
-* module.exports ([link](http://nodejs.org/api/modules.html#modules_module_exports)): yes
-* module.require ([link](http://nodejs.org/api/modules.html#modules_module_require_id)): no
-* module.id ([link](http://nodejs.org/api/modules.html#modules_module_id)): yes
-* module.filename ([link](http://nodejs.org/api/modules.html#modules_module_filename)): yes
-* module.loaded ([link](http://nodejs.org/api/modules.html#modules_module_loaded)): yes
-* module.parent ([link](http://nodejs.org/api/modules.html#modules_module_parent)): no
-* module.children ([link](http://nodejs.org/api/modules.html#modules_module_children)): no
+* module.exports: yes
+* module.require: no
+* module.id: yes
+* module.filename: yes
+* module.loaded: yes
+* module.parent: no
+* module.children: no
 
 ## Source maps
 
@@ -410,6 +410,10 @@ mode for styles.
 ```
 
 ## Changelog list
+
+* 3.8.0
+	+ Typos in readme
+	+ Added nodeModules section into packages configuration
 
 * 3.7.3
 	+ Typos in readme (compatility mode)

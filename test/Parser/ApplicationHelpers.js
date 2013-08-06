@@ -237,6 +237,20 @@
 			});
 		});
 
+		describe('#translateNodeModulesList()', function() {
+			it('should return array with expanded path of module names', function() {
+				ApplicationHelpers.translateNodeModulesList([
+					'moment',
+					'simq/*.<js$>',
+					'cache-storage'
+				]).should.eql([
+					'./node_modules/moment',
+					'./node_modules/simq/*.<js$>',
+					'./node_modules/cache-storage'
+				]);
+			});
+		});
+
 	});
 
 })();

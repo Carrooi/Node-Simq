@@ -212,4 +212,9 @@ class ApplicationHelpers
 		return array.filter( (el, pos) -> return array.indexOf(el) == pos)
 
 
+	@translateNodeModulesList: (list) ->
+		list[i] = "./node_modules/#{m}" for m, i in list
+		return list
+
+
 module.exports = ApplicationHelpers

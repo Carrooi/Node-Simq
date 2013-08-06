@@ -20,18 +20,17 @@ class Application
 	constructor: (@simq, @loader, @basePath, @section, @packageName) ->
 
 
-	parseLibraries: (type) ->
-		base = if @section.base == null then @basePath else @basePath + '/' + @section.base
-		return Helpers.loadLibraries(@loader, @section.libraries[type], base)
+	parseLibraries: (base, list) ->
+		return Helpers.loadLibraries(@loader, list, base)
 
 
-	parseModules: ->
+	parseModules: (sectionBase, base, modules, aliases) ->
 		deferred = Q.defer()
-		base = if @section.base == null then @basePath else @basePath + '/' + @section.base
-		Helpers.findDependentModulesFromList(@section.modules, base).then( (data) =>
-			Helpers.loadModules(@loader, data.files, @section.base).then( (modules) =>
-				for alias, module of @section.aliases
-					modules.push('\'' + alias + '\': \'' + module + '\'')
+
+		Helpers.findDependentModulesFromList(modules, base).then( (data) =>
+			Helpers.loadModules(@loader, data.files, sectionBase).then( (modules) =>
+				for alias, module of aliases
+					modules.push("'#{alias}': '#{module}'")
 
 				@loader.loadFile(__dirname + '/../Module.js').then( (content) =>
 					content = content.replace(/\s+$/, '').replace(/;$/, '')
@@ -62,20 +61,23 @@ class Application
 		return deferred.promise
 
 
-	parseRun: ->
+	parseRun: (list) ->
 		run = []
-		for module in @section.run
-			run.push('this.require(\'' + module + '\');')
-
+		run.push("this.require('#{module}');") for module in list
 		return Q.resolve(run)
 
 
 	parse: ->
+		base = if @section.base == null then @basePath else @basePath + '/' + @section.base
+
+		nodeModules = Helpers.translateNodeModulesList(@section.nodeModules)
+		modules = @section.modules.concat(nodeModules)
+
 		return Q.all([
-			@parseLibraries('begin')
-			@parseModules()
-			@parseRun()
-			@parseLibraries('end')
+			@parseLibraries(base, @section.libraries.begin)
+			@parseModules(@section.base, base, modules, @section.aliases)
+			@parseRun(@section.run)
+			@parseLibraries(base, @section.libraries.end)
 		]).then( (data) =>
 			result = [].concat(data[0], data[1].modules, data[1].node, data[2], data[3])
 			result = result.join('\n\n')
