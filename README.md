@@ -411,6 +411,9 @@ mode for styles.
 
 ## Changelog list
 
+* 3.7.3
+	+ Typos in readme (compatility mode)
+
 * 3.7.2
 	+ Typos in readme
 
