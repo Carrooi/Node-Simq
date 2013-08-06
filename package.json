@@ -1,7 +1,7 @@
 {
 	"name": "simq",
-	"description": "Simple require for javascript (client)",
-	"version": "3.7.1",
+	"description": "Simple require for javascript (browser)",
+	"version": "3.7.2",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
@@ -11,7 +11,9 @@
 		"client",
 		"minify",
 		"compressor",
-		"commonjs"
+		"commonjs",
+		"server",
+		"browser"
 	],
 	"repository": {
 		"type": "git",

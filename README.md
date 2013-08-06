@@ -5,7 +5,7 @@ Same also for your style files.
 
 ## Changelog
 
-Changelog is in the bottom of readme.
+Changelog is in the bottom of this readme.
 
 ## Supported files
 
@@ -26,7 +26,7 @@ Templates:
 
 * .eco ([eco](https://npmjs.org/package/eco), [documentation](https://github.com/sstephenson/eco/blob/master/README.md))
 
-Unfortenatelly typescript is really slow for processing by SimQ. This is because of typescript does not provide any
+Unfortenatelly typescript is really slow for processing by SimQ. This is because typescript does not provide any
 public API for other programmers, so there is just some slow workaround. This is really good point to use cache (see below).
 
 ## Installing
@@ -86,8 +86,8 @@ The name `packages` also suggests, that you can got more independent packages in
 }
 ```
 
-This is the basic configuration, where you can see how to load your modules and libraries. Plus modules can be loaded with
-one by one or with asterisk or with regular expression, which have to be enclosed in <> (see full documentation of
+This is the basic configuration, where you can see, how to load your modules and libraries. Plus modules and libraries
+can be loaded with one by one or with asterisk or with regular expression, which have to be enclosed in <> (see full documentation of
 [fs-finder](https://npmjs.org/package/fs-finder)).
 
 If you are programing in plain javascript, maybe it will be enough for you, to define just base main js file. This is
@@ -99,15 +99,13 @@ because of SimQ automatically looks for dependecies and include other dependent 
 In example abowe, you could see `libraries` section with two sub sections `begin` and `end`. There you can set some external
 libraries and their position in result file (begining or the end of the file).
 
-There you can also use asterisk or regular expressions like in `modules` sections.
-
 For libraries on remote server you can use http or https protocol.
 
 ## Styles
 
-If you are using some CSS framework, you can let SimQ to handle these files to. Styles definitions are also in packages
+If you are using some CSS framework, you can let SimQ to handle these files too. Styles definitions are also in packages
 and it is good to separete javascript application into one package and your styles into another, but in this example, we
-will add styles definition in our first package.
+will add styles definition into our first package.
 
 `./config/setup.json`:
 ```
@@ -121,7 +119,7 @@ will add styles definition in our first package.
 }
 ```
 
-Based on file extension if `in` variable, the right css framework will be chosen.
+Based on file extension in `in` variable, the right css framework will be chosen.
 
 ## Templates
 
@@ -144,7 +142,7 @@ There is also configuration which can save you few characters and wrap your eco 
 
 ## Building application
 
-There are three options how to build your application: build to disk, watch for changes and then build and create server.
+There are three options how to build your application: build to disk, watch automatically for changes and create server.
 
 `terminal`:
 ```
@@ -158,6 +156,8 @@ Or auto watching for changes:
 ```
 $ simq watch
 ```
+
+Or server:
 
 `terminal`:
 ```
@@ -192,7 +192,7 @@ If you set prefix, then every route url will be prefixed with it (default is `/`
 
 SimQ will also automatically set routes for your result javascript and style files.
 
-In this example there will be just free urls (if index.html file exists):
+In this example there will be just three urls (if index.html file exists):
 * http://localhost:4000/app/
 * http://localhost:4000/app/data-in-directory/<some file>
 * http://localhost:4000/app/source-file
@@ -226,10 +226,10 @@ var FormValidator = require('./validator');
 var SomethingElse = require('../../SomethingElseWithExtension.js');
 ```
 
-## NPM modules
+## npm modules
 
 You can also use modules from npm, but be carefull with this, because of usages of internal modules, which are not
-implemented in browser or in SimQ.
+implemented in browser or in SimQ (see compatibility section bellow).
 
 `terminal`:
 ```
@@ -242,17 +242,20 @@ $ npm install moment
 var moment = require('moment');
 ```
 
+If your application is written in coffee-script or in typescript, you have to add paths for these npm modules into modules
+section. You don't have to do this if your application is in plain javascript.
+
 ## Aliases
 
 Maybe you will want to shorten some frequently used modules like jQuery. For example our jquery is in ./lib/jquery directory,
-so every time we want to use jquery, we have to write `require('lib/jquery/jquery')`. Solution for this is to use alises.
+so every time we want to use jquery, we have to write `require('/lib/jquery/jquery')`. Solution for this is to use alises.
 
 `./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
 		"aliases": {
-			"jquery": "lib/jquery/jquery"
+			"jquery": "/lib/jquery/jquery"
 		}
 	}
 }
@@ -266,9 +269,21 @@ It would be great if some modules can be started automatically after script is l
 one Bootstrap.js module, which do not export anything but just load for example Application.js module and prepare your
 application. With this in most cases you don't have to got any javascript code in your HTML files!
 
+`./config/setup.json`:
+```
+{
+	"nameOfYourFirstModule": {
+		"run": [
+			"/app/setup",
+			"/app/Bootstrap"
+		]
+	}
+}
+```
+
 ## Base namespace
 
-If you have got more packages in your application, than writing some paths may be boring. Good example is when you rewriting
+If you have got more packages in your application, then writing some paths may be boring. Good example is when you rewriting
 your application and when you have got your new js files for example in `./_NEW_` directory. It is not good to write
 anything like this: `require('_NEW_/app/Bootstrap')`. So you can set base "namespace" of every package.
 
@@ -381,7 +396,7 @@ Module object:
 
 ## Source maps
 
-Less can also generate source maps with sass source maps syntax. If you want this function, you have to turn no debug
+Less can also generate source maps with sass source maps syntax. If you want this function, you have to turn on debug
 mode for styles.
 
 `./config/setup.json`:
@@ -395,6 +410,9 @@ mode for styles.
 ```
 
 ## Changelog list
+
+* 3.7.2
+	+ Typos in readme
 
 * 3.7.1
 	+ Added informations about compatibility with node
