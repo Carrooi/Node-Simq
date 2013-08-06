@@ -135,7 +135,6 @@ class ApplicationHelpers
 		return result
 
 
-
 	@parseModulesList: (list, basePath) ->
 		modules = []
 		for module in list

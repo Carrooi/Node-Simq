@@ -185,10 +185,4 @@ class SimQ
 		)
 
 
-	getModuleName: (path) ->
-		path = _path.resolve(path)
-		path = path.replace(new RegExp('^' + process.cwd() + '\/'), '')
-		return path
-
-
 module.exports = SimQ

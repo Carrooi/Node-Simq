@@ -24,9 +24,9 @@ class Loader
 	constructor: (@simq) ->
 		@compilers = new Compilers(@simq)
 
-		cacheDirectory = @simq.config.load().cache.directory
-		if cacheDirectory != null
-			@cache = new Cache(new FileStorage(_path.resolve(cacheDirectory)), Loader.CACHE_NAMESPACE)
+
+	setCacheDirectory: (directory) ->
+		@cache = new Cache(new FileStorage(_path.resolve(directory)), Loader.CACHE_NAMESPACE)
 
 
 	isCacheAllowed: (path, packageName = null) ->
@@ -132,12 +132,13 @@ class Loader
 			if data == null
 				deferred.resolve(null)
 			else
-				name = @simq.getModuleName(data.path)
+				name = _path.resolve(data.path)
+				name = name.replace(new RegExp('^' + process.cwd() + '\/'), '')
 
 				if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
 				@compilers.compile(data.path, data.content).then( (content) =>
-					globals = @getGlobalsForModule(name).join('\n')
+					globals = Loader.getGlobalsForModule(name).join('\n')
 					deferred.resolve("'#{name}': function(exports, __require, module) {\n#{globals}\n#{content}\n}")
 				)
 		)
@@ -145,7 +146,7 @@ class Loader
 		return deferred.promise
 
 
-	getGlobalsForModule: (name) ->
+	@getGlobalsForModule: (name) ->
 		globals =
 			require: "function(name) {return __require(name, '#{name}');}"
 			__filename: "'#{name}'"

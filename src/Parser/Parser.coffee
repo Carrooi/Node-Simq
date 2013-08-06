@@ -16,6 +16,9 @@ class Parser
 	constructor: (@simq, @basePath) ->
 		@loader = new Loader(@simq)
 
+		cacheDirectory = @simq.config.load().cache.directory
+		@loader.setCacheDirectory(cacheDirectory) if cacheDirectory != null
+
 
 	parseApplication: (section, name) ->
 		return (new Application(@simq, @loader, @basePath, section, name)).parse()
