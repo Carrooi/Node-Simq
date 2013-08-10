@@ -25,6 +25,9 @@ class PackageExtension extends Extension
 		for name, pckg of config
 			config[name] = @configurator.merge(pckg, @defaultsPackage)
 
+			if pckg.base != null
+				pckg.base = pckg.base.replace(/^[\.\/]*/, '').replace(/[\.\/]*$/, '')
+
 		return config
 
 

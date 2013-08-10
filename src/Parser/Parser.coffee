@@ -1,7 +1,8 @@
 Q = require 'q'
 Application = require './Application'
 Style = require './Style'
-Loader = require '../Loader/Loader'
+Loader = require '../Loader'
+Compiler = require 'source-compiler'
 
 class Parser
 
@@ -14,10 +15,14 @@ class Parser
 
 
 	constructor: (@simq, @basePath) ->
-		@loader = new Loader(@simq)
+		config = @simq.config.load()
+		@loader = new Loader
+		@loader.minify.styles = !config.debugger.styles
+		@loader.minify.scripts = !config.debugger.scripts
+		@loader.jquerify = config.template.jquerify
 
-		cacheDirectory = @simq.config.load().cache.directory
-		@loader.setCacheDirectory(cacheDirectory) if cacheDirectory != null
+		if config.cache.directory != null
+			Compiler.setCache(config.cache.directory)
 
 
 	parseApplication: (section, name) ->

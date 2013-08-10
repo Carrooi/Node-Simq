@@ -1,6 +1,6 @@
 fs = require 'fs'
 watch = require 'watch'
-_path = require 'path'
+path = require 'path'
 ncp = require 'ncp'
 express = require 'express'
 Q = require 'q'
@@ -24,11 +24,9 @@ class SimQ
 	parser: null
 
 
-	constructor: (@debug = false, @basePath = '.', configPath = null) ->
-		if !configPath then configPath = @configPath
-		@configPath = _path.resolve(@basePath + '/' + configPath)
-
-		@config = new Configurator(@configPath, @debug)
+	constructor: (configPath = @configPath, @basePath = @basePath) ->
+		@configPath = path.resolve(@basePath + '/' + configPath)
+		@config = new Configurator(@configPath)
 		@parser = new Parser(@, @basePath)
 
 
@@ -37,7 +35,7 @@ class SimQ
 		config = @config.load()
 		base = if config.routes.prefix == null then '/' else '/' + config.routes.prefix
 
-		main = _path.resolve(@basePath + '/' + config.routes.main)
+		main = path.resolve(@basePath + '/' + config.routes.main)
 		if fs.existsSync(main)
 			console.log "Mapping file '#{main}' to '#{base}'" if @v
 			app.get(base, (req, res) ->
@@ -45,14 +43,14 @@ class SimQ
 				res.sendfile(main)
 			)
 
-		for route, path of config.routes.routes
+		for route, _path of config.routes.routes
 			route = base + route
-			path = _path.resolve(@basePath + '/' + path)
-			data = {route: route, path: path}
+			_path = path.resolve(@basePath + '/' + _path)
+			data = {route: route, path: _path}
 
-			if fs.statSync(path).isDirectory()
-				console.log "Mapping directory '#{path}' to '#{route}'" if @v
-				app.use(route, express.static(path))
+			if fs.statSync(_path).isDirectory()
+				console.log "Mapping directory '#{_path}' to '#{route}'" if @v
+				app.use(route, express.static(_path))
 			else
 				((data) =>
 					console.log "Mapping file '#{data.path}' to '#{data.route}'" if @v
@@ -66,8 +64,8 @@ class SimQ
 			pckg.name = name
 			((pckg) =>
 				if @hasPackageApplication(pckg.name)
-					console.log 'Mapping file \'' + _path.resolve(pckg.application) + '\' to \'' + base + _path.normalize(pckg.application) + '\'' if @v
-					app.get(base + _path.normalize(pckg.application), (req, res) =>
+					console.log 'Mapping file \'' + path.resolve(pckg.application) + '\' to \'' + base + path.normalize(pckg.application) + '\'' if @v
+					app.get(base + path.normalize(pckg.application), (req, res) =>
 						@buildApplication(pckg.name).then( (content) ->
 							res.setHeader('Content-Type', 'application/javascript')
 							res.send(content)
@@ -75,8 +73,8 @@ class SimQ
 					)
 
 				if @hasPackageStyles(pckg.name)
-					console.log 'Mapping file \'' + _path.resolve(pckg.style.out) + '\' to \'' + base + _path.normalize(pckg.style.out) + '\'' if @v
-					app.get(base + _path.normalize(pckg.style.out), (req, res) =>
+					console.log 'Mapping file \'' + path.resolve(pckg.style.out) + '\' to \'' + base + path.normalize(pckg.style.out) + '\'' if @v
+					app.get(base + path.normalize(pckg.style.out), (req, res) =>
 						@buildStyles(pckg.name).then( (content) ->
 							res.setHeader('Content-Type', 'text/css')
 							res.send(content)
@@ -161,11 +159,11 @@ class SimQ
 
 		ignore = new Array
 		for name, pckg of @config.load().packages
-			if pckg.application then ignore.push(_path.resolve(pckg.application))
-			if pckg.style.out then ignore.push(_path.resolve(pckg.style.out))
+			if pckg.application then ignore.push(path.resolve(pckg.application))
+			if pckg.style.out then ignore.push(path.resolve(pckg.style.out))
 
 		watch.watchTree(@basePath, {},  (file, curr, prev) =>
-			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^\./) == null && ignore.indexOf(_path.resolve(file)) == -1		# filter in option is not working...
+			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^\./) == null && ignore.indexOf(path.resolve(file)) == -1		# filter in option is not working...
 				console.log file if @v
 				@config.invalidate()
 				@build()
@@ -177,12 +175,16 @@ class SimQ
 	@create: (name) ->
 		if !name then throw new Error 'Please enter name of new application.'
 
-		path = _path.resolve(name)
-		if fs.existsSync(path) then throw new Error 'Directory with ' + name + ' name is already exists.'
+		_path = path.resolve(name)
+		if fs.existsSync(_path) then throw new Error 'Directory with ' + name + ' name is already exists.'
 
-		ncp.ncp(_path.normalize(__dirname + '/../sandbox'), path, (err) ->
+		ncp.ncp(path.normalize(__dirname + '/../sandbox'), _path, (err) ->
 			if err then throw new Error 'There is some error with creating new application.'
 		)
+
+
+	@getModuleName: (_path) ->
+
 
 
 module.exports = SimQ

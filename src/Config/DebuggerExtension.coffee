@@ -4,23 +4,13 @@ class DebuggerExtension extends Extension
 
 
 	defaults:
-		styles: null
-		scripts: null
+		styles: false
+		scripts: false
 		sourceMap: false
-
-	debug: false
-
-
-	constructor: (@debug) ->
 
 
 	loadConfiguration: ->
-		config = @getConfig(@defaults)
-
-		if config.styles == null then config.styles = @debug
-		if config.scripts == null then config.scripts = @debug
-
-		return config
+		return @getConfig(@defaults)
 
 
 module.exports = DebuggerExtension

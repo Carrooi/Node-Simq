@@ -9,13 +9,13 @@ RoutesExtension = require './RoutesExtension'
 class Configurator extends EasyConfigurator
 
 
-	constructor: (fileName, debug = false) ->
+	constructor: (fileName) ->
 		super(fileName)
 
 		@addExtension('packages', new PackageExtension)
 		@addExtension('template', new TemplateExtension)
 		@addExtension('cache', new CacheExtension)
-		@addExtension('debugger', new DebuggerExtension(debug))
+		@addExtension('debugger', new DebuggerExtension)
 		@addExtension('server', new ServerExtension)
 		@addExtension('routes', new RoutesExtension)
 

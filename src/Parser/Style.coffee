@@ -1,7 +1,4 @@
-_path = require 'path'
-less = require 'less'
-fs = require 'fs'
-Q = require 'q'
+path = require 'path'
 
 class Style
 
@@ -12,8 +9,8 @@ class Style
 	constructor: (@loader) ->
 
 
-	parse: (path, packageName) ->
-		return @loader.loadFile(_path.resolve(path), packageName)
+	parse: (_path, packageName) ->
+		return @loader.loadFile(path.resolve(_path), packageName)
 
 
 module.exports = Style

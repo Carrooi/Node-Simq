@@ -26,7 +26,7 @@ Templates:
 
 * .eco ([eco](https://npmjs.org/package/eco), [documentation](https://github.com/sstephenson/eco/blob/master/README.md))
 
-Unfortenatelly typescript is really slow for processing by SimQ. This is because typescript does not provide any
+Unfortunately typescript is really slow for processing by SimQ. This is because typescript does not provide any
 public API for other programmers, so there is just some slow workaround. This is really good point to use cache (see below).
 
 ## Installing
@@ -43,14 +43,14 @@ $ npm install -g simq
 $ simq create name-of-my-new-application
 ```
 
-This will create base and default sceleton for your new application.
+This will create base and default skeleton for your new application.
 
 ## Configuration
 
 SimQ using [easy-configuration](https://npmjs.org/package/easy-configuration) module for configuration and configuration
 is loaded from json file. Default path for config file is `./config/setup.json`.
 
-There are several sections in your config files, but the main one is section `packages`. This section holds informations
+There are several sections in your config files, but the main one is section `packages`. This section holds information
 about your modules and external libraries which will be packed into your final javascript or css file.
 The name `packages` also suggests, that you can got more independent packages in one application.
 
@@ -91,20 +91,20 @@ can be loaded with one by one or with asterisk or with regular expression, which
 [fs-finder](https://npmjs.org/package/fs-finder)).
 
 If you are programing in plain javascript, maybe it will be enough for you, to define just base main js file. This is
-because of SimQ automatically looks for dependecies and include other dependent files automatically. Now this is only for
+because of SimQ automatically looks for dependencies and include other dependent files automatically. Now this is only for
 .js files.
 
 ## External libraries
 
-In example abowe, you could see `libraries` section with two sub sections `begin` and `end`. There you can set some external
-libraries and their position in result file (begining or the end of the file).
+In example above, you could see `libraries` section with two sub sections `begin` and `end`. There you can set some external
+libraries and their position in result file (beginning or the end of the file).
 
 For libraries on remote server you can use http or https protocol.
 
 ## Styles
 
 If you are using some CSS framework, you can let SimQ to handle these files too. Styles definitions are also in packages
-and it is good to separete javascript application into one package and your styles into another, but in this example, we
+and it is good to separate javascript application into one package and your styles into another, but in this example, we
 will add styles definition into our first package.
 
 `./config/setup.json`:
@@ -216,7 +216,7 @@ In your application you can use modules you defined just like you used to in nod
 Here we created instance of my/first/module and stored it in window object (window.app).
 
 Paths for modules have to be absolute from directory where you run `simq build` command. Exception are other modules,
-if you want to use module inside another module, you can require them also relativelly.
+if you want to use module inside another module, you can require them also relatively.
 
 File extensions are also optional.
 
@@ -228,7 +228,7 @@ var SomethingElse = require('../../SomethingElseWithExtension.js');
 
 ## npm modules
 
-You can also use modules from npm, but be carefull with this, because of usages of internal modules, which are not
+You can also use modules from npm, but be carefully with this, because of usages of internal modules, which are not
 implemented in browser or in SimQ (see compatibility section bellow).
 
 `terminal`:
@@ -248,7 +248,7 @@ section. You don't have to do this if your application is in plain javascript.
 ## Aliases
 
 Maybe you will want to shorten some frequently used modules like jQuery. For example our jquery is in ./lib/jquery directory,
-so every time we want to use jquery, we have to write `require('/lib/jquery/jquery')`. Solution for this is to use alises.
+so every time we want to use jquery, we have to write `require('/lib/jquery/jquery')`. Solution for this is to use aliases.
 
 `./config/setup.json`:
 ```
@@ -291,7 +291,7 @@ anything like this: `require('_NEW_/app/Bootstrap')`. So you can set base "names
 ```
 {
 	"nameOfYourFirstModule": {
-		"base": "_NEW_"
+		"base": "./_NEW_/"
 	}
 }
 ```
@@ -306,21 +306,16 @@ $ simq build --config my/own/path/to/config.json
 ## Debug mode
 
 In default, SimQ automatically minify all your scripts and styles, but for developer it would be better to see not-minified
-versions. Most simple way is to set it in build command.
+versions.
 
-`terminal`:
-```
-$ simq build --debug
-```
-
-But if you want debug mode only for styles and not for javascript, you have to write it in your config file.
+Only thing what you will need to do, is add new section to your config file.
 
 `./config/setup.json`:
 ```
 {
 	"packages": {
 
-	},
+    },
 	"debugger": {
 		"styles": true,
 		"scripts": false
@@ -330,7 +325,7 @@ But if you want debug mode only for styles and not for javascript, you have to w
 
 ## Verbose mode
 
-SimQ can also tell you some more informations in command line.
+SimQ can also tell you some more information in command line.
 
 ```
 $ simq server -v
@@ -354,7 +349,7 @@ Now when there is request for rebuild application, SimQ will first try to load r
 only if they are not in cache, they will be processed and saved to cache. Next time there is no need to recompile every
 file again, so they will be loaded from cache.
 
-This is little bit harder with styles, because they importing other files into itselfs, so cache do not know which files
+This is little bit harder with styles, because they importing other files into itself, so cache do not know which files
 must be invalidated. If you also want to use cache in styles, you have to define dependent files in your config file.
 Luckily you don't have to write every file on your own, but let [fs-finder](https://npmjs.org/package/fs-finder) do
 the job for you.
@@ -382,7 +377,7 @@ Global objects [link](http://nodejs.org/api/globals.html):
 * require.cache: yes
 * __filename: yes
 * __dirname: yes
-* module: yes (partialy)
+* module: yes (partially)
 * exports: yes
 
 Module object:
@@ -412,17 +407,20 @@ mode for styles.
 ## Changelog list
 
 * 3.8.0
-	+ Typos in readme
-	+ Added nodeModules section into packages configuration
+	+ Many typos in readme
+	+ Files are compiled with [source-compiler](https://npmjs.org/package/source-compiler)
+	+ Added other tests
+	+ Optimizations
+	+ Some bugs in building application
 
 * 3.7.3
-	+ Typos in readme (compatility mode)
+	+ Typos in readme (compatibility mode)
 
 * 3.7.2
 	+ Typos in readme
 
 * 3.7.1
-	+ Added informations about compatibility with node
+	+ Added information about compatibility with node
 	+ Exposed require.resolve function
 	+ Exposed require.cache object
 
@@ -447,5 +445,5 @@ mode for styles.
 
 * 3.4.0:
 	+ Added changelog
-	+ Created some tests for bulding js application
+	+ Created some tests for building js application
 	+ Fixed bugs in js building

@@ -6,14 +6,14 @@
 
 	var ApplicationHelpers = require('../../lib/Parser/ApplicationHelpers');
 	var SimQ = require('../../lib/SimQ');
-	var Loader = require('../../lib/Loader/Loader');
+	var Loader = require('../../lib/Loader');
 
 	var data = path.resolve(__dirname + '/../data');
 	var simpleModulePath = data + '/package/node_modules/module/index.js';
 	var advancedModulePath = data + '/package/node_modules/module/node_modules/another_one/file.json';
 	var invalidModule = data + '/some_file.js';
 
-	var simq = new SimQ(false, data + '/package');
+	var simq = new SimQ(null, data + '/package');
 	var loader = new Loader(simq);
 
 	var libraries = {
@@ -217,7 +217,7 @@
 			it('should return prepared module file', function(done) {
 				ApplicationHelpers.loadModules(loader, [simq.basePath + '/modules/1.js'], simq.basePath).then(function(data) {
 					var globals = Loader.getGlobalsForModule('data/package/modules/1.js').join('\n');
-					var content = "'data/package/modules/1.js': function(exports, __require, module) {\n" + globals + "\nreturn (function() {\nrequire('./2');\n}).call(this);\n}";
+					var content = "'data/package/modules/1.js': function(exports, __require, module) {\n" + globals + "\n(function() {\nrequire('./2');\n}).call(this);\n\n}";
 
 					data.should.eql([content]);
 					done();
@@ -228,7 +228,12 @@
 		describe('#loadLibraries()', function() {
 			it('should return array with loaded libraries', function(done) {
 				ApplicationHelpers.loadLibraries(loader, ['./libs/begin/*.js<$>'], simq.basePath).then(function(data) {
-					data.should.eql(['// 1', '// 2', '// 3', '// 4']);
+					data.should.eql([
+						'(function() {\n// 1\n}).call(this);\n',
+						'(function() {\n// 2\n}).call(this);\n',
+						'(function() {\n// 3\n}).call(this);\n',
+						'(function() {\n// 4\n}).call(this);\n'
+					]);
 					done();
 				}).done();
 			});
@@ -238,12 +243,10 @@
 			it('should return array with expanded path of module names', function() {
 				ApplicationHelpers.translateNodeModulesList([
 					'moment',
-					'simq/*.<js$>',
-					'cache-storage'
+					'simq/*.<js$>'
 				]).should.eql([
 					'./node_modules/moment',
-					'./node_modules/simq/*.<js$>',
-					'./node_modules/cache-storage'
+					'./node_modules/simq/*.<js$>'
 				]);
 			});
 		});

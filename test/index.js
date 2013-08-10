@@ -1,7 +1,7 @@
 (function () {
 
 	require('./SimQ');
-	require('./Loader/Loader');
+	require('./Loader');
 	require('./Parser/ApplicationHelpers');
 
 })();

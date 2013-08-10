@@ -9,7 +9,6 @@ argv = optimist.usage([
 		'	watch:  watch for new changes and save them automatically to disk\n'
 		'	--help: show this help'
 	].join('\n'))
-	.alias('d', 'debug').describe('d', 'all compilations use debug mode')
 	.alias('c', 'config').describe('c', 'set custom config file')
 	.alias('v', 'verbose').describe('v', 'make SimQ more talkative')
 	.argv
@@ -24,9 +23,7 @@ else if argv.command == 'create'
 	SimQ.create(argv.targets[0])
 
 else
-	debug = argv.debug and true or false
-
-	s = new SimQ(debug, '.', argv.config)
+	s = new SimQ(argv.config)
 	s.v = !!argv.v
 
 	switch argv.command

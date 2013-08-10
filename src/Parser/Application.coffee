@@ -29,17 +29,17 @@ class Application
 
 		Helpers.findDependentModulesFromList(modules, base).then( (data) =>
 			Helpers.loadModules(@loader, data.files, sectionBase).then( (modules) =>
-				for alias, module of aliases
-					modules.push("'#{alias}': '#{module}'")
+				for alias, m of aliases
+					modules.push("'#{alias}': '#{m}'")
 
 				@loader.loadFile(__dirname + '/../Module.js').then( (content) =>
 					content = content.replace(/\s+$/, '').replace(/;$/, '')
 					base = path.resolve(base)
 
 					node = {}
-					for module, info of data.node
+					for m, info of data.node
 						main = path.relative(base, info.main)
-						name = path.relative(base, module)
+						name = path.relative(base, m)
 
 						main = main.replace(/^[./]+/, '')
 						name = name.replace(/^[./]+/, '')
@@ -63,7 +63,7 @@ class Application
 
 	parseRun: (list) ->
 		run = []
-		run.push("this.require('#{module}');") for module in list
+		run.push("this.require('#{m}');") for m in list
 		return Q.resolve(run)
 
 
