@@ -25,6 +25,7 @@ class SimQ
 
 
 	constructor: (configPath = @configPath, @basePath = @basePath) ->
+		@basePath = path.resolve(@basePath)
 		@configPath = path.resolve(@basePath + '/' + configPath)
 		@config = new Configurator(@configPath)
 		@parser = new Parser(@, @basePath)

@@ -1,25 +1,12 @@
 Q = require 'q'
 path = require 'path'
 Compiler = require 'source-compiler'
+Package = require './Package'
 
 class Loader
 
 
-	minify:
-		styles: true
-		scripts: true
-
 	jquerify: false
-
-	types:
-		less: 'style'
-		scss: 'style'
-		styl: 'style'
-		js: 'script'
-		json: 'script'
-		coffee: 'script'
-		ts: 'script'
-		eco: 'script'
 
 	modulesAllowed: ['js', 'json', 'coffee', 'ts', 'eco']
 
@@ -27,13 +14,20 @@ class Loader
 	loadFile: (_path, dependents = null) ->
 		options =
 			precompile: true
-			minify: @minify[Compiler.getType(_path) + 's']
 			jquerify: @jquerify
 
 		if dependents != null
 			options.dependents = dependents
 
 		return Compiler.compileFile(_path, options)
+
+
+	loadFiles: (paths) ->
+		result = []
+		for _path in paths
+			result.push(@loadFile(_path))
+
+		return Q.all(result)
 
 
 	loadModule: (_path, base = null) ->
@@ -50,7 +44,7 @@ class Loader
 			name = _path.replace(new RegExp('^' + process.cwd() + '\/'), '')
 			if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
-			globals = Loader.getGlobalsForModule(name).join('\n')
+			globals = Package.getGlobalsForModule(name).join('\n')
 			deferred.resolve("'#{name}': function(exports, __require, module) {\n#{globals}\n#{data}\n}")
 		, (err) ->
 			deferred.reject(err)
@@ -59,17 +53,12 @@ class Loader
 		return deferred.promise
 
 
-	@getGlobalsForModule: (name) ->
-		globals =
-			require: "function(name) {return __require(name, '#{name}');}"
-			__filename: "'#{name}'"
-			__dirname: '\'' + path.dirname(name) + '\''
-
+	loadModules: (paths, base = null) ->
 		result = []
-		for key, value of globals
-			result.push("var #{key} = #{value};")
+		for _path in paths
+			result.push(@loadModule(_path, base))
 
-		return result
+		return Q.all(result)
 
 
 module.exports = Loader

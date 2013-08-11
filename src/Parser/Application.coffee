@@ -1,7 +1,8 @@
 path = require 'path'
 Uglify = require 'uglify-js'
 Q = require 'q'
-Helpers = require './ApplicationHelpers'
+Helpers = require '../Helpers'
+Package = require '../Package'
 
 class Application
 
@@ -18,28 +19,30 @@ class Application
 
 
 	constructor: (@simq, @loader, @basePath, @section, @packageName) ->
+		@basePath = if @section.base == null then @basePath else @basePath + '/' + @section.base
 
 
-	parseLibraries: (base, list) ->
-		return Helpers.loadLibraries(@loader, list, base)
+	parseLibraries: (type) ->
+		paths = Helpers.expandFilesList(@section.libraries[type], @basePath)
+		return @loader.loadFiles(paths)
 
 
-	parseModules: (sectionBase, base, modules, aliases) ->
+	parseModules: ->
 		deferred = Q.defer()
 
-		Helpers.findDependentModulesFromList(modules, base).then( (data) =>
-			Helpers.loadModules(@loader, data.files, sectionBase).then( (modules) =>
-				for alias, m of aliases
+		modules = Helpers.expandFilesList(@section.modules, @basePath)
+		Package.findDependenciesForModules(modules).then( (data) =>
+			@loader.loadModules(data.files, @section.base).then( (modules) =>
+				for alias, m of @section.aliases
 					modules.push("'#{alias}': '#{m}'")
 
 				@loader.loadFile(__dirname + '/../Module.js').then( (content) =>
 					content = content.replace(/\s+$/, '').replace(/;$/, '')
-					base = path.resolve(base)
 
 					node = {}
 					for m, info of data.node
-						main = path.relative(base, info.main)
-						name = path.relative(base, m)
+						main = path.relative(@basePath, info.main)
+						name = path.relative(@basePath, m)
 
 						main = main.replace(/^[./]+/, '')
 						name = name.replace(/^[./]+/, '')
@@ -61,28 +64,24 @@ class Application
 		return deferred.promise
 
 
-	parseRun: (list) ->
+	parseRun: ->
 		run = []
-		run.push("this.require('#{m}');") for m in list
+		run.push("this.require('#{m}');") for m in @section.run
 		return Q.resolve(run)
 
 
 	parse: ->
-		base = if @section.base == null then @basePath else @basePath + '/' + @section.base
-
-		nodeModules = Helpers.translateNodeModulesList(@section.nodeModules)
-		modules = @section.modules.concat(nodeModules)
-
 		return Q.all([
-			@parseLibraries(base, @section.libraries.begin)
-			@parseModules(@section.base, base, modules, @section.aliases)
-			@parseRun(@section.run)
-			@parseLibraries(base, @section.libraries.end)
+			@parseLibraries('begin')
+			@parseModules()
+			@parseRun()
+			@parseLibraries('end')
 		]).then( (data) =>
 			result = [].concat(data[0], data[1].modules, data[1].node, data[2], data[3])
 			result = result.join('\n\n')
 
-			if !@simq.config.load().debugger.scripts then result = Uglify.minify(result, fromString: true).code
+			if !@simq.config.load().debugger.scripts
+				result = Uglify.minify(result, fromString: true).code
 
 			return Q.resolve(result)
 		)

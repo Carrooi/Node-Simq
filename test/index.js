@@ -2,6 +2,7 @@
 
 	require('./SimQ');
 	require('./Loader');
-	require('./Parser/ApplicationHelpers');
+	require('./Helpers');
+	require('./Package');
 
 })();

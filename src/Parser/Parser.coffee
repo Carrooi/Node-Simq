@@ -9,20 +9,20 @@ class Parser
 
 	simq: null
 
+	config: null
+
 	loader: null
 
 	basePath: null
 
 
 	constructor: (@simq, @basePath) ->
-		config = @simq.config.load()
+		@config = @simq.config.load()
 		@loader = new Loader
-		@loader.minify.styles = !config.debugger.styles
-		@loader.minify.scripts = !config.debugger.scripts
-		@loader.jquerify = config.template.jquerify
+		@loader.jquerify = @config.template.jquerify
 
-		if config.cache.directory != null
-			Compiler.setCache(config.cache.directory)
+		if @config.cache.directory != null
+			Compiler.setCache(@config.cache.directory)
 
 
 	parseApplication: (section, name) ->
@@ -30,7 +30,7 @@ class Parser
 
 
 	parseStyle: (path, name) ->
-		return (new Style(@loader)).parse(path, name)
+		return (new Style(@loader)).parse(path, @config.packages[name])
 
 
 module.exports = Parser
