@@ -25,12 +25,15 @@ class Parser
 			Compiler.setCache(@config.cache.directory)
 
 
-	parseApplication: (section, name) ->
-		return (new Application(@simq, @loader, @basePath, section, name)).parse()
+	parseApplication: (section) ->
+		application = new Application(@loader, @basePath, section)
+		application.minify = !@config.debugger.scripts
+
+		return application.parse()
 
 
-	parseStyle: (path, name) ->
-		return (new Style(@loader)).parse(path, @config.packages[name])
+	parseStyle: (section) ->
+		return (new Style(@loader, section)).parse()
 
 
 module.exports = Parser

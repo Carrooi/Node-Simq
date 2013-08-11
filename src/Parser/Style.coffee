@@ -5,13 +5,18 @@ class Style
 
 	loader: null
 
+	section: null
 
-	constructor: (@loader) ->
+
+	constructor: (@loader, @section) ->
 
 
-	parse: (_path, pckg) ->
-		dependents = if pckg.style.dependencies.length == 0 then null else pckg.style.dependencies
-		return @loader.loadFile(path.resolve(_path), dependents)
+	parse: ->
+		dependents = @section.style.dependencies
+		if dependents.length == 0
+			dependents = null
+
+		return @loader.loadFile(path.resolve(@section.style.in), dependents)
 
 
 module.exports = Style

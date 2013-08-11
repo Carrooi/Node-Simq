@@ -7,7 +7,7 @@ Package = require '../Package'
 class Application
 
 
-	simq: null
+	minify: false
 
 	loader: null
 
@@ -15,10 +15,8 @@ class Application
 
 	section: null
 
-	packageName: null
 
-
-	constructor: (@simq, @loader, @basePath, @section, @packageName) ->
+	constructor: (@loader, @basePath, @section) ->
 		@basePath = if @section.base == null then @basePath else @basePath + '/' + @section.base
 
 
@@ -36,7 +34,7 @@ class Application
 				for alias, m of @section.aliases
 					modules.push("'#{alias}': '#{m}'")
 
-				@loader.loadFile(__dirname + '/../Module.js').then( (content) =>
+				@loader.loadFile(path.resolve(__dirname + '/../Module.js')).then( (content) =>
 					content = content.replace(/\s+$/, '').replace(/;$/, '')
 
 					node = {}
@@ -71,6 +69,8 @@ class Application
 
 
 	parse: ->
+		deferred = Q.defer()
+
 		return Q.all([
 			@parseLibraries('begin')
 			@parseModules()
@@ -80,11 +80,15 @@ class Application
 			result = [].concat(data[0], data[1].modules, data[1].node, data[2], data[3])
 			result = result.join('\n\n')
 
-			if !@simq.config.load().debugger.scripts
+			if @minify == true
 				result = Uglify.minify(result, fromString: true).code
 
-			return Q.resolve(result)
+			deferred.resolve(result)
+		, (err) ->
+			deferred.reject(err)
 		)
+
+		return deferred.promise
 
 
 module.exports = Application

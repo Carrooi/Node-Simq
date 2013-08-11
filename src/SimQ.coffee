@@ -111,7 +111,7 @@ class SimQ
 
 		console.log "Building styles '#{packageName}'" if @v
 
-		@parser.parseStyle(pckg.style.in, pckg.name).then( (content) =>
+		@parser.parseStyle(pckg).then( (content) =>
 			deferred.resolve(content)
 		, (e) ->
 			throw e
@@ -126,7 +126,7 @@ class SimQ
 
 		console.log "Building package '#{packageName}'" if @v
 
-		@parser.parseApplication(pckg, pckg.name).then( (content) =>
+		@parser.parseApplication(pckg).then( (content) =>
 			deferred.resolve(content)
 		, (e) ->
 			throw e
