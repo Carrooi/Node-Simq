@@ -10,6 +10,8 @@ class Loader
 
 	modulesAllowed: ['js', 'json', 'coffee', 'ts', 'eco']
 
+	autoModule: ['json']
+
 
 	loadFile: (_path, dependents = null) ->
 		options =
@@ -31,7 +33,9 @@ class Loader
 
 
 	loadModule: (_path, base = null) ->
-		if Compiler.getType(_path) !in @modulesAllowed
+		type = Compiler.getType(_path)
+
+		if type !in @modulesAllowed
 			return Q.reject(new Error "File #{_path} is not module")
 
 		if _path.match(/^http/) != null
@@ -45,6 +49,7 @@ class Loader
 			if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
 
 			globals = Package.getGlobalsForModule(name).join('\n')
+			data = "module.exports = #{data}" if type in @autoModule
 			deferred.resolve("'#{name}': function(exports, __require, module) {\n#{globals}\n#{data}\n}")
 		, (err) ->
 			deferred.reject(err)

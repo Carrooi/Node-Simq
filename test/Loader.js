@@ -14,7 +14,7 @@
 		json: {
 			file: dir + '/package/modules/5.json',
 			name: 'data/package/modules/5.json',
-			result: "'data/package/modules/5.json': function(exports, __require, module) {\n" + Package.getGlobalsForModule('data/package/modules/5.json').join('\n') + "\n(function() {\nreturn {\n\t\"message\": \"linux\"\n}\n}).call(this);\n\n}"
+			result: "'data/package/modules/5.json': function(exports, __require, module) {\n" + Package.getGlobalsForModule('data/package/modules/5.json').join('\n') + "\nmodule.exports = (function() {\nreturn {\n\t\"message\": \"linux\"\n}\n}).call(this);\n\n}"
 		},
 		less: {
 			file: dir + '/package/css/style.less',
@@ -53,7 +53,7 @@
 			it('should return parsed list of loaded modules', function(done) {
 				loader.loadModules([dir + '/package/modules/1.js']).then(function(data) {
 					var globals = Package.getGlobalsForModule('data/package/modules/1.js').join('\n');
-					var content = "'data/package/modules/1.js': function(exports, __require, module) {\n" + globals + "\n(function() {\nrequire('./2');\n}).call(this);\n\n}";
+					var content = "'data/package/modules/1.js': function(exports, __require, module) {\n" + globals + "\nrequire('./2');\n}";
 
 					data.should.eql([content]);
 					done();

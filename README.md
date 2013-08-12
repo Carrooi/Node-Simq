@@ -406,6 +406,9 @@ mode for styles.
 
 ## Changelog list
 
+* 3.9.1
+	+ auto 'module.exports' for json files
+
 * 3.9.0
 	+ Base namespace is applied also for results files and style files (BC break)
 	+ Bug with styles and application building
