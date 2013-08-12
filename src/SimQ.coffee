@@ -141,14 +141,16 @@ class SimQ
 		for name, pckg of config.packages
 			pckg.name = name
 			((pckg) =>
+				basePath = if pckg.base == null then @basePath else @basePath + '/' + pckg.base
+
 				if @hasPackageApplication(pckg.name)
 					@buildApplication(pckg.name).then( (content) =>
-						fs.writeFile(@basePath + '/' + pckg.application, content)
+						fs.writeFile(basePath + '/' + pckg.application, content)
 					)
 
 				if @hasPackageStyles(pckg.name)
 					@buildStyles(pckg.name).then( (content) =>
-						fs.writeFile(@basePath + '/' + pckg.style.out, content)
+						fs.writeFile(basePath + '/' + pckg.style.out, content)
 					)
 			)(pckg)
 

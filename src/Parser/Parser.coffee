@@ -26,14 +26,18 @@ class Parser
 
 
 	parseApplication: (section) ->
-		application = new Application(@loader, @basePath, section)
+		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
+
+		application = new Application(@loader, basePath, section)
 		application.minify = !@config.debugger.scripts
 
 		return application.parse()
 
 
 	parseStyle: (section) ->
-		return (new Style(@loader, section)).parse()
+		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
+
+		return (new Style(@loader, basePath, section)).parse()
 
 
 module.exports = Parser

@@ -17,7 +17,6 @@ class Application
 
 
 	constructor: (@loader, @basePath, @section) ->
-		@basePath = if @section.base == null then @basePath else @basePath + '/' + @section.base
 
 
 	parseLibraries: (type) ->
@@ -71,7 +70,7 @@ class Application
 	parse: ->
 		deferred = Q.defer()
 
-		return Q.all([
+		Q.all([
 			@parseLibraries('begin')
 			@parseModules()
 			@parseRun()

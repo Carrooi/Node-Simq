@@ -406,6 +406,11 @@ mode for styles.
 
 ## Changelog list
 
+* 3.9.0
+	+ Base namespace is applied also for results files and style files (BC break)
+	+ Bug with styles and application building
+	+ Some optimizations
+
 * 3.8.0
 	+ Many typos in readme
 	+ Files are compiled with [source-compiler](https://npmjs.org/package/source-compiler)
