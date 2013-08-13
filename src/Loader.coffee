@@ -10,7 +10,7 @@ class Loader
 
 	modulesAllowed: ['js', 'json', 'coffee', 'ts', 'eco']
 
-	autoModule: ['json']
+	autoModule: ['json', 'eco']
 
 
 	loadFile: (_path, dependents = null) ->
@@ -32,7 +32,7 @@ class Loader
 		return Q.all(result)
 
 
-	loadModule: (_path, base = null) ->
+	loadModule: (_path, base = null, name = null) ->
 		type = Compiler.getType(_path)
 
 		if type !in @modulesAllowed
@@ -45,8 +45,9 @@ class Loader
 		deferred = Q.defer()
 
 		@loadFile(_path).then( (data) =>
-			name = _path.replace(new RegExp('^' + process.cwd() + '\/'), '')
-			if base != null then name = name.replace(new RegExp('^' + base + '/'), '')
+			if name == null
+				name = _path.replace(new RegExp('^' + process.cwd() + '\/'), '')
+				name = name.replace(new RegExp('^' + base + '/'), '') if base != null
 
 			globals = Package.getGlobalsForModule(name).join('\n')
 			data = "module.exports = #{data}" if type in @autoModule
@@ -60,8 +61,13 @@ class Loader
 
 	loadModules: (paths, base = null) ->
 		result = []
-		for _path in paths
-			result.push(@loadModule(_path, base))
+		switch Object.prototype.toString.call(paths)
+			when '[object Array]'
+				for _path in paths
+					result.push(@loadModule(_path, base))
+			when '[object Object]'
+				for name, _path in paths
+					result.push(@loadModule(_path, base, name))
 
 		return Q.all(result)
 

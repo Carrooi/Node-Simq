@@ -14,15 +14,13 @@ class Style
 
 
 	parse: ->
-		dependents = @section.style.dependencies
-		if dependents.length == 0
-			dependents = null
-		else
-			for dep, i in dependents
-				dependents[i] = path.resolve(@basePath + '/' + dep)
+		dependents = null
+		if @section.style.dependencies != null
+			dependents = []
+			for dep in @section.style.dependencies
+				dependents.push(path.resolve(@basePath + '/' + dep))
 
 		_path = path.resolve(@basePath + '/' + @section.style.in)
-
 		return @loader.loadFile(_path, dependents)
 
 

@@ -406,6 +406,11 @@ mode for styles.
 
 ## Changelog list
 
+* 3.9.2
+	+ Added tests for styles
+	+ Bug with eco templates
+	+ Optimizations
+
 * 3.9.1
 	+ auto 'module.exports' for json files
 
