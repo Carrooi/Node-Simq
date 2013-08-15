@@ -20,18 +20,23 @@ class Application
 
 
 	parseLibraries: (type) ->
-		paths = Helpers.expandFilesList(@section.libraries[type], @basePath)
-		return @loader.loadFiles(paths)
+		return @loader.loadFiles(@section.libraries[type])
+
+
+	parseAliases: ->
+		result = []
+		for alias, m of @section.aliases
+			result.push("'#{alias}': '#{m}'")
+
+		return result
 
 
 	parseModules: ->
 		deferred = Q.defer()
 
-		modules = Helpers.expandFilesList(@section.modules, @basePath)
-		Package.findDependenciesForModules(modules).then( (data) =>
+		Package.findDependenciesForModules(@section.modules).then( (data) =>
 			@loader.loadModules(data.files, @section.base).then( (modules) =>
-				for alias, m of @section.aliases
-					modules.push("'#{alias}': '#{m}'")
+				modules = modules.concat(@parseAliases())
 
 				@loader.loadFile(path.resolve(__dirname + '/../Module.js')).then( (content) =>
 					content = content.replace(/\s+$/, '').replace(/;$/, '')

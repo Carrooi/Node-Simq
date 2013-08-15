@@ -35,9 +35,7 @@ class Parser
 
 
 	parseStyle: (section) ->
-		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
-
-		return (new Style(@loader, basePath, section)).parse()
+		return (new Style(@loader, section)).parse()
 
 
 module.exports = Parser

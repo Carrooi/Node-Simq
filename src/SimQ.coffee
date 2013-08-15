@@ -27,7 +27,7 @@ class SimQ
 	constructor: (configPath = @configPath, @basePath = @basePath) ->
 		@basePath = path.resolve(@basePath)
 		@configPath = path.resolve(@basePath + '/' + configPath)
-		@config = new Configurator(@configPath)
+		@config = new Configurator(@configPath, @basePath)
 		@parser = new Parser(@, @basePath)
 
 
@@ -102,7 +102,7 @@ class SimQ
 
 	hasPackageApplication: (packageName) ->
 		pckg = @getPackage(packageName)
-		return pckg.application
+		return pckg.application != null
 
 
 	buildStyles: (packageName) ->
@@ -141,16 +141,14 @@ class SimQ
 		for name, pckg of config.packages
 			pckg.name = name
 			((pckg) =>
-				basePath = if pckg.base == null then @basePath else @basePath + '/' + pckg.base
-
 				if @hasPackageApplication(pckg.name)
 					@buildApplication(pckg.name).then( (content) =>
-						fs.writeFile(basePath + '/' + pckg.application, content)
+						fs.writeFile(pckg.application, content)
 					)
 
 				if @hasPackageStyles(pckg.name)
 					@buildStyles(pckg.name).then( (content) =>
-						fs.writeFile(basePath + '/' + pckg.style.out, content)
+						fs.writeFile(pckg.style.out, content)
 					)
 			)(pckg)
 

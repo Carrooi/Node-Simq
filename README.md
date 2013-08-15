@@ -406,6 +406,11 @@ mode for styles.
 
 ## Changelog list
 
+* 4.0.0
+	+ Bugs
+	+ Optimizations in configuration
+	+ Updated for new version of [easy-configuration](https://npmjs.org/package/easy-configuration)
+
 * 3.9.2
 	+ Added tests for styles
 	+ Bug with eco templates
