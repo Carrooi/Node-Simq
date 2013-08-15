@@ -171,4 +171,21 @@ class Package
 		return result
 
 
+	@parseNodeInfo: (data, basePath) ->
+		result = {}
+
+		for m, info of data
+			main = path.relative(basePath, info.main)
+			name = path.relative(basePath, m)
+
+			main = main.replace(/^[./]+/, '')
+			name = name.replace(/^[./]+/, '')
+
+			result[name] =
+				name: info.name
+				path: main
+
+		return result
+
+
 module.exports = Package

@@ -50,18 +50,7 @@ class Application
 		Package.findDependenciesForModules(@section.modules).then( (data) =>
 			@loader.loadModules(data.files, @section.base).then( (modules) =>
 				modules = modules.concat(@parseAliases())
-
-				node = {}
-				for m, info of data.node
-					main = path.relative(@basePath, info.main)
-					name = path.relative(@basePath, m)
-
-					main = main.replace(/^[./]+/, '')
-					name = name.replace(/^[./]+/, '')
-
-					node[name] =
-						name: info.name
-						path: main
+				node = Package.parseNodeInfo(data.node, @basePath)
 
 				result =
 					modules: modules.join(',\n')
