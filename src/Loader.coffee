@@ -48,6 +48,8 @@ class Loader
 			if name == null
 				name = _path.replace(new RegExp('^' + process.cwd() + '\/'), '')
 				name = name.replace(new RegExp('^' + base + '/'), '') if base != null
+			else
+				#console.log name
 
 			globals = Package.getGlobalsForModule(name).join('\n')
 			data = "module.exports = #{data}" if type in @autoModule
@@ -66,7 +68,7 @@ class Loader
 				for _path in paths
 					result.push(@loadModule(_path, base))
 			when '[object Object]'
-				for name, _path in paths
+				for name, _path of paths
 					result.push(@loadModule(_path, base, name))
 
 		return Q.all(result)

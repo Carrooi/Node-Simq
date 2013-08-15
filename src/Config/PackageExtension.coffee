@@ -1,5 +1,6 @@
 Extension = require 'easy-configuration/lib/Extension'
 Helpers = require '../Helpers'
+Package = require '../Package'
 path = require 'path'
 
 class PackageExtension extends Extension
@@ -47,6 +48,7 @@ class PackageExtension extends Extension
 					}
 
 				data = @configurator.merge(data, @defaultFsModule)
+				pckg.fsModules[_path] = data
 
 		return config
 
@@ -60,8 +62,9 @@ class PackageExtension extends Extension
 
 			pckg.modules = Helpers.expandFilesList(pckg.modules, basePath)
 
-			#for _path, data of pckg.fsModules
-			#	data.paths = Helpers.expandFilesList(data.paths, _path)
+			for _path, data of pckg.fsModules
+				data.paths = Helpers.expandFilesList(data.paths, _path)
+				data.paths.push Package.loadModuleInfo(_path + '/package.json').main
 
 			if pckg.application != null
 				pckg.application = path.resolve("#{basePath}/#{pckg.application}")

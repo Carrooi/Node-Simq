@@ -8,22 +8,30 @@ class Package
 
 
 	@isInModule: (_path) ->
-		return _path.lastIndexOf('/node_modules/') != -1
+		return _path.lastIndexOf('/node_modules/') != -1 || _path.match(/package\.json$/) != null
 
 
 	@getModuleName: (_path) ->
 		if !@isInModule(_path)
 			return null
 
-		buf = _path.substr(_path.lastIndexOf('/node_modules/') + 14)
-		return buf.substr(0, buf.indexOf('/'))
+		if _path.match(/package\.json$/) == null
+			buf = _path.substr(_path.lastIndexOf('/node_modules/') + 14)
+			return buf.substr(0, buf.indexOf('/'))
+		else
+			buf = _path.substr(0, _path.length - 13)
+			return buf.substr(buf.lastIndexOf('/') + 1)
+
 
 
 	@getModuleBaseDir: (_path) ->
 		if !@isInModule(_path)
 			return null
 
-		return _path.substr(0, _path.lastIndexOf('/node_modules/') + 14) + @getModuleName(_path)
+		if _path.match(/package\.json$/) == null
+			return _path.substr(0, _path.lastIndexOf('/node_modules/') + 14) + @getModuleName(_path)
+		else
+			return _path.substr(0, _path.length - 13)
 
 
 	@resolveModuleName: (_path) ->

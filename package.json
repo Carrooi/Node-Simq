@@ -38,7 +38,8 @@
 		"mime": "1.2.10",
 		"easy-configuration": "latest",
 		"fs-finder": "latest",
-		"source-compiler": "latest"
+		"source-compiler": "latest",
+		"recursive-merge": "latest"
 	},
 	"devDependencies": {
 		"should": "1.2.2"

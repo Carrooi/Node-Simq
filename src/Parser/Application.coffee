@@ -1,6 +1,7 @@
 path = require 'path'
 Uglify = require 'uglify-js'
 Q = require 'q'
+merge = require 'recursive-merge'
 Helpers = require '../Helpers'
 Package = require '../Package'
 
@@ -50,11 +51,51 @@ class Application
 		Package.findDependenciesForModules(@section.modules).then( (data) =>
 			@loader.loadModules(data.files, @section.base).then( (modules) =>
 				modules = modules.concat(@parseAliases())
-				node = Package.parseNodeInfo(data.node, @basePath)
 
 				result =
 					modules: modules.join(',\n')
-					node: JSON.stringify(node)
+					node: Package.parseNodeInfo(data.node, @basePath)
+
+				deferred.resolve(result)
+			, (err) ->
+				deferred.reject(err)
+			)
+		, (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
+	loadFsModules: ->
+		deferred = Q.defer()
+
+		modules = []
+		for _path, data of @section.fsModules
+			modules.push @loadFsModule(data.name, _path, data.paths)
+
+		Q.all(modules).then( (data) ->
+			deferred.resolve(data)
+		, (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
+	loadFsModule: (name, _path, paths) ->
+		deferred = Q.defer()
+
+		Package.findDependenciesForModules(paths).then( (deps) =>
+			modules = {}
+			for file in deps.files
+				_name = name + '/' + path.relative(_path, file)
+				modules[_name] = file
+
+			@loader.loadModules(modules, _path).then( (result) ->
+				result =
+					modules: result.join(',\n')
+					node: Package.parseNodeInfo(deps.node, _path)
 
 				deferred.resolve(result)
 			, (err) ->
@@ -72,11 +113,19 @@ class Application
 
 		Q.all([
 			@loadModules(),
-			@loadBaseModuleFile()
+			@loadBaseModuleFile(),
+			@loadFsModules()
 		]).then( (data) =>
+			modules = [data[0].modules]
+			modules.push sub.modules for sub in data[2]
+			modules = modules.join(',\n')
+
+			node = merge(data[0].node, sub.node) for sub in data[2]
+			node = JSON.stringify(node)
+
 			result =
-				modules: "#{data[1]}({\n#{data[0].modules}\n});"
-				node: "require._setNodeInfo(#{data[0].node});\n"
+				modules: "#{data[1]}({\n#{modules}\n});"
+				node: "require._setNodeInfo(#{node});\n"
 
 			deferred.resolve(result)
 		, (err) ->
