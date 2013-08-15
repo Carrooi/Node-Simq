@@ -31,38 +31,69 @@ class Application
 		return result
 
 
-	parseModules: ->
+	loadBaseModuleFile: ->
+		deferred = Q.defer()
+
+		@loader.loadFile(path.resolve(__dirname + '/../Module.js')).then( (content) ->
+			content = content.replace(/\s+$/, '').replace(/;$/, '')
+			deferred.resolve(content)
+		, (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
+	loadModules: ->
 		deferred = Q.defer()
 
 		Package.findDependenciesForModules(@section.modules).then( (data) =>
 			@loader.loadModules(data.files, @section.base).then( (modules) =>
 				modules = modules.concat(@parseAliases())
 
-				@loader.loadFile(path.resolve(__dirname + '/../Module.js')).then( (content) =>
-					content = content.replace(/\s+$/, '').replace(/;$/, '')
+				node = {}
+				for m, info of data.node
+					main = path.relative(@basePath, info.main)
+					name = path.relative(@basePath, m)
 
-					node = {}
-					for m, info of data.node
-						main = path.relative(@basePath, info.main)
-						name = path.relative(@basePath, m)
+					main = main.replace(/^[./]+/, '')
+					name = name.replace(/^[./]+/, '')
 
-						main = main.replace(/^[./]+/, '')
-						name = name.replace(/^[./]+/, '')
+					node[name] =
+						name: info.name
+						path: main
 
-						node[name] =
-							name: info.name
-							path: main
+				result =
+					modules: modules.join(',\n')
+					node: JSON.stringify(node)
 
-					result =
-						modules: content + '({\n' + modules.join(',\n') + '\n});'
-						node: 'require._setNodeInfo(' + JSON.stringify(node) + ');\n'
-
-					deferred.resolve(result)
-				, (e) ->
-					deferred.reject(e)
-				)
+				deferred.resolve(result)
+			, (err) ->
+				deferred.reject(err)
 			)
+		, (err) ->
+			deferred.reject(err)
 		)
+
+		return deferred.promise
+
+
+	parseModules: ->
+		deferred = Q.defer()
+
+		Q.all([
+			@loadModules(),
+			@loadBaseModuleFile()
+		]).then( (data) =>
+			result =
+				modules: "#{data[1]}({\n#{data[0].modules}\n});"
+				node: "require._setNodeInfo(#{data[0].node});\n"
+
+			deferred.resolve(result)
+		, (err) ->
+			deferred.reject(err)
+		)
+
 		return deferred.promise
 
 

@@ -59,8 +59,8 @@ class PackageExtension extends Extension
 
 			pckg.modules = Helpers.expandFilesList(pckg.modules, basePath)
 
-			for _path, data of pckg.fsModules
-				data.paths = Helpers.expandFilesList(data.paths, _path)
+			#for _path, data of pckg.fsModules
+			#	data.paths = Helpers.expandFilesList(data.paths, _path)
 
 			if pckg.application != null
 				pckg.application = path.resolve("#{basePath}/#{pckg.application}")

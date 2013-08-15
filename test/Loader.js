@@ -18,7 +18,7 @@
 		},
 		less: {
 			file: dir + '/package/css/style.less',
-			result: 'body {\n  color: #ff0000;\n}\n'
+			result: 'body {\n  color: #000000;\n}\n'
 		}
 	}
 

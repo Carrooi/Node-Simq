@@ -410,6 +410,7 @@ mode for styles.
 	+ Bugs
 	+ Optimizations in configuration
 	+ Updated for new version of [easy-configuration](https://npmjs.org/package/easy-configuration)
+	+ Bugs in tests
 
 * 3.9.2
 	+ Added tests for styles
