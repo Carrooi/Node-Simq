@@ -331,6 +331,21 @@ SimQ can also tell you some more information in command line.
 $ simq server -v
 ```
 
+## Skip packages
+
+If you want to temporary disable some packages from processing by SimQ, you can set `skip` option for this package in
+your config file.
+
+
+`./config/setup.json`:
+```
+{
+	"nameOfYourFirstModule": {
+		"skip": true
+	}
+}
+```
+
 ## Caching
 
 In large applications or in applications with typescript (explanation above) it is good to turn on cache. SimQ using
@@ -411,6 +426,7 @@ mode for styles.
 	+ Optimizations in configuration
 	+ Updated for new version of [easy-configuration](https://npmjs.org/package/easy-configuration)
 	+ Bugs in tests
+	+ Added skip option
 
 * 3.9.2
 	+ Added tests for styles

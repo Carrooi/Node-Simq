@@ -8,6 +8,7 @@ class PackageExtension extends Extension
 	basePath: '.'
 
 	defaultsPackage:
+		skip: false
 		application: null
 		base: null
 		style:

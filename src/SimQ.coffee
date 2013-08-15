@@ -62,26 +62,27 @@ class SimQ
 				)(data)
 
 		for name, pckg of config.packages
-			pckg.name = name
-			((pckg) =>
-				if @hasPackageApplication(pckg.name)
-					console.log 'Mapping file \'' + path.resolve(pckg.application) + '\' to \'' + base + path.normalize(pckg.application) + '\'' if @v
-					app.get(base + path.normalize(pckg.application), (req, res) =>
-						@buildApplication(pckg.name).then( (content) ->
-							res.setHeader('Content-Type', 'application/javascript')
-							res.send(content)
+			if pckg.skip == false
+				pckg.name = name
+				((pckg) =>
+					if @hasPackageApplication(pckg.name)
+						console.log 'Mapping file \'' + path.resolve(pckg.application) + '\' to \'' + base + path.normalize(pckg.application) + '\'' if @v
+						app.get(base + path.normalize(pckg.application), (req, res) =>
+							@buildApplication(pckg.name).then( (content) ->
+								res.setHeader('Content-Type', 'application/javascript')
+								res.send(content)
+							)
 						)
-					)
 
-				if @hasPackageStyles(pckg.name)
-					console.log 'Mapping file \'' + path.resolve(pckg.style.out) + '\' to \'' + base + path.normalize(pckg.style.out) + '\'' if @v
-					app.get(base + path.normalize(pckg.style.out), (req, res) =>
-						@buildStyles(pckg.name).then( (content) ->
-							res.setHeader('Content-Type', 'text/css')
-							res.send(content)
+					if @hasPackageStyles(pckg.name)
+						console.log 'Mapping file \'' + path.resolve(pckg.style.out) + '\' to \'' + base + path.normalize(pckg.style.out) + '\'' if @v
+						app.get(base + path.normalize(pckg.style.out), (req, res) =>
+							@buildStyles(pckg.name).then( (content) ->
+								res.setHeader('Content-Type', 'text/css')
+								res.send(content)
+							)
 						)
-					)
-			)(pckg)
+				)(pckg)
 
 		app.listen(config.server.port)
 		console.log 'Listening on port ' + config.server.port
@@ -139,18 +140,19 @@ class SimQ
 		config = @config.load()
 
 		for name, pckg of config.packages
-			pckg.name = name
-			((pckg) =>
-				if @hasPackageApplication(pckg.name)
-					@buildApplication(pckg.name).then( (content) =>
-						fs.writeFile(pckg.application, content)
-					)
+			if pckg.skip == false
+				pckg.name = name
+				((pckg) =>
+					if @hasPackageApplication(pckg.name)
+						@buildApplication(pckg.name).then( (content) =>
+							fs.writeFile(pckg.application, content)
+						)
 
-				if @hasPackageStyles(pckg.name)
-					@buildStyles(pckg.name).then( (content) =>
-						fs.writeFile(pckg.style.out, content)
-					)
-			)(pckg)
+					if @hasPackageStyles(pckg.name)
+						@buildStyles(pckg.name).then( (content) =>
+							fs.writeFile(pckg.style.out, content)
+						)
+				)(pckg)
 
 		return @
 
