@@ -137,7 +137,13 @@ class Application
 
 	parseRun: ->
 		run = []
-		run.push("this.require('#{m}');") for m in @section.run
+
+		for m in @section.run
+			if (match = m.match(/^<(.+)>$/)) == null
+				run.push("this.require('#{m}');")
+			else
+				run.push(match[1])
+
 		return Q.resolve(run)
 
 

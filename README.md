@@ -281,6 +281,21 @@ application. With this in most cases you don't have to got any javascript code i
 }
 ```
 
+It is also possible to combine this `run` section with your own code. Just need to enclose it into `<>`.
+
+`./config/setup.json`:
+```
+{
+	"nameOfYourFirstModule": {
+		"run": [
+			"/app/setup",
+			"<my.own.code();>",
+			"/app/Bootstrap"
+		]
+	}
+}
+```
+
 ## Base namespace
 
 If you have got more packages in your application, then writing some paths may be boring. Good example is when you rewriting
@@ -420,6 +435,9 @@ mode for styles.
 ```
 
 ## Changelog list
+
+* 4.1.0
+	+ Added ability to run own code from run section
 
 * 4.0.0
 	+ Bugs
