@@ -114,14 +114,17 @@ class Application
 		Q.all([
 			@loadModules(),
 			@loadBaseModuleFile(),
-			@loadFsModules()
+			#@loadFsModules()
 		]).then( (data) =>
 			modules = [data[0].modules]
-			modules.push sub.modules for sub in data[2]
-			modules = modules.join(',\n')
+			#for sub in data[2]
+			#	modules.push sub.modules
+			#modules = modules.join(',\n')
 
-			node = merge(data[0].node, sub.node) for sub in data[2]
-			node = JSON.stringify(node)
+			#for sub in data[2]
+			#	node = merge(data[0].node, sub.node)
+
+			node = JSON.stringify(data[0].node)
 
 			result =
 				modules: "#{data[1]}({\n#{modules}\n});"

@@ -436,6 +436,9 @@ mode for styles.
 
 ## Changelog list
 
+* 4.1.1
+	+ Bug with building application
+
 * 4.1.0
 	+ Added ability to run own code from run section
 
