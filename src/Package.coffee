@@ -31,10 +31,8 @@ class Package
 		if !@isInModule(_path)
 			return null
 
-		if _path.match(/package\.json$/) == null
-			return _path.substr(0, _path.lastIndexOf('/node_modules/') + 14) + @getModuleName(_path)
-		else
-			return _path.substr(0, _path.length - 13)
+		pckg = @findModulePackageFile(_path)
+		return path.dirname(pckg)
 
 
 	resolveModuleName: (_path) ->
