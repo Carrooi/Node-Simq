@@ -263,6 +263,10 @@ so every time we want to use jquery, we have to write `require('/lib/jquery/jque
 
 Now you can use `require('jquery')`.
 
+## Node core modules
+
+If you are about to use some core module from node, simq will show you this information with list of these core modules.
+
 ## Run automatically
 
 It would be great if some modules can be started automatically after script is loaded to the page. You can got for example
@@ -438,6 +442,7 @@ mode for styles.
 
 * 4.2.0
 	+ Many improvements
+	+ Showing information about using node core modules
 
 * 4.1.1
 	+ Bug with building application

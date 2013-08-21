@@ -18,7 +18,7 @@ class PackageExtension extends Extension
 			out: null
 			dependencies: null
 		modules: []
-		nodeModules: []
+		coreModules: []
 		fsModules: {}
 		aliases: {}
 		run: []

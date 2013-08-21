@@ -50,6 +50,14 @@ class Application
 		deferred = Q.defer()
 
 		@pckg.findDependenciesForModules(@section.modules).then( (data) =>
+			if data.core.length > 0
+				core = []
+				for m in data.core
+					if @section.coreModules.indexOf(m) == -1
+						core.push(m)
+
+				if core.length > 0 then console.log 'These core modules will not be used: ' + core.join(', ')
+
 			@loader.loadModules(data.files, @section.base).then( (modules) =>
 				modules = modules.concat(@parseAliases())
 
