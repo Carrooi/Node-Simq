@@ -57,7 +57,7 @@ class Package
 			return null
 
 
-	findModulePackageFile: (_path, limit = false) ->
+	findModulePackageFile: (_path, limit = null) ->
 		return Finder.in(path.dirname(_path)).lookUp(limit).findFirst().findFiles('package.json')
 
 
