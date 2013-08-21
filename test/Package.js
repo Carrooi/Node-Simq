@@ -14,6 +14,8 @@
 
 	var pckg = new Package(dir);
 
+	console.log(pckg.findSystemNodeModulePath('events'));
+
 	var modules = {
 		list: [
 			'./modules/<[0-9]>.js',

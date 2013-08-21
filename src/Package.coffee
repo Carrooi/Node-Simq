@@ -3,6 +3,7 @@ path = require 'path'
 Q = require 'q'
 required = require 'required'
 Finder = require 'fs-finder'
+Module = require 'module'
 Helpers = require './Helpers'
 
 class Package
@@ -192,6 +193,15 @@ class Package
 				path: main
 
 		return result
+
+
+	findSystemNodeModulePath: (name) ->
+		for dir in Module.globalPaths
+			_path = "#{dir}/#{name}.js"
+			if fs.existsSync(_path) && fs.statSync(_path).isFile()
+				return _path
+
+		return null
 
 
 module.exports = Package
