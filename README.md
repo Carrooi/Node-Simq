@@ -437,7 +437,7 @@ mode for styles.
 ## Changelog list
 
 * 4.2.0
-
+	+ Many improvements
 
 * 4.1.1
 	+ Bug with building application

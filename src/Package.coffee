@@ -15,7 +15,7 @@ class Package
 
 
 	isInModule: (_path) ->
-		pckg = Finder.in(path.dirname(_path)).lookUp(@basePath).findFirst().findFiles('package.json')
+		pckg = @findModulePackageFile(_path, @basePath)
 		return pckg != null && pckg != @basePath + '/package.json'
 
 
@@ -23,13 +23,8 @@ class Package
 		if !@isInModule(_path)
 			return null
 
-		if _path.match(/package\.json$/) == null
-			buf = _path.substr(_path.lastIndexOf('/node_modules/') + 14)
-			return buf.substr(0, buf.indexOf('/'))
-		else
-			buf = _path.substr(0, _path.length - 13)
-			return buf.substr(buf.lastIndexOf('/') + 1)
-
+		pckg = @findModulePackageFile(_path)
+		return JSON.parse(fs.readFileSync(pckg, encoding: 'utf8')).name
 
 
 	getModuleBaseDir: (_path) ->
@@ -63,11 +58,8 @@ class Package
 			return null
 
 
-	findModulePackageFile: (_path) ->
-		if !@isInModule(_path)
-			return null
-
-		return @getModuleBaseDir(_path) + '/package.json'
+	findModulePackageFile: (_path, limit = false) ->
+		return Finder.in(path.dirname(_path)).lookUp(limit).findFirst().findFiles('package.json')
 
 
 	loadModuleInfo: (_path) ->
