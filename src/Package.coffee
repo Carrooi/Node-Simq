@@ -2,6 +2,7 @@ fs = require 'fs'
 path = require 'path'
 Q = require 'q'
 required = require 'required'
+Finder = require 'fs-finder'
 Helpers = require './Helpers'
 
 class Package
@@ -14,7 +15,8 @@ class Package
 
 
 	isInModule: (_path) ->
-		return _path.lastIndexOf('/node_modules/') != -1 || _path.match(/package\.json$/) != null
+		pckg = Finder.in(path.dirname(_path)).lookUp(@basePath).findFirst().findFiles('package.json')
+		return pckg != null && pckg != @basePath + '/package.json'
 
 
 	getModuleName: (_path) ->

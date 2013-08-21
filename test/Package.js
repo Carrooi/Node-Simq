@@ -5,13 +5,14 @@
 
 	var Package = require('../lib/Package');
 	var Helpers = require('../lib/Helpers');
-	
-	var pckg = new Package;
+
 
 	var dir = __dirname + '/data';
 	var simpleModulePath = dir + '/package/node_modules/module/index.js';
 	var advancedModulePath = dir + '/package/node_modules/module/node_modules/another_one/file.json';
 	var invalidModule = dir + '/some_file.js';
+
+	var pckg = new Package(dir);
 
 	var modules = {
 		list: [
