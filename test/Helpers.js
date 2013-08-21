@@ -13,7 +13,8 @@
 				'./modules/3.js',
 				'./modules/4.js',
 				'./modules/5.json',
-				'./modules/6.coffee'
+				'./modules/6.coffee',
+				'./modules/6.js'
 			],
 			list: [
 				dir + '/modules/1.js',
@@ -21,7 +22,8 @@
 				dir + '/modules/3.js',
 				dir + '/modules/4.js',
 				dir + '/modules/5.json',
-				dir + '/modules/6.coffee'
+				dir + '/modules/6.coffee',
+				dir + '/modules/6.js'
 			]
 		}
 	};

@@ -3,7 +3,6 @@ Uglify = require 'uglify-js'
 Q = require 'q'
 merge = require 'recursive-merge'
 Helpers = require '../Helpers'
-Package = require '../Package'
 
 class Application
 
@@ -12,12 +11,14 @@ class Application
 
 	loader: null
 
+	pckg: null
+
 	basePath: null
 
 	section: null
 
 
-	constructor: (@loader, @basePath, @section) ->
+	constructor: (@loader, @pckg, @basePath, @section) ->
 
 
 	parseLibraries: (type) ->
@@ -48,13 +49,13 @@ class Application
 	loadModules: ->
 		deferred = Q.defer()
 
-		Package.findDependenciesForModules(@section.modules).then( (data) =>
+		@pckg.findDependenciesForModules(@section.modules).then( (data) =>
 			@loader.loadModules(data.files, @section.base).then( (modules) =>
 				modules = modules.concat(@parseAliases())
 
 				result =
 					modules: modules.join(',\n')
-					node: Package.parseNodeInfo(data.node, @basePath)
+					node: @pckg.parseNodeInfo(data.node, @basePath)
 
 				deferred.resolve(result)
 			, (err) ->
@@ -86,7 +87,7 @@ class Application
 	loadFsModule: (name, _path, paths) ->
 		deferred = Q.defer()
 
-		Package.findDependenciesForModules(paths).then( (deps) =>
+		@pckg.findDependenciesForModules(paths).then( (deps) =>
 			modules = {}
 			for file in deps.files
 				_name = name + '/' + path.relative(_path, file)
@@ -95,7 +96,7 @@ class Application
 			@loader.loadModules(modules, _path).then( (result) ->
 				result =
 					modules: result.join(',\n')
-					node: Package.parseNodeInfo(deps.node, _path)
+					node: @pckg.parseNodeInfo(deps.node, _path)
 
 				deferred.resolve(result)
 			, (err) ->

@@ -9,6 +9,8 @@ class Parser
 
 	simq: null
 
+	pckg: null
+
 	config: null
 
 	loader: null
@@ -16,9 +18,9 @@ class Parser
 	basePath: null
 
 
-	constructor: (@simq, @basePath) ->
+	constructor: (@simq, @pckg, @basePath) ->
 		@config = @simq.config.load()
-		@loader = new Loader
+		@loader = new Loader(@pckg)
 		@loader.jquerify = @config.template.jquerify
 
 		if @config.cache.directory != null
@@ -28,7 +30,7 @@ class Parser
 	parseApplication: (section) ->
 		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
 
-		application = new Application(@loader, basePath, section)
+		application = new Application(@loader, @pckg, basePath, section)
 		application.minify = !@config.debugger.scripts
 
 		return application.parse()

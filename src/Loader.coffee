@@ -1,16 +1,20 @@
 Q = require 'q'
 path = require 'path'
 Compiler = require 'source-compiler'
-Package = require './Package'
 
 class Loader
 
+
+	pckg: null
 
 	jquerify: false
 
 	modulesAllowed: ['js', 'json', 'coffee', 'ts', 'eco']
 
 	autoModule: ['json', 'eco']
+
+
+	constructor: (@pckg) ->
 
 
 	loadFile: (_path, dependents = null) ->
@@ -51,7 +55,7 @@ class Loader
 			else
 				#console.log name
 
-			globals = Package.getGlobalsForModule(name).join('\n')
+			globals = @pckg.getGlobalsForModule(name).join('\n')
 			data = "module.exports = #{data}" if type in @autoModule
 			deferred.resolve("'#{name}': function(exports, __require, module) {\n#{globals}\n#{data}\n}")
 		, (err) ->

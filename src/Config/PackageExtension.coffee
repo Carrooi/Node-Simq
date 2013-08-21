@@ -1,10 +1,11 @@
 Extension = require 'easy-configuration/lib/Extension'
 Helpers = require '../Helpers'
-Package = require '../Package'
 path = require 'path'
 
 class PackageExtension extends Extension
 
+
+	pckg: null
 
 	basePath: '.'
 
@@ -29,7 +30,7 @@ class PackageExtension extends Extension
 		paths: []
 
 
-	constructor: (@basePath) ->
+	constructor: (@pckg, @basePath) ->
 
 
 	loadConfiguration: ->
@@ -64,7 +65,7 @@ class PackageExtension extends Extension
 
 			for _path, data of pckg.fsModules
 				data.paths = Helpers.expandFilesList(data.paths, _path)
-				data.paths.push Package.loadModuleInfo(_path + '/package.json').main
+				data.paths.push @pckg.loadModuleInfo(_path + '/package.json').main
 
 			if pckg.application != null
 				pckg.application = path.resolve("#{basePath}/#{pckg.application}")

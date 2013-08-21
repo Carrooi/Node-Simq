@@ -7,11 +7,17 @@ Helpers = require './Helpers'
 class Package
 
 
-	@isInModule: (_path) ->
+	basePath: null
+
+
+	constructor: (@basePath) ->
+
+
+	isInModule: (_path) ->
 		return _path.lastIndexOf('/node_modules/') != -1 || _path.match(/package\.json$/) != null
 
 
-	@getModuleName: (_path) ->
+	getModuleName: (_path) ->
 		if !@isInModule(_path)
 			return null
 
@@ -24,7 +30,7 @@ class Package
 
 
 
-	@getModuleBaseDir: (_path) ->
+	getModuleBaseDir: (_path) ->
 		if !@isInModule(_path)
 			return null
 
@@ -34,7 +40,7 @@ class Package
 			return _path.substr(0, _path.length - 13)
 
 
-	@resolveModuleName: (_path) ->
+	resolveModuleName: (_path) ->
 		_path = path.resolve(_path)
 		if fs.existsSync(_path)
 			if fs.statSync(_path).isDirectory()
@@ -55,14 +61,14 @@ class Package
 			return null
 
 
-	@findModulePackageFile: (_path) ->
+	findModulePackageFile: (_path) ->
 		if !@isInModule(_path)
 			return null
 
 		return @getModuleBaseDir(_path) + '/package.json'
 
 
-	@loadModuleInfo: (_path) ->
+	loadModuleInfo: (_path) ->
 		if !@isInModule(_path)
 			return null
 
@@ -83,7 +89,7 @@ class Package
 		return result
 
 
-	@findDependencies: (_path) ->
+	findDependencies: (_path) ->
 		if path.extname(_path) != '.js'
 			result =
 				files: [_path]
@@ -126,7 +132,7 @@ class Package
 		return deferred.promise
 
 
-	@parseDependencies: (dep) ->
+	parseDependencies: (dep) ->
 		result =
 			files: []
 			core: []
@@ -143,7 +149,7 @@ class Package
 		return result
 
 
-	@findDependenciesForModules: (paths) ->
+	findDependenciesForModules: (paths) ->
 		modules = []
 		for _path in paths
 			modules.push(@findDependencies(_path))
@@ -166,7 +172,7 @@ class Package
 		)
 
 
-	@getGlobalsForModule: (name) ->
+	getGlobalsForModule: (name) ->
 		globals =
 			require: "function(name) {return __require(name, '#{name}');}"
 			__filename: "'#{name}'"
@@ -179,7 +185,7 @@ class Package
 		return result
 
 
-	@parseNodeInfo: (data, basePath) ->
+	parseNodeInfo: (data, basePath) ->
 		result = {}
 
 		for m, info of data

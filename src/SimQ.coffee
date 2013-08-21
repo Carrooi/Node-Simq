@@ -7,6 +7,7 @@ Q = require 'q'
 mime = require 'mime'
 Parser = require './Parser/Parser'
 Configurator = require './Config/Configurator'
+Package = require './Package'
 
 class SimQ
 
@@ -23,12 +24,15 @@ class SimQ
 
 	parser: null
 
+	pckg: null
+
 
 	constructor: (configPath = @configPath, @basePath = @basePath) ->
 		@basePath = path.resolve(@basePath)
 		@configPath = path.resolve(@basePath + '/' + configPath)
-		@config = new Configurator(@configPath, @basePath)
-		@parser = new Parser(@, @basePath)
+		@pckg = new Package(@basePath)
+		@config = new Configurator(@configPath, @pckg, @basePath)
+		@parser = new Parser(@, @pckg, @basePath)
 
 
 	server: ->
