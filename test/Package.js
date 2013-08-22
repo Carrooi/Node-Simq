@@ -94,10 +94,6 @@
 				pckg.findModulePackageFile(advancedModulePath).should.equal(dir + '/package/node_modules/module/node_modules/another_one/package.json');
 			});
 
-			it('should return null if file is not in node module', function() {
-				should.not.exist(pckg.findModulePackageFile(invalidModule));
-			});
-
 		});
 
 		describe('#loadModuleInfo()', function() {
