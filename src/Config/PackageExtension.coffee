@@ -26,9 +26,7 @@ class PackageExtension extends Extension
 			begin: []
 			end: []
 
-	defaultFsModule:
-		name: null
-		paths: []
+	defaultFsModule: []
 
 
 	constructor: (@pckg, @basePath) ->
@@ -64,9 +62,10 @@ class PackageExtension extends Extension
 
 			pckg.modules = Helpers.expandFilesList(pckg.modules, basePath)
 
-			for _path, data of pckg.fsModules
-				data.paths = Helpers.expandFilesList(data.paths, _path)
-				data.paths.push @pckg.loadModuleInfo(_path + '/package.json').main
+			for _path, paths of pckg.fsModules
+				info = @pckg.loadModuleInfo(_path + '/package.json')
+				pckg.fsModules[_path] = Helpers.expandFilesList(paths, _path)
+				pckg.fsModules[_path].push info.main if pckg.fsModules[_path].indexOf(info.main) == -1
 
 			if pckg.application != null
 				pckg.application = path.resolve("#{basePath}/#{pckg.application}")

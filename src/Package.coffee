@@ -183,13 +183,13 @@ class Package
 
 		for m, info of data
 			main = path.relative(basePath, info.main)
-			name = path.relative(basePath, m)
+			base = path.relative(basePath, m)
 
 			main = main.replace(/^[./]+/, '')
-			name = name.replace(/^[./]+/, '')
+			base = base.replace(/^[./]+/, '')
 
-			result[name] =
-				name: info.name
+			result[info.name] =
+				base: base
 				path: main
 
 		return result

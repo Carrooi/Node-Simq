@@ -3,7 +3,7 @@ if !@require
 
 	modules = {}
 
-	nodeInfo = {}
+	meta= {}
 
 	cache = {}
 
@@ -41,58 +41,6 @@ if !@require
 		if name[0] == '.' && parent == null
 			throw new Error 'Can not resolve module name ' + name
 
-		if name[0] == '/'
-			name = name.substr(1)
-		else if name[0] == '.'
-			num = parent.lastIndexOf('/')
-			num = if num == -1 then 0 else num
-
-			name = parent.substring(0, num) + '/' + name
-		else
-			if parent == null then parent = ''
-			count = parent.split('/').length - 1
-
-			num = name.indexOf('/')
-			if num == -1
-				nameRest = null
-			else
-				nameRest = name.substr(num + 1)
-				name = name.substr(0, num)
-
-			for i in [0..count]
-				num = parent.lastIndexOf('/')
-				num = if num == -1 then 0 else num
-
-				parent = parent.substring(0, num)
-				moduleName = parent + '/node_modules/' + name
-				moduleName = moduleName.replace(/^\//, '')
-
-				if typeof nodeInfo[moduleName] != 'undefined' && nodeInfo[moduleName].name == name
-					if nameRest == null
-						name = nodeInfo[moduleName].path
-					else
-						name = moduleName + '/' + nameRest
-
-					break
-
-		parts = name.split('/')
-
-		result = []
-		prev = null
-
-		for part in parts
-			if part == '.' || part == ''
-				continue
-			else if part == '..' && prev
-				result.pop()
-			else
-				result.push(part)
-
-			prev = part
-
-
-		name = result.join('/')
-
 		checkName = (name) ->
 			if typeof modules[name] != 'undefined'
 				return name
@@ -109,7 +57,43 @@ if !@require
 			else
 				return name
 
-		return checkName(name)
+		if name[0] == '/'
+			name = name.replace(/^\/*/, '')
+		else if name[0] == '.'
+			num = parent.lastIndexOf('/')
+			num = if num == -1 then 0 else num
+			name = parent.substring(0, num) + '/' + name
+
+		parts = name.split('/')
+		result = []
+		prev = null
+
+		for part in parts
+			if part == '.' || part == ''
+				continue
+			else if part == '..' && prev
+				result.pop()
+			else
+				result.push(part)
+
+			prev = part
+
+		name = result.join('/')
+
+		name = checkName(name)
+
+		if typeof modules[name] == 'undefined'
+			if typeof meta[name] != 'undefined'
+				name = checkName(meta[name].path)
+			else
+				num = name.indexOf('/')
+				base = name.substring(0, num)
+				rest = name.substr(num + 1)
+
+				if typeof meta[base] != 'undefined'
+					name = checkName("#{meta[base].base}/#{rest}")
+
+		return name
 
 
 	@require = (name, parent = null) ->
@@ -129,8 +113,8 @@ if !@require
 	@require.cache = cache
 
 
-	@require._setNodeInfo = (data) ->
-		nodeInfo = data
+	@require._setMeta = (data) ->
+		meta = data
 		return
 
 

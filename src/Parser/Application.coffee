@@ -80,8 +80,8 @@ class Application
 		deferred = Q.defer()
 
 		modules = []
-		for _path, data of @section.fsModules
-			modules.push @loadFsModule(data.name, _path, data.paths)
+		for _path, paths of @section.fsModules
+			modules.push @loadFsModule(_path, paths)
 
 		Q.all(modules).then( (data) ->
 			deferred.resolve(data)
@@ -92,19 +92,20 @@ class Application
 		return deferred.promise
 
 
-	loadFsModule: (name, _path, paths) ->
+	loadFsModule: (_path, paths) ->
 		deferred = Q.defer()
+		info = @pckg.loadModuleInfo("#{_path}/package.json")
 
 		@pckg.findDependenciesForModules(paths).then( (deps) =>
 			modules = {}
 			for file in deps.files
-				_name = name + '/' + path.relative(_path, file)
+				_name = info.name + '/' + path.relative(_path, file)
 				modules[_name] = file
 
-			@loader.loadModules(modules, _path).then( (result) ->
+			@loader.loadModules(modules, _path).then( (result) =>
 				result =
 					modules: result.join(',\n')
-					node: @pckg.parseNodeInfo(deps.node, _path)
+					node: @pckg.parseNodeInfo(deps.node, path.dirname(_path))
 
 				deferred.resolve(result)
 			, (err) ->
@@ -123,21 +124,22 @@ class Application
 		Q.all([
 			@loadModules(),
 			@loadBaseModuleFile(),
-			#@loadFsModules()
+			@loadFsModules()
 		]).then( (data) =>
-			modules = [data[0].modules]
-			#for sub in data[2]
-			#	modules.push sub.modules
-			#modules = modules.join(',\n')
+			final =
+				modules: data[0].modules
+				node: data[0].node
 
-			#for sub in data[2]
-			#	node = merge(data[0].node, sub.node)
+			for pack in data[2]
+				final.modules += ',\n' if final.modules != '' && pack.modules != ''
+				final.modules += pack.modules if pack.modules != ''
+				final.node = merge(final.node, pack.node)
 
-			node = JSON.stringify(data[0].node)
+			final.node = JSON.stringify(final.node)
 
 			result =
-				modules: "#{data[1]}({\n#{modules}\n});"
-				node: "require._setNodeInfo(#{node});\n"
+				modules: "#{data[1]}({\n#{final.modules}\n});"
+				node: "require._setMeta(#{final.node});\n"
 
 			deferred.resolve(result)
 		, (err) ->

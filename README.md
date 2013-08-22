@@ -267,6 +267,24 @@ Now you can use `require('jquery')`.
 
 If you are about to use some core module from node, simq will show you this information with list of these core modules.
 
+## Modules somewhere else
+
+Maybe you have got some modules somewhere else in your disk. Then you just have to use `fsModules` section.
+
+`./config/setup.json`:
+```
+{
+	"nameOfYourFirstModule": {
+		"fsModules": {
+			"/module/which/is/not/in/my/project": []
+		}
+	}
+}
+```
+
+There you can see, that it is just name of path to your module (directory) and array. This can be used, if you want to
+specifically set some other file paths in this module to be included.
+
 ## Run automatically
 
 It would be great if some modules can be started automatically after script is loaded to the page. You can got for example
@@ -439,6 +457,12 @@ mode for styles.
 ```
 
 ## Changelog list
+
+* 4.3.0
+	+ Again some improvements
+	+ Bugs
+	+ Browser code should be faster
+	+ Added fsModules
 
 * 4.2.0
 	+ Many improvements

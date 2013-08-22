@@ -1,7 +1,7 @@
 {
 	"name": "simq",
 	"description": "Simple require for javascript (browser)",
-	"version": "4.2.0",
+	"version": "4.3.0",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
