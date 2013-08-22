@@ -70,8 +70,9 @@ class SimQ
 				pckg.name = name
 				((pckg) =>
 					if @hasPackageApplication(pckg.name)
-						console.log 'Mapping file \'' + path.resolve(pckg.application) + '\' to \'' + base + path.normalize(pckg.application) + '\'' if @v
-						app.get(base + path.normalize(pckg.application), (req, res) =>
+						_path = base + path.relative(@basePath, pckg.application)
+						console.log 'Mapping file \'' + path.resolve(pckg.application) + '\' to \'' + _path + '\'' if @v
+						app.get(_path, (req, res) =>
 							@buildApplication(pckg.name).then( (content) ->
 								res.setHeader('Content-Type', 'application/javascript')
 								res.send(content)
@@ -79,8 +80,9 @@ class SimQ
 						)
 
 					if @hasPackageStyles(pckg.name)
-						console.log 'Mapping file \'' + path.resolve(pckg.style.out) + '\' to \'' + base + path.normalize(pckg.style.out) + '\'' if @v
-						app.get(base + path.normalize(pckg.style.out), (req, res) =>
+						_path = base + path.relative(@basePath, pckg.style.out)
+						console.log 'Mapping file \'' + path.resolve(pckg.style.out) + '\' to \'' + _path + '\'' if @v
+						app.get(_path, (req, res) =>
 							@buildStyles(pckg.name).then( (content) ->
 								res.setHeader('Content-Type', 'text/css')
 								res.send(content)

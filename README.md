@@ -443,6 +443,7 @@ mode for styles.
 * 4.2.0
 	+ Many improvements
 	+ Showing information about using node core modules
+	+ Bugs in server option
 
 * 4.1.1
 	+ Bug with building application
