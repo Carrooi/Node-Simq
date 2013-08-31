@@ -55,7 +55,7 @@ class Application
 			if data.core.length > 0
 				core = []
 				for m in data.core
-					if @section.coreModules.indexOf(m) == -1
+					if typeof @section.coreModules[m] == 'undefined'
 						core.push(m)
 
 				if core.length > 0 then console.log 'These core modules will not be used: ' + core.join(', ')
@@ -128,6 +128,9 @@ class Application
 			console.log "Loading core module '#{name}' from '#{_path}'" if @v
 			promises.push @loader.loadModule(_path, null, name)
 
+		if promises.length == 0
+			return Q.resolve('')
+
 		Q.all(promises).then( (data) ->
 			data = data.join(',\n')
 			deferred.resolve(data)
@@ -177,7 +180,7 @@ class Application
 
 		for m in @section.run
 			if (match = m.match(/^<(.+)>$/)) == null
-				run.push("this.require('#{m}');")
+				run.push("require('#{m}');")
 			else
 				run.push(match[1])
 

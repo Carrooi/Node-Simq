@@ -474,6 +474,9 @@ mode for styles.
 
 ## Changelog list
 
+* 4.4.3
+	+ Bug with core modules
+
 * 4.4.2
 	+ Optimization
 	+ More verbose
