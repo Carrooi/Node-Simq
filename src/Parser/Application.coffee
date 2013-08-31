@@ -17,6 +17,8 @@ class Application
 
 	section: null
 
+	v: false
+
 
 	constructor: (@loader, @pckg, @basePath, @section) ->
 
@@ -121,12 +123,9 @@ class Application
 	loadCoreModules: ->
 		deferred = Q.defer()
 
-		modules = {}
-		for m in @section.coreModules
-			modules[m] = @pckg.findSystemNodeModulePath(m)
-
 		promises = []
-		for name, _path of modules
+		for name, _path of @section.coreModules
+			console.log "Loading core module '#{name}' from '#{_path}'" if @v
 			promises.push @loader.loadModule(_path, null, name)
 
 		Q.all(promises).then( (data) ->

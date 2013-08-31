@@ -31,6 +31,7 @@ class Parser
 		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
 
 		application = new Application(@loader, @pckg, basePath, section)
+		application.v = @simq.v
 		application.minify = !@config.debugger.scripts
 
 		return application.parse()

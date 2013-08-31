@@ -474,6 +474,10 @@ mode for styles.
 
 ## Changelog list
 
+* 4.4.2
+	+ Optimization
+	+ More verbose
+
 * 4.4.1
 	+ Strange bug with same named variables (in different places)
 

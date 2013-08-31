@@ -73,7 +73,13 @@ class PackageExtension extends Extension
 				core.push m
 				if typeof deps[m] != 'undefined'
 					deps = deps.concat(deps[m])
-			pckg.coreModules = Helpers.removeDuplicates(core)
+			core = Helpers.removeDuplicates(core)
+			modules = {}
+			for m in core
+				_path = @pckg.findSystemNodeModulePath(m)
+				if _path != null
+					modules[m] = _path
+			pckg.coreModules = modules
 
 			if pckg.application != null
 				pckg.application = path.resolve("#{basePath}/#{pckg.application}")
