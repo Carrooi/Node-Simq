@@ -263,10 +263,6 @@ so every time we want to use jquery, we have to write `require('/lib/jquery/jque
 
 Now you can use `require('jquery')`.
 
-## Node core modules
-
-If you are about to use some core module from node, simq will show you this information with list of these core modules.
-
 ## Modules somewhere else
 
 Maybe you have got some modules somewhere else in your disk. Then you just have to use `fsModules` section.
@@ -474,7 +470,7 @@ mode for styles.
 
 ## Changelog list
 
-* 4.4.3
+* 4.4.3 - 4.4.4
 	+ Bug with core modules
 
 * 4.4.2
