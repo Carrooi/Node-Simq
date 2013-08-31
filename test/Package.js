@@ -197,7 +197,8 @@
 				pckg.getGlobalsForModule('test/module/name.js').should.eql([
 					"var require = function(name) {return __require(name, 'test/module/name.js');};",
 					"var __filename = 'test/module/name.js';",
-					"var __dirname = 'test/module';"
+					"var __dirname = 'test/module';",
+					"var process = {cwd: function() {return '/';}};"
 				]);
 			});
 
