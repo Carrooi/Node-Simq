@@ -121,26 +121,17 @@ class Application
 	loadCoreModules: ->
 		deferred = Q.defer()
 
-		deps = require('../../coredeps.json')
-
-		expanded = []
-		for m in @section.coreModules
-			expanded.push m
-			if typeof deps[m] != 'undefined'
-				expanded = expanded.concat(deps[m])
-
-		expanded = Helpers.removeDuplicates(expanded)
-
 		modules = {}
-		for m in expanded
+		for m in @section.coreModules
 			modules[m] = @pckg.findSystemNodeModulePath(m)
 
 		promises = []
-		for name, path of modules
-			promises.push @loader.loadModule(path, null, name)
+		for name, _path of modules
+			promises.push @loader.loadModule(_path, null, name)
 
 		Q.all(promises).then( (data) ->
-			deferred.resolve(data.join(',\n'))
+			data = data.join(',\n')
+			deferred.resolve(data)
 		)
 
 		return deferred.promise

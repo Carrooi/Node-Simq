@@ -67,6 +67,14 @@ class PackageExtension extends Extension
 				pckg.fsModules[_path] = Helpers.expandFilesList(paths, _path)
 				pckg.fsModules[_path].push info.main if pckg.fsModules[_path].indexOf(info.main) == -1
 
+			core = []
+			deps = require('../../coredeps.json')
+			for m in pckg.coreModules
+				core.push m
+				if typeof deps[m] != 'undefined'
+					deps = deps.concat(deps[m])
+			pckg.coreModules = Helpers.removeDuplicates(core)
+
 			if pckg.application != null
 				pckg.application = path.resolve("#{basePath}/#{pckg.application}")
 
