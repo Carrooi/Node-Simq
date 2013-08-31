@@ -1,0 +1,7 @@
+{
+	"assert": ["util"],
+	"console": ["util"],
+	"readline": ["string_decoder"],
+	"sys": ["util"],
+	"url": ["punycode", "querystring"]
+}

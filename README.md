@@ -285,6 +285,18 @@ Maybe you have got some modules somewhere else in your disk. Then you just have 
 There you can see, that it is just name of path to your module (directory) and array. This can be used, if you want to
 specifically set some other file paths in this module to be included.
 
+## Node core modules
+
+You can define all core modules (like `events`) if you want to use them in browser.
+
+```
+{
+	"nameOfYourFirstModule": {
+		"coreModules": ["events"]
+	}
+}
+```
+
 ## Run automatically
 
 It would be great if some modules can be started automatically after script is loaded to the page. You can got for example
@@ -429,8 +441,12 @@ Global objects [link](http://nodejs.org/api/globals.html):
 * require.cache: yes
 * __filename: yes
 * __dirname: yes
+* process: yes (partially)
 * module: yes (partially)
 * exports: yes
+
+Process object
+* cwd: yes
 
 Module object:
 * module.exports: yes
@@ -457,6 +473,9 @@ mode for styles.
 ```
 
 ## Changelog list
+
+* 4.4.0
+	+ Added support for core modules
 
 * 4.3.0
 	+ Again some improvements

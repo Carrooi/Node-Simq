@@ -166,10 +166,13 @@ class Package
 
 
 	getGlobalsForModule: (name) ->
+		dir = path.dirname(name)
+
 		globals =
 			require: "function(name) {return __require(name, '#{name}');}"
 			__filename: "'#{name}'"
-			__dirname: '\'' + path.dirname(name) + '\''
+			__dirname: "'#{dir}'"
+			process: "{cwd: function() {return '/';}}"
 
 		result = []
 		for key, value of globals

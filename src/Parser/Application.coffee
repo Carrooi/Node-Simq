@@ -118,13 +118,42 @@ class Application
 		return deferred.promise
 
 
+	loadCoreModules: ->
+		deferred = Q.defer()
+
+		deps = require('../../coredeps.json')
+
+		expanded = []
+		for m in @section.coreModules
+			expanded.push m
+			if typeof deps[m] != 'undefined'
+				expanded = expanded.concat(deps[m])
+
+		expanded = Helpers.removeDuplicates(expanded)
+
+		modules = {}
+		for m in expanded
+			modules[m] = @pckg.findSystemNodeModulePath(m)
+
+		promises = []
+		for name, path of modules
+			promises.push @loader.loadModule(path, null, name)
+
+		Q.all(promises).then( (data) ->
+			deferred.resolve(data.join(',\n'))
+		)
+
+		return deferred.promise
+
+
 	parseModules: ->
 		deferred = Q.defer()
 
 		Q.all([
 			@loadModules(),
 			@loadBaseModuleFile(),
-			@loadFsModules()
+			@loadFsModules(),
+			@loadCoreModules()
 		]).then( (data) =>
 			final =
 				modules: data[0].modules
@@ -134,6 +163,10 @@ class Application
 				final.modules += ',\n' if final.modules != '' && pack.modules != ''
 				final.modules += pack.modules if pack.modules != ''
 				final.node = merge(final.node, pack.node)
+
+			if data[3] != ''
+				final.modules += ',\n' if final.modules != ''
+				final.modules += data[3]
 
 			final.node = JSON.stringify(final.node)
 
