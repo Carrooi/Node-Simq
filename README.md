@@ -476,6 +476,7 @@ mode for styles.
 
 * 4.4.0
 	+ Added support for core modules
+	+ Prepared process object
 
 * 4.3.0
 	+ Again some improvements
