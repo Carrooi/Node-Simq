@@ -468,7 +468,18 @@ mode for styles.
 }
 ```
 
+## Remove files created by simq
+
+```
+$ simq clean
+```
+
+This will remove all result js and css files with temp files.
+
 ## Changelog list
+
+* 4.5.0
+	+ Added clean option
 
 * 4.4.3 - 4.4.4
 	+ Bug with core modules

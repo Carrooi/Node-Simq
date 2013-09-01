@@ -192,8 +192,23 @@ class SimQ
 		)
 
 
-	@getModuleName: (_path) ->
+	clean: ->
+		config = @config.load()
 
+		for name, pckg of config.packages
+			if @hasPackageApplication(name) && fs.existsSync(pckg.application)
+				console.log "Removing '#{pckg.application}' file" if @v
+				fs.unlinkSync(pckg.application)
+
+			if @hasPackageStyles(name) && fs.existsSync(pckg.style.out)
+				console.log "Removing '#{pckg.style.out}' file" if @v
+				fs.unlinkSync(pckg.style.out)
+
+			if config.cache.directory != null
+				_path = path.resolve(@basePath + '/' + config.cache.directory + '/__source_compiler.json')
+				if fs.existsSync(_path)
+					console.log "Removing temp files" if @v
+					fs.unlinkSync(_path)
 
 
 module.exports = SimQ

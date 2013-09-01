@@ -39,4 +39,8 @@ else
 			console.log 'Watching application'
 			s.watch()
 
+		when 'clean'
+			console.log 'Removing created files'
+			s.clean()
+
 		else optimist.showHelp()
