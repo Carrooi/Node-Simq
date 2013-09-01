@@ -6,7 +6,8 @@ argv = optimist.usage([
 		'	creare: create and prepare new application'
 		'	server: create server'
 		'	build:  save all changes to disk'
-		'	watch:  watch for new changes and save them automatically to disk\n'
+		'	watch:  watch for new changes and save them automatically to disk'
+		'	clean:  remove all files created by simq\n'
 		'	--help: show this help'
 	].join('\n'))
 	.alias('c', 'config').describe('c', 'set custom config file')
