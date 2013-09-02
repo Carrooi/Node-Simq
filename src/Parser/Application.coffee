@@ -116,12 +116,23 @@ class Application
 		deferred = Q.defer()
 
 		promises = []
+		msg = []
 		for name, _path of @section.coreModules
-			console.log "Loading core module '#{name}' from '#{_path}'" if @v
+			msg.push "Loading core module '#{name}' from '#{_path}'"
 			promises.push @loader.loadModule(_path, null, name)
 
 		if promises.length == 0
 			return Q.resolve('')
+
+		if @v
+			paths = @pckg.getSystemModulesPath()
+			if paths.length == 0
+				console.log 'Core modules will not be loaded. No system module path found.'
+			else
+				console.log 'Core modules will be searched in these paths:\n' + paths.join('\n')
+
+			for m in msg
+				console.log m
 
 		Q.all(promises).then( (data) ->
 			data = data.join(',\n')

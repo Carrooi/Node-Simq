@@ -478,6 +478,9 @@ This will remove all result js and css files with temp files.
 
 ## Changelog list
 
+* 4.5.1
+	+ More debug info
+
 * 4.5.0
 	+ Added clean option
 

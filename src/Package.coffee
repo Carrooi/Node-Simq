@@ -198,8 +198,12 @@ class Package
 		return result
 
 
+	getSystemModulesPath: ->
+		return Module.globalPaths
+
+
 	findSystemNodeModulePath: (name) ->
-		for dir in Module.globalPaths
+		for dir in @getSystemModulesPath()
 			_path = "#{dir}/#{name}.js"
 			if fs.existsSync(_path) && fs.statSync(_path).isFile()
 				return _path
