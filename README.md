@@ -478,6 +478,9 @@ This will remove all result js and css files with temp files.
 
 ## Changelog list
 
+* 4.5.2
+	+ Optimized base namespace option
+
 * 4.5.1
 	+ More debug info
 

@@ -50,8 +50,12 @@ class Loader
 
 		@loadFile(_path).then( (data) =>
 			if name == null
-				name = _path.replace(new RegExp('^' + process.cwd() + '\/'), '')
-				name = name.replace(new RegExp('^' + base + '/'), '') if base != null
+				if base == null
+					name = _path.replace(new RegExp('^' + process.cwd() + '\/'), '')
+				else
+					basePath = process.cwd() + '/' + base
+					basePath = path.normalize(basePath)
+					name = _path.replace(new RegExp('^' + basePath), '')
 			else
 				#console.log name
 

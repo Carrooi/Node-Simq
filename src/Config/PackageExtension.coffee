@@ -38,9 +38,6 @@ class PackageExtension extends Extension
 		for name, pckg of config
 			config[name] = @configurator.merge(pckg, @defaultsPackage)
 
-			if pckg.base != null
-				pckg.base = pckg.base.replace(/^[\.\/]*/, '').replace(/[\.\/]*$/, '')
-
 			for _path, data of pckg.fsModules
 				if typeof data == 'string'
 					data = {
@@ -56,6 +53,7 @@ class PackageExtension extends Extension
 	afterCompile: (config) ->
 		for name, pckg of config
 			basePath = if pckg.base == null then @basePath else @basePath + '/' + pckg.base
+			basePath = path.normalize(basePath)
 
 			pckg.libraries.begin = Helpers.expandFilesList(pckg.libraries.begin, basePath)
 			pckg.libraries.end = Helpers.expandFilesList(pckg.libraries.end, basePath)

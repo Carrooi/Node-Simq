@@ -3,6 +3,7 @@ Application = require './Application'
 Style = require './Style'
 Loader = require '../Loader'
 Compiler = require 'source-compiler'
+path = require 'path'
 
 class Parser
 
@@ -29,6 +30,7 @@ class Parser
 
 	parseApplication: (section) ->
 		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
+		basePath = path.normalize(basePath)
 
 		application = new Application(@loader, @pckg, basePath, section)
 		application.v = @simq.v
