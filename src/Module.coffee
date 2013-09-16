@@ -93,6 +93,9 @@ if !@require
 				if typeof meta[base] != 'undefined'
 					name = checkName("#{meta[base].base}/#{rest}")
 
+		if typeof modules[name] == 'string'
+			name = resolve(modules[name], parent)
+
 		return name
 
 

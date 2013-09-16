@@ -480,6 +480,9 @@ This will remove all result js and css files with temp files.
 
 ## Changelog list
 
+* 4.5.4
+	+ require.resolve returns full path for aliases
+
 * 4.5.3
 	+ Added argv and env to process variable
 
