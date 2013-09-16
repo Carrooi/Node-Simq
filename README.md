@@ -443,6 +443,8 @@ Global objects [link](http://nodejs.org/api/globals.html):
 
 Process object
 * cwd: yes
+* argv: yes
+* env: yes
 
 Module object:
 * module.exports: yes
@@ -477,6 +479,9 @@ $ simq clean
 This will remove all result js and css files with temp files.
 
 ## Changelog list
+
+* 4.5.3
+	+ Added argv and env to process variable
 
 * 4.5.2
 	+ Optimized base namespace option
