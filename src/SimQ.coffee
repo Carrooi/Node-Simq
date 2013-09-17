@@ -174,7 +174,6 @@ class SimQ
 		watch.watchTree(@basePath, {},  (file, curr, prev) =>
 			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^\./) == null && ignore.indexOf(path.resolve(file)) == -1		# filter in option is not working...
 				console.log file if @v
-				@config.invalidate()
 				@build()
 		)
 
