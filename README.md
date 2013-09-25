@@ -3,9 +3,11 @@
 Join and minify all your javascript files into one (even remote ones) and use them in browser just like in node server.
 Same also for your style files.
 
-## Changelog
+## Installation
 
-Changelog is in the bottom of this readme.
+```
+$ npm install -g simq
+```
 
 ## Supported files
 
@@ -478,10 +480,17 @@ $ simq clean
 
 This will remove all result js and css files with temp files.
 
+## Tests
+
+```
+$ npm test
+```
+
 ## Changelog list
 
 * 4.6.0
 	+ Rewritten tests
+	+ Better documentation
 
 * 4.5.5
 	+ Bug with watching
