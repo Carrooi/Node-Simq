@@ -480,6 +480,9 @@ This will remove all result js and css files with temp files.
 
 ## Changelog list
 
+* 4.6.0
+	+ Rewritten tests
+
 * 4.5.5
 	+ Bug with watching
 
