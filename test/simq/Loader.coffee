@@ -5,16 +5,16 @@ path = require 'path'
 
 Loader = require '../../lib/Loader'
 Package = require '../../lib/Package'
+Helpers = require '../../lib/Helpers'
 
 dir = path.normalize(__dirname + '/../data')
-pckg = new Package
-loader = new Loader(pckg)
+loader = new Loader(new Package)
 
 files =
 	json:
 		file: dir + '/package/modules/5.json'
 		name: 'data/package/modules/5.json'
-		result: "'data/package/modules/5.json': function(exports, __require, module) {\n" + pckg.getGlobalsForModule('data/package/modules/5.json').join('\n') + "\nmodule.exports = (function() {\nreturn {\n\t\"message\": \"linux\"\n}\n}).call(this);\n\n}"
+		result: "'data/package/modules/5.json': function(exports, __require, module) {\n" + Helpers.getGlobalsForModule('data/package/modules/5.json').join('\n') + "\nmodule.exports = (function() {\nreturn {\n\t\"message\": \"linux\"\n}\n}).call(this);\n\n}"
 	less:
 		file: dir + '/package/css/style.less'
 		result: 'body {\n  color: #000000;\n}\n'
@@ -43,7 +43,7 @@ describe 'Loader', ->
 	describe '#loadModules()', ->
 		it 'should return parsed list of loaded modules', (done) ->
 			loader.loadModules([dir + '/package/modules/1.js']).then( (data) ->
-				globals = pckg.getGlobalsForModule('data/package/modules/1.js').join('\n')
+				globals = Helpers.getGlobalsForModule('data/package/modules/1.js').join('\n')
 				content = "'data/package/modules/1.js': function(exports, __require, module) {\n" + globals + "\nrequire('./2');\n}"
 
 				expect(data).to.be.eql([content])

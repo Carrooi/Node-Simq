@@ -1,6 +1,7 @@
 Q = require 'q'
 path = require 'path'
 Compiler = require 'source-compiler'
+Helpers = require './Helpers'
 
 class Loader
 
@@ -59,7 +60,7 @@ class Loader
 			else
 				#console.log name
 
-			globals = @pckg.getGlobalsForModule(name).join('\n')
+			globals = Helpers.getGlobalsForModule(name).join('\n')
 			data = "module.exports = #{data}" if type in @autoModule
 			deferred.resolve("'#{name}': function(exports, __require, module) {\n#{globals}\n#{data}\n}")
 		, (err) ->

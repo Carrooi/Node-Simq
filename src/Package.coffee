@@ -165,22 +165,6 @@ class Package
 		)
 
 
-	getGlobalsForModule: (name) ->
-		dir = path.dirname(name)
-
-		globals =
-			require: "function(name) {return __require(name, '#{name}');}"
-			__filename: "'#{name}'"
-			__dirname: "'#{dir}'"
-			process: "{cwd: function() {return '/';}, argv: ['node', '#{name}'], env: {}}"
-
-		result = []
-		for key, value of globals
-			result.push("var #{key} = #{value};")
-
-		return result
-
-
 	parseNodeInfo: (data, basePath) ->
 		result = {}
 

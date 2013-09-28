@@ -28,4 +28,20 @@ class Helpers
 		return array.filter( (el, pos) -> return array.indexOf(el) == pos)
 
 
+	@getGlobalsForModule: (name) ->
+		dir = path.dirname(name)
+
+		globals =
+			require: "function(name) {return __require(name, '#{name}');}"
+			__filename: "'#{name}'"
+			__dirname: "'#{dir}'"
+			process: "{cwd: function() {return '/';}, argv: ['node', '#{name}'], env: {}}"
+
+		result = []
+		for key, value of globals
+			result.push("var #{key} = #{value};")
+
+		return result
+
+
 module.exports = Helpers
