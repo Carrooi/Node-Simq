@@ -1,0 +1,12 @@
+{
+	"supportedCores": [
+		"assert",
+		"events",
+		"freelist",
+		"punycode",
+		"querystring",
+		"string_decoder",
+		"sys",
+		"url"
+	]
+}
