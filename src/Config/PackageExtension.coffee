@@ -74,7 +74,7 @@ class PackageExtension extends Extension
 			core = Helpers.removeDuplicates(core)
 			modules = {}
 			for m in core
-				_path = @pckg.findSystemNodeModulePath(m)
+				_path = Helpers.getCoreModulePath(m)
 				if _path != null
 					modules[m] = _path
 			pckg.coreModules = modules

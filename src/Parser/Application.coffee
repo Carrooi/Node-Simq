@@ -125,7 +125,7 @@ class Application
 			return Q.resolve('')
 
 		if @v
-			paths = @pckg.getSystemModulesPath()
+			paths = Helpers.getCoreModulesPaths()
 			if paths.length == 0
 				console.log 'Core modules will not be loaded. No system module path found.'
 			else
