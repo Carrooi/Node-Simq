@@ -18,17 +18,27 @@ class Parser
 
 	basePath: null
 
+	initialized: false
+
 
 	constructor: (@simq, @pckg, @basePath) ->
-		@config = @simq.config.load()
-		@loader = new Loader(@pckg)
-		@loader.jquerify = @config.template.jquerify
 
-		if @config.cache.directory != null
-			Compiler.setCache(@config.cache.directory)
+
+	prepare: ->
+		if !@initialized
+			@config = @simq.config.load()
+			@loader = new Loader(@pckg)
+			@loader.jquerify = @config.template.jquerify
+
+			if @config.cache.directory != null
+				Compiler.setCache(@config.cache.directory)
+
+			@initialized = true
 
 
 	parseApplication: (section) ->
+		@prepare()
+
 		basePath = if section.base == null then @basePath else @basePath + '/' + section.base
 		basePath = path.normalize(basePath)
 
@@ -40,6 +50,8 @@ class Parser
 
 
 	parseStyle: (section) ->
+		@prepare()
+
 		return (new Style(@loader, section)).parse()
 
 

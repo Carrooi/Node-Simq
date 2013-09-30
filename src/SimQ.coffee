@@ -8,6 +8,7 @@ mime = require 'mime'
 Parser = require './Parser/Parser'
 Configurator = require './Config/Configurator'
 Package = require './Package'
+_Package = require './_Package'
 
 class SimQ
 
@@ -26,13 +27,45 @@ class SimQ
 
 	pckg: null
 
+	packages: null
+
 
 	constructor: (configPath = @configPath, @basePath = @basePath) ->
+		@packages = {}
+
 		@basePath = path.resolve(@basePath)
 		@configPath = path.resolve(@basePath + '/' + configPath)
 		@pckg = new Package(@basePath)
 		@config = new Configurator(@configPath, @pckg, @basePath)
 		@parser = new Parser(@, @pckg, @basePath)
+
+
+	hasPackage: (name) ->
+		return typeof @packages[name] != 'undefined'
+
+
+	addPackage: (name) ->
+		if @hasPackage(name)
+			throw new Error 'Package ' + name + ' is already registered.'
+
+		@packages[name] = new _Package(@basePath)
+
+		return @packages[name]
+
+
+	_getPackage: (name) ->
+		if !@hasPackage(name)
+			throw new Error 'Package ' + name + ' is not registered.'
+
+		return @packages[name]
+
+
+	removePackage: (name) ->
+		if !@hasPackage(name)
+			throw new Error 'Package ' + name + ' is not registered.'
+
+		delete @packages[name]
+		return @
 
 
 	server: ->
