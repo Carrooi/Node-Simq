@@ -8,7 +8,7 @@ mime = require 'mime'
 Parser = require './Parser/Parser'
 Configurator = require './Config/Configurator'
 Package = require './Package'
-_Package = require './_Package'
+_Package = require './Package/Package'
 
 class SimQ
 

@@ -2,7 +2,7 @@ Info = require 'module-info'
 fs = require 'fs'
 path = require 'path'
 
-Helpers = require './Helpers'
+Helpers = require '../Helpers'
 
 class Package
 

@@ -8,9 +8,9 @@
 
   Info = require('module-info');
 
-  Package = require('../../lib/_Package');
+  Package = require('../../../lib/Package/Package');
 
-  dir = path.resolve(__dirname + '/../data/package');
+  dir = path.resolve(__dirname + '/../../data/package');
 
   pckg = null;
 

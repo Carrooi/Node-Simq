@@ -488,7 +488,7 @@ $ npm test
 
 ## Changelog list
 
-* 4.6.0
+* 5.0.0
 	+ Rewritten tests
 	+ Better documentation
 

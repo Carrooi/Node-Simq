@@ -7,6 +7,8 @@
 		"querystring",
 		"string_decoder",
 		"sys",
-		"url"
+		"url",
+		"util",
+		"path"
 	]
 }
