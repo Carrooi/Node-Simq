@@ -36,47 +36,37 @@
         return expect(pckg.style.dependencies).to.be.eql([dir + '/css/common.less', dir + '/css/style.less', dir + '/css/variables.less']);
       });
     });
-    describe('#addModule()', function() {
-      it('should add new module and create instance of module-info', function() {
-        pckg.addModule('module');
-        return expect(pckg.modules.module).to.be.an["instanceof"](Info);
+    return describe('#addModule()', function() {
+      it('should add module with absolute path', function() {
+        pckg.addModule(dir + '/modules/1.js');
+        expect(pckg.modules).to.include.keys('package/modules/1.js');
+        return expect(pckg.modules['package/modules/1.js']).to.be.equal(dir + '/modules/1.js');
       });
-      return it('should throw an error if module was not found', function() {
-        return expect(function() {
-          return pckg.addModule('unknown');
-        }).to["throw"](Error);
+      it('should add modules with absolute path', function() {
+        pckg.addModule(dir + '/modules/*.js<$>');
+        return expect(pckg.modules).to.include.keys(['package/modules/1.js', 'package/modules/2.js', 'package/modules/3.js', 'package/modules/4.js', 'package/modules/6.js']);
       });
-    });
-    describe('#addCoreModule()', function() {
-      it('should add events core module', function() {
-        pckg.addCoreModule('events');
-        return expect(pckg.coreModules).to.include.keys('events');
+      it('should add core module', function() {
+        pckg.addModule('events');
+        return expect(pckg.modules).to.include.keys('events');
       });
-      return it('should throw an error if core module is not supported', function() {
-        return expect(function() {
-          return pckg.addCoreModule('fs');
-        }).to["throw"](Error);
+      it('should add module from base directory', function() {
+        pckg.addModule('./modules/1.js');
+        expect(pckg.modules).to.include.keys('modules/1.js');
+        return expect(pckg.modules['modules/1.js']).to.be.equal(dir + '/modules/1.js');
       });
-    });
-    return describe('#addFsModule()', function() {
-      it('should add new module from disk', function() {
-        pckg.addFsModule(dir + '/node_modules/module');
-        return expect(pckg.fsModules).to.include.keys(dir + '/node_modules/module');
+      it('should add modules from base directory', function() {
+        pckg.addModule('./modules/*.js<$>');
+        return expect(pckg.modules).to.include.keys(['modules/1.js', 'modules/2.js', 'modules/3.js', 'modules/4.js', 'modules/6.js']);
       });
-      it('should throw an error if path does not exists', function() {
-        return expect(function() {
-          return pckg.addFsModule(dir + '/unknown');
-        }).to["throw"](Error);
+      it('should add installed npm module', function() {
+        pckg.addModule('module/test.js');
+        expect(pckg.modules).to.include.keys('module/test.js');
+        return expect(pckg.modules['module/test.js']).to.be.equal(dir + '/node_modules/module/test.js');
       });
-      it('should throw an error if path is not directory', function() {
-        return expect(function() {
-          return pckg.addFsModule(dir + '/node_modules/module/index.js');
-        }).to["throw"](Error);
-      });
-      return it('should throw an error if package.json does not exists in directory', function() {
-        return expect(function() {
-          return pckg.addFsModule(dir + '/libs');
-        }).to["throw"](Error);
+      return it('should add installed npm modules', function() {
+        pckg.addModule('module/*.js<$>');
+        return expect(pckg.modules).to.include.keys(['module', 'module/test.js', 'module/test2.js']);
       });
     });
   });

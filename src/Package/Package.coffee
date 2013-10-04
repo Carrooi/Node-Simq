@@ -1,6 +1,7 @@
 Info = require 'module-info'
 fs = require 'fs'
 path = require 'path'
+Finder = require 'fs-finder'
 
 Helpers = require '../Helpers'
 
@@ -19,10 +20,6 @@ class Package
 
 	modules: null
 
-	coreModules: null
-
-	fsModules: null
-
 	aliases: null
 
 	run: null
@@ -34,13 +31,15 @@ class Package
 		@basePath = path.resolve(@basePath)
 
 		@modules = {}
-		@coreModules = {}
-		@fsModules = {}
 		@aliases = {}
 		@run = []
 		@libraries =
 			begin: []
 			end: []
+
+
+	getBasePath: ->
+		return @basePath + (if @base == null then '' else '/' + @base)
 
 
 	setApplication: (@application) ->
@@ -64,43 +63,67 @@ class Package
 
 
 	addModule: (name) ->
-		_path = Helpers.resolvePath(@basePath, './node_modules/' + name, @base)
-		if !fs.existsSync(_path)
+		found = false
+
+		# modules registered with absolute path
+		if name[0] == '/'
+			if fs.existsSync(name)
+				found = true
+				if fs.statSync(name).isDirectory()
+					pckg = new Info(name)
+					@modules[pckg.getName()] = pckg.getMainFile()
+					@modules[pckg.getName() + '/package.json'] = pckg.getPackagePath()
+				else
+					pckg = Info.fromFile(name)
+					@modules[pckg.getModuleName(name)] = name
+			else
+				paths = Finder.findFiles(name)
+				if paths.length > 0
+					found = true
+					for _path in paths
+						@addModule(_path)
+
+		# core node modules
+		if found == false
+			_path = Helpers.getCoreModulePath(name)
+			if _path != null
+				found = true
+				@modules[name] = _path
+
+		# own modules from project
+		if name[0] == '.' && found == false
+			_path = Helpers.resolvePath(@basePath, name, @base)
+			if fs.existsSync(_path)
+				found = true
+				pckg = Info.fromFile(_path)
+				name = pckg.getModuleName(name).replace(new RegExp('^' + pckg.getName() + '\/'), '')
+				@modules[name] = _path
+			else
+				paths = Finder.findFiles(_path)
+				if paths.length > 0
+					found = true
+					for _path in paths
+						_path = path.relative(@getBasePath(), _path)
+						@addModule('./' + _path)
+
+		# npm modules in node_modules directory
+		if found == false
+			_path = Helpers.resolvePath(@basePath, './node_modules/' + name, @base)
+			if fs.existsSync(_path)
+				found = true
+				pckg = Info.fromFile(_path)
+				@modules[pckg.getModuleName(_path)] = _path
+			else
+				paths = Finder.findFiles(_path)
+				if paths.length > 0
+					found = true
+					for _path in paths
+						_path = path.relative(@getBasePath() + '/node_modules', _path)
+						@addModule(_path)
+
+		if found == false
 			throw new Error 'Module ' + name + ' was not found.'
 
-		@modules[name] = new Info(_path)
-
-		return @
-
-
-	addCoreModule: (name) ->
-		if !Helpers.isCoreModuleSupported(name)
-			throw new Error 'Core module ' + name + ' is not supported.'
-
-		_path = Helpers.getCoreModulePath(name)
-
-		if _path == null
-			throw new Error 'Core module ' + name + ' was not found.'
-
-		@coreModules[name] = _path
-		return @
-
-
-	addFsModule: (_path, paths = null) ->
-		if !fs.existsSync(_path)
-			throw new Error 'Module ' + _path + ' does not exists.'
-
-		if !fs.statSync(_path).isDirectory()
-			throw new Error 'Module ' + _path + ' is not directory.'
-
-		pckg = path.resolve(_path + '/package.json')
-		if !fs.existsSync(pckg) || !fs.statSync(pckg).isFile()
-			throw new Error 'File ' + pckg + ' was not found.'
-
-		paths = ['./<*.js$>']
-		paths = Helpers.expandFilesList(paths, _path)
-
-		@fsModules[_path] = paths
 		return @
 
 

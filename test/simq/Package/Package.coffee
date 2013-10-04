@@ -34,31 +34,49 @@ describe '_Package', ->
 			])
 
 	describe '#addModule()', ->
-		it 'should add new module and create instance of module-info', ->
-			pckg.addModule('module')
-			expect(pckg.modules.module).to.be.an.instanceof(Info)
+		it 'should add module with absolute path', ->
+			pckg.addModule(dir + '/modules/1.js')
+			expect(pckg.modules).to.include.keys('package/modules/1.js')
+			expect(pckg.modules['package/modules/1.js']).to.be.equal(dir + '/modules/1.js')
 
-		it 'should throw an error if module was not found', ->
-			expect( -> pckg.addModule('unknown') ).to.throw(Error)
+		it 'should add modules with absolute path', ->
+			pckg.addModule(dir + '/modules/*.js<$>')
+			expect(pckg.modules).to.include.keys([
+				'package/modules/1.js'
+				'package/modules/2.js'
+				'package/modules/3.js'
+				'package/modules/4.js'
+				'package/modules/6.js'
+			])
 
-	describe '#addCoreModule()', ->
-		it 'should add events core module', ->
-			pckg.addCoreModule('events')
-			expect(pckg.coreModules).to.include.keys('events')
+		it 'should add core module', ->
+			pckg.addModule('events')
+			expect(pckg.modules).to.include.keys('events')
 
-		it 'should throw an error if core module is not supported', ->
-			expect( -> pckg.addCoreModule('fs') ).to.throw(Error)
+		it 'should add module from base directory', ->
+			pckg.addModule('./modules/1.js')
+			expect(pckg.modules).to.include.keys('modules/1.js')
+			expect(pckg.modules['modules/1.js']).to.be.equal(dir + '/modules/1.js')
 
-	describe '#addFsModule()', ->
-		it 'should add new module from disk', ->
-			pckg.addFsModule(dir + '/node_modules/module')
-			expect(pckg.fsModules).to.include.keys(dir + '/node_modules/module')
+		it 'should add modules from base directory', ->
+			pckg.addModule('./modules/*.js<$>')
+			expect(pckg.modules).to.include.keys([
+				'modules/1.js'
+				'modules/2.js'
+				'modules/3.js'
+				'modules/4.js'
+				'modules/6.js'
+			])
 
-		it 'should throw an error if path does not exists', ->
-			expect( -> pckg.addFsModule(dir + '/unknown') ).to.throw(Error)
+		it 'should add installed npm module', ->
+			pckg.addModule('module/test.js')
+			expect(pckg.modules).to.include.keys('module/test.js')
+			expect(pckg.modules['module/test.js']).to.be.equal(dir + '/node_modules/module/test.js')
 
-		it 'should throw an error if path is not directory', ->
-			expect( -> pckg.addFsModule(dir + '/node_modules/module/index.js') ).to.throw(Error)
-
-		it 'should throw an error if package.json does not exists in directory', ->
-			expect( -> pckg.addFsModule(dir + '/libs') ).to.throw(Error)
+		it 'should add installed npm modules', ->
+			pckg.addModule('module/*.js<$>')
+			expect(pckg.modules).to.include.keys([
+				'module',
+				'module/test.js',
+				'module/test2.js'
+			])
