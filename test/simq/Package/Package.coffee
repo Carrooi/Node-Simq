@@ -80,3 +80,56 @@ describe '_Package', ->
 				'module/test.js',
 				'module/test2.js'
 			])
+
+	describe '#addAlias()', ->
+		it 'should throw an error if module is not registered', ->
+			expect( -> pckg.addAlias('unknown', 'new')).to.throw(Error)
+
+		it 'should create new module for alias', ->
+			pckg.addModule('module/test.js')
+			pckg.addAlias('module/test.js', 'test')
+			expect(pckg.modules).to.include.keys(['module/test.js', 'test'])
+			expect(pckg.modules.test).to.be.equal("`module.exports = require('module/test.js');`")
+
+		it 'should create new module for alias without extension', ->
+			pckg.addModule('module/test.js')
+			pckg.addAlias('module/test', 'test')
+			expect(pckg.modules).to.include.keys(['module/test.js', 'test'])
+
+		it 'should create new module for alias without exact file path', ->
+			pckg.addModule('module/any/index.json')
+			pckg.addAlias('module/any', 'any')
+			expect(pckg.modules).to.include.keys(['module/any/index.json', 'any'])
+
+	describe '#resolveRegisteredModule()', ->
+		it 'should return same name', ->
+			pckg.addModule('module/test.js')
+			expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js')
+
+		it 'should return full name from name without extension', ->
+			pckg.addModule('module/test.js')
+			expect(pckg.resolveRegisteredModule('module/test')).to.be.equal('module/test.js')
+
+		it 'should return full name from directory', ->
+			pckg.addModule('module/any/index.json')
+			expect(pckg.resolveRegisteredModule('module/any')).to.be.equal('module/any/index.json')
+
+		it 'should return null if module is not registered', ->
+			expect(pckg.findRegisteredModule('unknown')).to.be.null
+
+	describe '#findRegisteredModule()', ->
+		it 'should find registered module', ->
+			pckg.addModule('module/test.js')
+			expect(pckg.findRegisteredModule('module/test.js')).to.be.equal(dir + '/node_modules/module/test.js')
+
+		it 'should find registered module without extension', ->
+			pckg.addModule('module/test.js')
+			expect(pckg.findRegisteredModule('module/test')).to.be.equal(dir + '/node_modules/module/test.js')
+
+		it 'should find registered module withoud file path', ->
+			pckg.addModule('module/any/index.json')
+			expect(pckg.findRegisteredModule('module/any')).to.be.equal(dir + '/node_modules/module/any/index.json')
+
+		it 'should return null if module is not registered', ->
+			expect(pckg.findRegisteredModule('unknown')).to.be.null
+

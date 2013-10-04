@@ -36,7 +36,7 @@
         return expect(pckg.style.dependencies).to.be.eql([dir + '/css/common.less', dir + '/css/style.less', dir + '/css/variables.less']);
       });
     });
-    return describe('#addModule()', function() {
+    describe('#addModule()', function() {
       it('should add module with absolute path', function() {
         pckg.addModule(dir + '/modules/1.js');
         expect(pckg.modules).to.include.keys('package/modules/1.js');
@@ -67,6 +67,63 @@
       return it('should add installed npm modules', function() {
         pckg.addModule('module/*.js<$>');
         return expect(pckg.modules).to.include.keys(['module', 'module/test.js', 'module/test2.js']);
+      });
+    });
+    describe('#addAlias()', function() {
+      it('should throw an error if module is not registered', function() {
+        return expect(function() {
+          return pckg.addAlias('unknown', 'new');
+        }).to["throw"](Error);
+      });
+      it('should create new module for alias', function() {
+        pckg.addModule('module/test.js');
+        pckg.addAlias('module/test.js', 'test');
+        expect(pckg.modules).to.include.keys(['module/test.js', 'test']);
+        return expect(pckg.modules.test).to.be.equal("`module.exports = require('module/test.js');`");
+      });
+      it('should create new module for alias without extension', function() {
+        pckg.addModule('module/test.js');
+        pckg.addAlias('module/test', 'test');
+        return expect(pckg.modules).to.include.keys(['module/test.js', 'test']);
+      });
+      return it('should create new module for alias without exact file path', function() {
+        pckg.addModule('module/any/index.json');
+        pckg.addAlias('module/any', 'any');
+        return expect(pckg.modules).to.include.keys(['module/any/index.json', 'any']);
+      });
+    });
+    describe('#resolveRegisteredModule()', function() {
+      it('should return same name', function() {
+        pckg.addModule('module/test.js');
+        return expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js');
+      });
+      it('should return full name from name without extension', function() {
+        pckg.addModule('module/test.js');
+        return expect(pckg.resolveRegisteredModule('module/test')).to.be.equal('module/test.js');
+      });
+      it('should return full name from directory', function() {
+        pckg.addModule('module/any/index.json');
+        return expect(pckg.resolveRegisteredModule('module/any')).to.be.equal('module/any/index.json');
+      });
+      return it('should return null if module is not registered', function() {
+        return expect(pckg.findRegisteredModule('unknown')).to.be["null"];
+      });
+    });
+    return describe('#findRegisteredModule()', function() {
+      it('should find registered module', function() {
+        pckg.addModule('module/test.js');
+        return expect(pckg.findRegisteredModule('module/test.js')).to.be.equal(dir + '/node_modules/module/test.js');
+      });
+      it('should find registered module without extension', function() {
+        pckg.addModule('module/test.js');
+        return expect(pckg.findRegisteredModule('module/test')).to.be.equal(dir + '/node_modules/module/test.js');
+      });
+      it('should find registered module withoud file path', function() {
+        pckg.addModule('module/any/index.json');
+        return expect(pckg.findRegisteredModule('module/any')).to.be.equal(dir + '/node_modules/module/any/index.json');
+      });
+      return it('should return null if module is not registered', function() {
+        return expect(pckg.findRegisteredModule('unknown')).to.be["null"];
       });
     });
   });

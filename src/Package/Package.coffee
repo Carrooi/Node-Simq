@@ -8,6 +8,9 @@ Helpers = require '../Helpers'
 class Package
 
 
+	@SUPPORTED = ['js', 'json', 'ts', 'coffee']
+
+
 	basePath: null
 
 	skip: false
@@ -20,8 +23,6 @@ class Package
 
 	modules: null
 
-	aliases: null
-
 	run: null
 
 	libraries: null
@@ -31,7 +32,6 @@ class Package
 		@basePath = path.resolve(@basePath)
 
 		@modules = {}
-		@aliases = {}
 		@run = []
 		@libraries =
 			begin: []
@@ -128,7 +128,12 @@ class Package
 
 
 	addAlias: (original, alias) ->
-		@aliases[alias] = original
+		original = @resolveRegisteredModule(original)
+
+		if original == null
+			throw new Error 'Module ' + original + ' is not registered.'
+
+		@modules[alias] = "`module.exports = require('#{original}');`"
 		return @
 
 
@@ -145,6 +150,24 @@ class Package
 	addLibraryToEnd: (_path) ->
 		@libraries.end.push(Helpers.expandFilesList(_path))
 		return @
+
+
+	resolveRegisteredModule: (name) ->
+		if typeof @modules[name] != 'undefined'
+			return name
+
+		for ext in Package.SUPPORTED
+			return name + '.' + ext if typeof @modules[name + '.' + ext] != 'undefined'
+
+		for ext in Package.SUPPORTED
+			return name + '/index.' + ext if typeof @modules[name + '/index.' + ext] != 'undefined'
+
+		return null
+
+
+	findRegisteredModule: (name) ->
+		name = @resolveRegisteredModule(name)
+		return if name == null then null else @modules[name]
 
 
 module.exports = Package
