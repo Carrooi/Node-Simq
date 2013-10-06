@@ -7,7 +7,7 @@ Package = require '../../../lib/Package/Package'
 dir = path.resolve(__dirname + '/../../data/package')
 pckg = null
 
-describe '_Package', ->
+describe 'Package/Package', ->
 
 	beforeEach( ->
 		pckg = new Package(dir)
@@ -100,6 +100,53 @@ describe '_Package', ->
 			pckg.addModule('module/any/index.json')
 			pckg.addAlias('module/any', 'any')
 			expect(pckg.modules).to.include.keys(['module/any/index.json', 'any'])
+
+	describe '#addToAutorun()', ->
+		it 'should add module to autorun', ->
+			pckg.addModule('module/test.js')
+			pckg.addToAutorun('module/test.js')
+			expect(pckg.run).to.include.members(['module/test.js'])
+
+		it 'should add module to autorun without extension', ->
+			pckg.addModule('module/test.js')
+			pckg.addToAutorun('module/test')
+			expect(pckg.run).to.include.members(['module/test.js'])
+
+		it 'should add module to autorun without exact file path', ->
+			pckg.addModule('module/any/index.json')
+			pckg.addToAutorun('module/any')
+			expect(pckg.run).to.include.members(['module/any/index.json'])
+
+		it 'should add library from absolute path', ->
+			pckg.addToAutorun(dir + '/libs/begin/1.js')
+			expect(pckg.run).to.include.members([dir + '/libs/begin/1.js'])
+
+		it 'should add library from relative path', ->
+			pckg.addToAutorun('./libs/begin/1.js')
+			expect(pckg.run).to.include.members([dir + '/libs/begin/1.js'])
+
+		it 'should add all js libraries from absolute path', ->
+			pckg.addToAutorun(dir + '/libs/begin/*.js<$>')
+			expect(pckg.run).to.include.members([
+				dir + '/libs/begin/1.js'
+				dir + '/libs/begin/2.js'
+				dir + '/libs/begin/3.js'
+				dir + '/libs/begin/4.js'
+				dir + '/libs/begin/6.js'
+			])
+
+		it 'should add all js libraries from relative path', ->
+			pckg.addToAutorun('./libs/begin/*.js<$>')
+			expect(pckg.run).to.include.members([
+				dir + '/libs/begin/1.js'
+				dir + '/libs/begin/2.js'
+				dir + '/libs/begin/3.js'
+				dir + '/libs/begin/4.js'
+				dir + '/libs/begin/6.js'
+			])
+
+		it 'should throw an error if module or library does not exists', ->
+			expect( -> pckg.addToAutorun('unknown')).to.throw(Error)
 
 	describe '#resolveRegisteredModule()', ->
 		it 'should return same name', ->

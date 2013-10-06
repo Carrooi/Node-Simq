@@ -14,7 +14,7 @@
 
   pckg = null;
 
-  describe('_Package', function() {
+  describe('Package/Package', function() {
     beforeEach(function() {
       return pckg = new Package(dir);
     });
@@ -90,6 +90,44 @@
         pckg.addModule('module/any/index.json');
         pckg.addAlias('module/any', 'any');
         return expect(pckg.modules).to.include.keys(['module/any/index.json', 'any']);
+      });
+    });
+    describe('#addToAutorun()', function() {
+      it('should add module to autorun', function() {
+        pckg.addModule('module/test.js');
+        pckg.addToAutorun('module/test.js');
+        return expect(pckg.run).to.include.members(['module/test.js']);
+      });
+      it('should add module to autorun without extension', function() {
+        pckg.addModule('module/test.js');
+        pckg.addToAutorun('module/test');
+        return expect(pckg.run).to.include.members(['module/test.js']);
+      });
+      it('should add module to autorun without exact file path', function() {
+        pckg.addModule('module/any/index.json');
+        pckg.addToAutorun('module/any');
+        return expect(pckg.run).to.include.members(['module/any/index.json']);
+      });
+      it('should add library from absolute path', function() {
+        pckg.addToAutorun(dir + '/libs/begin/1.js');
+        return expect(pckg.run).to.include.members([dir + '/libs/begin/1.js']);
+      });
+      it('should add library from relative path', function() {
+        pckg.addToAutorun('./libs/begin/1.js');
+        return expect(pckg.run).to.include.members([dir + '/libs/begin/1.js']);
+      });
+      it('should add all js libraries from absolute path', function() {
+        pckg.addToAutorun(dir + '/libs/begin/*.js<$>');
+        return expect(pckg.run).to.include.members([dir + '/libs/begin/1.js', dir + '/libs/begin/2.js', dir + '/libs/begin/3.js', dir + '/libs/begin/4.js', dir + '/libs/begin/6.js']);
+      });
+      it('should add all js libraries from relative path', function() {
+        pckg.addToAutorun('./libs/begin/*.js<$>');
+        return expect(pckg.run).to.include.members([dir + '/libs/begin/1.js', dir + '/libs/begin/2.js', dir + '/libs/begin/3.js', dir + '/libs/begin/4.js', dir + '/libs/begin/6.js']);
+      });
+      return it('should throw an error if module or library does not exists', function() {
+        return expect(function() {
+          return pckg.addToAutorun('unknown');
+        }).to["throw"](Error);
       });
     });
     describe('#resolveRegisteredModule()', function() {

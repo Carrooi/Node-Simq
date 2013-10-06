@@ -25,17 +25,12 @@ class Package
 
 	run: null
 
-	libraries: null
-
 
 	constructor: (@basePath) ->
 		@basePath = path.resolve(@basePath)
 
 		@modules = {}
 		@run = []
-		@libraries =
-			begin: []
-			end: []
 
 
 	getBasePath: ->
@@ -138,17 +133,23 @@ class Package
 
 
 	addToAutorun: (name) ->
-		@run.push(name)
-		return @
+		fullName = @resolveRegisteredModule(name)
+
+		if fullName == null
+			fullName = path.resolve(@getBasePath(), name)
+			if !fs.existsSync(fullName)
+				files = Finder.findFiles(fullName)
+				if files.length == 0
+					throw new Error 'Module or library' + name + ' was not found.'
+
+				for file in files
+					@addToAutorun(file)
+
+				return @
 
 
-	addLibraryToBegin: (_path) ->
-		@libraries.begin.push(Helpers.expandFilesList(_path))
-		return @
+		@run.push(fullName)
 
-
-	addLibraryToEnd: (_path) ->
-		@libraries.end.push(Helpers.expandFilesList(_path))
 		return @
 
 
