@@ -147,7 +147,6 @@ class Package
 
 				return @
 
-
 		@run.push(fullName)
 
 		return @
