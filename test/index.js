@@ -6,3 +6,4 @@ require('./simq/Parser/Style');
 require('./simq/Parser/Application');*/
 
 require('./simq/Package/Package');
+require('./simq/Package/Package.baseNamespace');
