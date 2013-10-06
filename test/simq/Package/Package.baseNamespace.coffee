@@ -7,11 +7,11 @@ Package = require '../../../lib/Package/Package'
 dir = path.resolve(__dirname + '/../../data/package')
 pckg = null
 
-describe.skip 'Package/Package.baseNamespace', ->
+describe 'Package/Package.baseNamespace', ->
 
 	beforeEach( ->
-		pckg = new Package(path.resolve(dir + '/..'))
-		pckg.base = 'package'
+		pckg = new Package(path.resolve(dir + '/../..'))
+		pckg.base = 'data/package'
 	)
 
 	describe '#setApplication()', ->
@@ -34,7 +34,10 @@ describe.skip 'Package/Package.baseNamespace', ->
 				dir + '/css/variables.less'
 			])
 
-	describe '#addModule()', ->
+		it 'should throw an error if input file does not exists', ->
+			expect( -> pckg.setStyle('./css/unknown.less', './public/style.css')).to.throw(Error)
+
+	describe.skip '#addModule()', ->
 		it 'should add module with absolute path', ->
 			pckg.addModule(dir + '/modules/1.js')
 			expect(pckg.modules).to.include.keys('package/modules/1.js')
@@ -82,7 +85,7 @@ describe.skip 'Package/Package.baseNamespace', ->
 				'module/test2.js'
 			])
 
-	describe '#addAlias()', ->
+	describe.skip '#addAlias()', ->
 		it 'should throw an error if module is not registered', ->
 			expect( -> pckg.addAlias('unknown', 'new')).to.throw(Error)
 
@@ -102,7 +105,7 @@ describe.skip 'Package/Package.baseNamespace', ->
 			pckg.addAlias('module/any', 'any')
 			expect(pckg.modules).to.include.keys(['module/any/index.json', 'any'])
 
-	describe '#addToAutorun()', ->
+	describe.skip '#addToAutorun()', ->
 		it 'should add module to autorun', ->
 			pckg.addModule('module/test.js')
 			pckg.addToAutorun('module/test.js')
@@ -149,7 +152,7 @@ describe.skip 'Package/Package.baseNamespace', ->
 		it 'should throw an error if module or library does not exists', ->
 			expect( -> pckg.addToAutorun('unknown')).to.throw(Error)
 
-	describe '#resolveRegisteredModule()', ->
+	describe.skip '#resolveRegisteredModule()', ->
 		it 'should return same name', ->
 			pckg.addModule('module/test.js')
 			expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js')
@@ -165,7 +168,7 @@ describe.skip 'Package/Package.baseNamespace', ->
 		it 'should return null if module is not registered', ->
 			expect(pckg.findRegisteredModule('unknown')).to.be.null
 
-	describe '#findRegisteredModule()', ->
+	describe.skip '#findRegisteredModule()', ->
 		it 'should find registered module', ->
 			pckg.addModule('module/test.js')
 			expect(pckg.findRegisteredModule('module/test.js')).to.be.equal(dir + '/node_modules/module/test.js')

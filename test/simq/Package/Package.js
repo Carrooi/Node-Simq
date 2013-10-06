@@ -31,9 +31,14 @@
         expect(pckg.style.out).to.be.equal(dir + '/public/style.css');
         return expect(pckg.style.dependencies).to.be["null"];
       });
-      return it('should set paths for styles with dependent files', function() {
+      it('should set paths for styles with dependent files', function() {
         pckg.setStyle('./css/style.less', './public/style.css', ['./css/*.less']);
         return expect(pckg.style.dependencies).to.be.eql([dir + '/css/common.less', dir + '/css/style.less', dir + '/css/variables.less']);
+      });
+      return it('should throw an error if input file does not exists', function() {
+        return expect(function() {
+          return pckg.setStyle('./css/unknown.less', './public/style.css');
+        }).to["throw"](Error);
       });
     });
     describe('#addModule()', function() {

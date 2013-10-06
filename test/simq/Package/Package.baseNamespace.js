@@ -14,10 +14,10 @@
 
   pckg = null;
 
-  describe.skip('Package/Package.baseNamespace', function() {
+  describe('Package/Package.baseNamespace', function() {
     beforeEach(function() {
-      pckg = new Package(path.resolve(dir + '/..'));
-      return pckg.base = 'package';
+      pckg = new Package(path.resolve(dir + '/../..'));
+      return pckg.base = 'data/package';
     });
     describe('#setApplication()', function() {
       return it('should set path for result js file', function() {
@@ -32,12 +32,17 @@
         expect(pckg.style.out).to.be.equal(dir + '/public/style.css');
         return expect(pckg.style.dependencies).to.be["null"];
       });
-      return it('should set paths for styles with dependent files', function() {
+      it('should set paths for styles with dependent files', function() {
         pckg.setStyle('./css/style.less', './public/style.css', ['./css/*.less']);
         return expect(pckg.style.dependencies).to.be.eql([dir + '/css/common.less', dir + '/css/style.less', dir + '/css/variables.less']);
       });
+      return it('should throw an error if input file does not exists', function() {
+        return expect(function() {
+          return pckg.setStyle('./css/unknown.less', './public/style.css');
+        }).to["throw"](Error);
+      });
     });
-    describe('#addModule()', function() {
+    describe.skip('#addModule()', function() {
       it('should add module with absolute path', function() {
         pckg.addModule(dir + '/modules/1.js');
         expect(pckg.modules).to.include.keys('package/modules/1.js');
@@ -70,7 +75,7 @@
         return expect(pckg.modules).to.include.keys(['module', 'module/test.js', 'module/test2.js']);
       });
     });
-    describe('#addAlias()', function() {
+    describe.skip('#addAlias()', function() {
       it('should throw an error if module is not registered', function() {
         return expect(function() {
           return pckg.addAlias('unknown', 'new');
@@ -93,7 +98,7 @@
         return expect(pckg.modules).to.include.keys(['module/any/index.json', 'any']);
       });
     });
-    describe('#addToAutorun()', function() {
+    describe.skip('#addToAutorun()', function() {
       it('should add module to autorun', function() {
         pckg.addModule('module/test.js');
         pckg.addToAutorun('module/test.js');
@@ -131,7 +136,7 @@
         }).to["throw"](Error);
       });
     });
-    describe('#resolveRegisteredModule()', function() {
+    describe.skip('#resolveRegisteredModule()', function() {
       it('should return same name', function() {
         pckg.addModule('module/test.js');
         return expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js');
@@ -148,7 +153,7 @@
         return expect(pckg.findRegisteredModule('unknown')).to.be["null"];
       });
     });
-    return describe('#findRegisteredModule()', function() {
+    return describe.skip('#findRegisteredModule()', function() {
       it('should find registered module', function() {
         pckg.addModule('module/test.js');
         return expect(pckg.findRegisteredModule('module/test.js')).to.be.equal(dir + '/node_modules/module/test.js');

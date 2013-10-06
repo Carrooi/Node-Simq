@@ -33,6 +33,9 @@ describe 'Package/Package', ->
 				dir + '/css/variables.less'
 			])
 
+		it 'should throw an error if input file does not exists', ->
+			expect( -> pckg.setStyle('./css/unknown.less', './public/style.css')).to.throw(Error)
+
 	describe '#addModule()', ->
 		it 'should add module with absolute path', ->
 			pckg.addModule(dir + '/modules/1.js')

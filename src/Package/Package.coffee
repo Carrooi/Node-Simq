@@ -41,6 +41,21 @@ class Package
 		return path.resolve(@getBasePath() + '/' + _path)
 
 
+	expandPaths: (paths) ->
+		result = []
+		for _path in paths
+			if _path.match(/^http/) == null
+				_path = @getPath(_path)
+				if fs.existsSync(_path) && fs.statSync(_path).isFile()
+					result.push(_path)
+				else
+					result = result.concat(Finder.findFiles(_path))
+			else
+				result.push(_path)
+
+		return result.filter( (el, pos) -> return result.indexOf(el) == pos)
+
+
 	setApplication: (@application) ->
 		@application = @getPath(@application)
 		return @
@@ -50,8 +65,11 @@ class Package
 		fileIn = @getPath(fileIn)
 		fileOut = @getPath(fileOut)
 
+		if !fs.existsSync(fileIn)
+			throw new Error 'File ' + fileIn + ' does not exists.'
+
 		if dependencies != null
-				dependencies = Helpers.expandFilesList(dependencies, @basePath, @base)
+			dependencies = @expandPaths(dependencies)
 
 		@style =
 			in: fileIn
