@@ -37,7 +37,7 @@ describe 'Package/Package.baseNamespace', ->
 		it 'should throw an error if input file does not exists', ->
 			expect( -> pckg.setStyle('./css/unknown.less', './public/style.css')).to.throw(Error)
 
-	describe.skip '#addModule()', ->
+	describe '#addModule()', ->
 		it 'should add module with absolute path', ->
 			pckg.addModule(dir + '/modules/1.js')
 			expect(pckg.modules).to.include.keys('package/modules/1.js')
@@ -85,7 +85,7 @@ describe 'Package/Package.baseNamespace', ->
 				'module/test2.js'
 			])
 
-	describe.skip '#addAlias()', ->
+	describe '#addAlias()', ->
 		it 'should throw an error if module is not registered', ->
 			expect( -> pckg.addAlias('unknown', 'new')).to.throw(Error)
 
@@ -105,7 +105,7 @@ describe 'Package/Package.baseNamespace', ->
 			pckg.addAlias('module/any', 'any')
 			expect(pckg.modules).to.include.keys(['module/any/index.json', 'any'])
 
-	describe.skip '#addToAutorun()', ->
+	describe '#addToAutorun()', ->
 		it 'should add module to autorun', ->
 			pckg.addModule('module/test.js')
 			pckg.addToAutorun('module/test.js')
@@ -152,7 +152,7 @@ describe 'Package/Package.baseNamespace', ->
 		it 'should throw an error if module or library does not exists', ->
 			expect( -> pckg.addToAutorun('unknown')).to.throw(Error)
 
-	describe.skip '#resolveRegisteredModule()', ->
+	describe '#resolveRegisteredModule()', ->
 		it 'should return same name', ->
 			pckg.addModule('module/test.js')
 			expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js')
@@ -168,7 +168,7 @@ describe 'Package/Package.baseNamespace', ->
 		it 'should return null if module is not registered', ->
 			expect(pckg.findRegisteredModule('unknown')).to.be.null
 
-	describe.skip '#findRegisteredModule()', ->
+	describe '#findRegisteredModule()', ->
 		it 'should find registered module', ->
 			pckg.addModule('module/test.js')
 			expect(pckg.findRegisteredModule('module/test.js')).to.be.equal(dir + '/node_modules/module/test.js')
