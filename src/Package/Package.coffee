@@ -37,14 +37,18 @@ class Package
 		return @basePath + (if @base == null then '' else '/' + @base)
 
 
+	getPath: (_path) ->
+		return path.resolve(@getBasePath() + '/' + _path)
+
+
 	setApplication: (@application) ->
-		@application = Helpers.resolvePath(@basePath, @application, @base)
+		@application = @getPath(@application)
 		return @
 
 
 	setStyle: (fileIn, fileOut, dependencies = null) ->
-		fileIn = Helpers.resolvePath(@basePath, fileIn, @base)
-		fileOut = Helpers.resolvePath(@basePath, fileOut, @base)
+		fileIn = @getPath(fileIn)
+		fileOut = @getPath(fileOut)
 
 		if dependencies != null
 				dependencies = Helpers.expandFilesList(dependencies, @basePath, @base)
@@ -87,7 +91,7 @@ class Package
 
 		# own modules from project
 		if name[0] == '.' && found == false
-			_path = Helpers.resolvePath(@basePath, name, @base)
+			_path = @getPath(name)
 			if fs.existsSync(_path)
 				found = true
 				pckg = Info.fromFile(_path)
@@ -103,7 +107,7 @@ class Package
 
 		# npm modules in node_modules directory
 		if found == false
-			_path = Helpers.resolvePath(@basePath, './node_modules/' + name, @base)
+			_path = @getPath('./node_modules/' + name)
 			if fs.existsSync(_path)
 				found = true
 				pckg = Info.fromFile(_path)
