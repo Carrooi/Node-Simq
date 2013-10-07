@@ -22,3 +22,12 @@ describe 'Package/Builder', ->
 			builder.buildModules().then( (data) ->
 				done()
 			).done()
+
+	describe '#buildAutorun()', ->
+		it 'should build autorun section', (done) ->
+			pckg.addModule('./modules/1.js')
+			pckg.addToAutorun('modules/1')
+			pckg.addToAutorun('libs/begin/4.js')
+			builder.buildAutorun().then( (data) ->
+				done()
+			).done()

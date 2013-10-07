@@ -22,7 +22,44 @@ class Builder extends Package
 
 
 	build: ->
+		deferred = Q.defer()
 
+		Q.all([
+			@buildModules()
+			@buildAutorun()
+		])
+
+		return deferred.promise
+
+
+	buildModules: ->
+		deferred = Q.defer()
+
+		@prepareModules().then( (modules) =>
+			c = [@loadMain()]
+
+			for name, _path of modules
+				c.push(@compileModule(name, _path))
+
+			Q.all(c).then( (data) ->
+				main = data.shift()
+				deferred.resolve("#{main}({\n#{data}\n});")
+			).fail( (err) ->
+				deferred.reject(err)
+			)
+		).fail( (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
+	buildAutorun: ->
+		deferred = Q.defer()
+
+		deferred.resolve('')
+
+		return deferred.promise
 
 
 	prepareModules: ->
@@ -84,28 +121,6 @@ class Builder extends Package
 			else
 				data = data.replace(/\s+$/, '').replace(/;$/, '')
 				deferred.resolve(data)
-		)
-
-		return deferred.promise
-
-
-	buildModules: ->
-		deferred = Q.defer()
-
-		@prepareModules().then( (modules) =>
-			c = [@loadMain()]
-
-			for name, _path of modules
-				c.push(@compileModule(name, _path))
-
-			Q.all(c).then( (data) ->
-				main = data.shift()
-				deferred.resolve("#{main}({\n#{data}\n});")
-			).fail( (err) ->
-				deferred.reject(err)
-			)
-		).fail( (err) ->
-			deferred.reject(err)
 		)
 
 		return deferred.promise

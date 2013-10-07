@@ -23,10 +23,20 @@
       pckg = new Package(dir);
       return builder = new Builder(pckg);
     });
-    return describe('#buildModules()', function() {
+    describe('#buildModules()', function() {
       return it('should build one module from absolute path', function(done) {
         pckg.addModule(dir + '/modules/1.js');
         return builder.buildModules().then(function(data) {
+          return done();
+        }).done();
+      });
+    });
+    return describe('#buildAutorun()', function() {
+      return it('should build autorun section', function(done) {
+        pckg.addModule('./modules/1.js');
+        pckg.addToAutorun('modules/1');
+        pckg.addToAutorun('libs/begin/4.js');
+        return builder.buildAutorun().then(function(data) {
           return done();
         }).done();
       });
