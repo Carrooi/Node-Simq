@@ -44,9 +44,10 @@
 		"module-info": "~1.1.0"
 	},
 	"devDependencies": {
-		"chai": "~1.8.0"
+		"chai": "~1.8.0",
+		"mocha": "~1.13.0"
 	},
 	"scripts": {
-		"test": "cd ./test; mocha ./index.js --reporter spec --timeout 10000;"
+		"test": "cd ./test; echo \"Testing in node:\"; mocha ./node/index.js --reporter spec --timeout 10000; echo \"Testing in browser:\"; mocha-phantomjs ./browser/index.html;"
 	}
 }
