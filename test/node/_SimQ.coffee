@@ -24,6 +24,14 @@ describe 'SimQ', ->
 			simq.addPackage('test')
 			expect( -> simq.addPackage('test') ).to.throw(Error)
 
+	describe '#hasPackage()', ->
+		it 'should return false', ->
+			expect(simq.hasPackage('test')).to.be.false
+
+		it 'should return true', ->
+			simq.addPackage('test')
+			expect(simq.hasPackage('test')).to.be.true
+
 	describe '#getPackage()', ->
 		it 'should return instance of created package', ->
 			simq.addPackage('test')

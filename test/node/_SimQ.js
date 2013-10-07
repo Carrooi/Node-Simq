@@ -31,6 +31,15 @@
         }).to["throw"](Error);
       });
     });
+    describe('#hasPackage()', function() {
+      it('should return false', function() {
+        return expect(simq.hasPackage('test')).to.be["false"];
+      });
+      return it('should return true', function() {
+        simq.addPackage('test');
+        return expect(simq.hasPackage('test')).to.be["true"];
+      });
+    });
     describe('#getPackage()', function() {
       it('should return instance of created package', function() {
         simq.addPackage('test');
