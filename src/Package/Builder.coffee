@@ -132,9 +132,11 @@ class Builder extends Package
 
 			if result != ''
 				result = '\n\n\t/** code **/\n\t' + result.replace(/\n/g, '\n\t') + '\n'
+			else
+				result = '\n'
 
 			globals = '\t' + Helpers.getGlobalsForModule(name).join('\n').replace(/\n/g, '\n\t')
-			result = "'#{name}': function(exports, __require, module) {\n\t/** node globals **/\n#{globals}#{result}\n}"
+			result = "'#{name}': function(exports, __require, module) {\n\n\t/** node globals **/\n#{globals}#{result}\n}"
 
 			deferred.resolve(result)
 		).fail( (err) ->

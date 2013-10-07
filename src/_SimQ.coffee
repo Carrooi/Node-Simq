@@ -1,4 +1,8 @@
+Q = require 'q'
+fs = require 'fs'
+
 Package = require './Package/Package'
+Builder = require './Package/Builder'
 
 class SimQ
 
@@ -38,6 +42,44 @@ class SimQ
 
 		delete @packages[name]
 		return @
+
+
+	build: ->
+		deferred = Q.defer()
+
+		result = []
+		for name, pckg of @packages
+			result.push((new Builder(pckg)).build())
+
+		Q.all(result).then( (data) =>
+			result = {}
+			count = 0
+			for name, pckg of @packages
+				result[name] = data[count]
+				count++
+
+			deferred.resolve(result)
+		).fail( (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
+	buildToFiles: ->
+		deferred = Q.defer()
+
+		@build().then( (packages) =>
+			for name, pckg of packages
+				if @packages[name].application != null
+					fs.writeFileSync(@packages[name].application, pckg)
+
+			deferred.resolve(packages)
+		).fail( (err) ->
+			deffered.reject(err)
+		)
+
+		return deferred.promise
 
 
 module.exports = SimQ
