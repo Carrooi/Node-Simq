@@ -187,9 +187,4 @@ class Package
 		return null
 
 
-	findRegisteredModule: (name) ->
-		name = @resolveRegisteredModule(name)
-		return if name == null then null else @modules[name]
-
-
 module.exports = Package

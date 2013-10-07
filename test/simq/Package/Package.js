@@ -135,7 +135,7 @@
         }).to["throw"](Error);
       });
     });
-    describe('#resolveRegisteredModule()', function() {
+    return describe('#resolveRegisteredModule()', function() {
       it('should return same name', function() {
         pckg.addModule('module/test.js');
         return expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js');
@@ -149,24 +149,7 @@
         return expect(pckg.resolveRegisteredModule('module/any')).to.be.equal('module/any/index.json');
       });
       return it('should return null if module is not registered', function() {
-        return expect(pckg.findRegisteredModule('unknown')).to.be["null"];
-      });
-    });
-    return describe('#findRegisteredModule()', function() {
-      it('should find registered module', function() {
-        pckg.addModule('module/test.js');
-        return expect(pckg.findRegisteredModule('module/test.js')).to.be.equal(dir + '/node_modules/module/test.js');
-      });
-      it('should find registered module without extension', function() {
-        pckg.addModule('module/test.js');
-        return expect(pckg.findRegisteredModule('module/test')).to.be.equal(dir + '/node_modules/module/test.js');
-      });
-      it('should find registered module withoud file path', function() {
-        pckg.addModule('module/any/index.json');
-        return expect(pckg.findRegisteredModule('module/any')).to.be.equal(dir + '/node_modules/module/any/index.json');
-      });
-      return it('should return null if module is not registered', function() {
-        return expect(pckg.findRegisteredModule('unknown')).to.be["null"];
+        return expect(pckg.resolveRegisteredModule('unknown')).to.be["null"];
       });
     });
   });
