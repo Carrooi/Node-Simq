@@ -491,6 +491,7 @@ $ npm test
 * 5.0.0
 	+ Rewritten tests
 	+ Better documentation
+	+ Better error messages from compiler
 
 * 4.5.5
 	+ Bug with watching

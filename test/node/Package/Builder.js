@@ -24,12 +24,19 @@
       return builder = new Builder(pckg);
     });
     describe('#buildModules()', function() {
-      return it('should build one module from absolute path', function(done) {
+      it('should build one module from absolute path', function(done) {
         pckg.addModule(dir + '/modules/1.js');
         return builder.buildModules().then(function(data) {
           expect(data).to.have.string("'package/modules/2.js'");
           expect(data).to.have.string("'package/modules/3.js'");
           expect(data).to.have.string("'module'");
+          return done();
+        }).done();
+      });
+      return it('should return an error for wrong coffee file', function(done) {
+        pckg.addModule('./modules/with-error.coffee');
+        return builder.buildModules().fail(function(err) {
+          expect(err).to.be.an["instanceof"](Error);
           return done();
         }).done();
       });

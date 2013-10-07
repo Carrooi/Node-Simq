@@ -26,6 +26,13 @@ describe 'Package/Builder', ->
 				done()
 			).done()
 
+		it 'should return an error for wrong coffee file', (done) ->
+			pckg.addModule('./modules/with-error.coffee')
+			builder.buildModules().fail( (err) ->
+				expect(err).to.be.an.instanceof(Error)
+				done()
+			).done()
+
 	describe '#buildAutorun()', ->
 		it 'should build autorun section', (done) ->
 			pckg.addModule('./modules/1.js')

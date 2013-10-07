@@ -105,6 +105,9 @@ class Builder extends Package
 		required.findMany(paths, true, require('../../data.json').supportedCores).then( (data) ->
 			result = {}
 
+			data.files = data.files.concat(paths)
+			data.files = data.files.filter( (el, pos) -> return data.files.indexOf(el) == pos)
+
 			for file in data.files
 				info = Info.fromFile(file)
 				result[info.getModuleName(file)] = file
