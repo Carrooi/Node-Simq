@@ -57,7 +57,32 @@ class Builder extends Package
 	buildAutorun: ->
 		deferred = Q.defer()
 
-		deferred.resolve('')
+		run = []
+		for _path in @pckg.run
+			run.push(@loadForAutorun(_path))
+
+		Q.all(run).then( (data) ->
+			deferred.resolve(data.join('\n'))
+		).fail( (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
+	loadForAutorun: (_path) ->
+		deferred = Q.defer()
+
+		name = @pckg.resolveRegisteredModule(_path)
+		if name == null
+			fs.readFile(_path, encoding: 'utf8', (err, data) ->
+				if err
+					deferred.reject(err)
+				else
+					deferred.resolve(data)
+			)
+		else
+			deferred.resolve("require('#{name}');")
 
 		return deferred.promise
 

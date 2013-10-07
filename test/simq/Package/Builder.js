@@ -27,6 +27,9 @@
       return it('should build one module from absolute path', function(done) {
         pckg.addModule(dir + '/modules/1.js');
         return builder.buildModules().then(function(data) {
+          expect(data).to.have.string("'package/modules/2.js'");
+          expect(data).to.have.string("'package/modules/3.js'");
+          expect(data).to.have.string("'module'");
           return done();
         }).done();
       });
@@ -37,6 +40,7 @@
         pckg.addToAutorun('modules/1');
         pckg.addToAutorun('libs/begin/4.js');
         return builder.buildAutorun().then(function(data) {
+          expect(data).to.be.equal(["require('modules/1.js');", '// 4'].join('\n'));
           return done();
         }).done();
       });
