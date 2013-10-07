@@ -34,13 +34,28 @@
         }).done();
       });
     });
-    return describe('#buildAutorun()', function() {
+    describe('#buildAutorun()', function() {
       return it('should build autorun section', function(done) {
         pckg.addModule('./modules/1.js');
         pckg.addToAutorun('modules/1');
         pckg.addToAutorun('libs/begin/4.js');
         return builder.buildAutorun().then(function(data) {
           expect(data).to.be.equal(["require('modules/1.js');", '// 4'].join('\n'));
+          return done();
+        }).done();
+      });
+    });
+    return describe('#build()', function() {
+      return it('should build whole section', function(done) {
+        pckg.addModule('./modules/1.js');
+        pckg.addToAutorun('modules/1');
+        pckg.addToAutorun('libs/begin/4.js');
+        return builder.build().then(function(data) {
+          expect(data).to.have.string("'package/modules/2.js'");
+          expect(data).to.have.string("'package/modules/3.js'");
+          expect(data).to.have.string("'module'");
+          expect(data).to.have.string("require('modules/1.js');");
+          expect(data).to.have.string('// 4');
           return done();
         }).done();
       });

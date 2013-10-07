@@ -38,3 +38,17 @@ describe 'Package/Builder', ->
 				].join('\n'))
 				done()
 			).done()
+
+	describe '#build()', ->
+		it 'should build whole section', (done) ->
+			pckg.addModule('./modules/1.js')
+			pckg.addToAutorun('modules/1')
+			pckg.addToAutorun('libs/begin/4.js')
+			builder.build().then( (data) ->
+				expect(data).to.have.string("'package/modules/2.js'")
+				expect(data).to.have.string("'package/modules/3.js'")
+				expect(data).to.have.string("'module'")
+				expect(data).to.have.string("require('modules/1.js');")
+				expect(data).to.have.string('// 4')
+				done()
+			).done()
