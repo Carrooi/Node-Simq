@@ -44,12 +44,35 @@ class SimQ
 		return @
 
 
+	buildPackage: (name) ->
+		if !@hasPackage(name)
+			throw new Error 'Package ' + name + ' is not registered.'
+
+		return (new Builder(@packages[name])).build()
+
+
+	buildPackageToFile: (name, file) ->
+		if !@hasPackage(name)
+			throw new Error 'Package ' + name + ' is not registered.'
+
+		deferred = Q.defer()
+
+		@buildPackage(name).then( (data) ->
+			fs.writeFileSync(file, data)
+			deferred.resolve(data)
+		).fail( (err) ->
+			deferred.reject(err)
+		)
+
+		return deferred.promise
+
+
 	build: ->
 		deferred = Q.defer()
 
 		result = []
 		for name, pckg of @packages
-			result.push((new Builder(pckg)).build())
+			result.push(@buildPackage(name))
 
 		Q.all(result).then( (data) =>
 			result = {}
@@ -69,14 +92,21 @@ class SimQ
 	buildToFiles: ->
 		deferred = Q.defer()
 
-		@build().then( (packages) =>
-			for name, pckg of packages
-				if @packages[name].application != null
-					fs.writeFileSync(@packages[name].application, pckg)
+		result = []
+		for name, pckg of @packages
+			if pckg.application != null
+				result.push(@buildPackageToFile(name, pckg.application))
 
-			deferred.resolve(packages)
+		Q.all(result).then( (data) =>
+			result = {}
+			count = 0
+			for name, pckg of @packages
+				result[name] = data[count]
+				count++
+
+			deferred.resolve(result)
 		).fail( (err) ->
-			deffered.reject(err)
+			deferred.reject(err)
 		)
 
 		return deferred.promise
