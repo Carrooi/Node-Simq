@@ -66,7 +66,7 @@ class Builder extends Package
 		deferred = Q.defer()
 
 		paths = []
-		for name, _path of @pckg.modules
+		for _path in @pckg.modules
 			paths.push(_path)
 
 		required.findMany(paths, true, require('../../data.json').supportedCores).then( (data) ->

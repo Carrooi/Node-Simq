@@ -23,13 +23,16 @@ class Package
 
 	modules: null
 
+	names: null
+
 	run: null
 
 
 	constructor: (@basePath) ->
 		@basePath = path.resolve(@basePath)
 
-		@modules = {}
+		@modules = []
+		@names = {}
 		@run = []
 
 
@@ -88,11 +91,11 @@ class Package
 				found = true
 				if fs.statSync(name).isDirectory()
 					pckg = new Info(name)
-					@modules[pckg.getName()] = pckg.getMainFile()
-					@modules[pckg.getName() + '/package.json'] = pckg.getPackagePath()
+					@registerModule(pckg.getName(), pckg.getMainFile())
+					@registerModule(pckg.getName() + '/package.json', pckg.getPackagePath())
 				else
 					pckg = Info.fromFile(name)
-					@modules[pckg.getModuleName(name)] = name
+					@registerModule(pckg.getModuleName(name), name)
 			else
 				paths = Finder.findFiles(name)
 				if paths.length > 0
@@ -105,7 +108,7 @@ class Package
 			_path = Helpers.getCoreModulePath(name)
 			if _path != null
 				found = true
-				@modules[name] = _path
+				@registerModule(name, _path)
 
 		# own modules from project
 		if name[0] == '.' && found == false
@@ -114,7 +117,7 @@ class Package
 				found = true
 				pckg = Info.fromFile(_path)
 				name = pckg.getModuleName(name).replace(new RegExp('^' + pckg.getName() + '\/'), '')
-				@modules[name] = _path
+				@registerModule(name, _path)
 			else
 				paths = Finder.findFiles(_path)
 				if paths.length > 0
@@ -129,7 +132,7 @@ class Package
 			if fs.existsSync(_path)
 				found = true
 				pckg = Info.fromFile(_path)
-				@modules[pckg.getModuleName(_path)] = _path
+				@registerModule(pckg.getModuleName(_path), _path)
 			else
 				paths = Finder.findFiles(_path)
 				if paths.length > 0
@@ -144,13 +147,19 @@ class Package
 		return @
 
 
+	registerModule: (name, data) ->
+		@modules.push(data)
+		@names[name] = @modules.length - 1
+
+
 	addAlias: (original, alias) ->
 		original = @resolveRegisteredModule(original)
 
 		if original == null
 			throw new Error 'Module ' + original + ' is not registered.'
 
-		@modules[alias] = "`module.exports = require('#{original}');`"
+		@registerModule(alias, "`module.exports = require('#{original}');`")
+
 		return @
 
 
@@ -175,14 +184,14 @@ class Package
 
 
 	resolveRegisteredModule: (name) ->
-		if typeof @modules[name] != 'undefined'
+		if typeof @names[name] != 'undefined'
 			return name
 
 		for ext in Package.SUPPORTED
-			return name + '.' + ext if typeof @modules[name + '.' + ext] != 'undefined'
+			return name + '.' + ext if typeof @names[name + '.' + ext] != 'undefined'
 
 		for ext in Package.SUPPORTED
-			return name + '/index.' + ext if typeof @modules[name + '/index.' + ext] != 'undefined'
+			return name + '/index.' + ext if typeof @names[name + '/index.' + ext] != 'undefined'
 
 		return null
 

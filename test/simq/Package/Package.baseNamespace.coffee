@@ -40,49 +40,47 @@ describe 'Package/Package.baseNamespace', ->
 	describe '#addModule()', ->
 		it 'should add module with absolute path', ->
 			pckg.addModule(dir + '/modules/1.js')
-			expect(pckg.modules).to.include.keys('package/modules/1.js')
-			expect(pckg.modules['package/modules/1.js']).to.be.equal(dir + '/modules/1.js')
+			expect(pckg.modules).to.be.eql([dir + '/modules/1.js'])
 
 		it 'should add modules with absolute path', ->
 			pckg.addModule(dir + '/modules/*.js<$>')
-			expect(pckg.modules).to.include.keys([
-				'package/modules/1.js'
-				'package/modules/2.js'
-				'package/modules/3.js'
-				'package/modules/4.js'
-				'package/modules/6.js'
+			expect(pckg.modules).to.be.eql([
+				dir + '/modules/1.js'
+				dir + '/modules/2.js'
+				dir + '/modules/3.js'
+				dir + '/modules/4.js'
+				dir + '/modules/6.js'
 			])
 
 		it 'should add core module', ->
 			pckg.addModule('events')
-			expect(pckg.modules).to.include.keys('events')
+			expect(pckg.modules).to.have.length.above(0)
+			expect(pckg.modules[0]).not.to.be.null
 
 		it 'should add module from base directory', ->
 			pckg.addModule('./modules/1.js')
-			expect(pckg.modules).to.include.keys('modules/1.js')
-			expect(pckg.modules['modules/1.js']).to.be.equal(dir + '/modules/1.js')
+			expect(pckg.modules).to.be.eql([dir + '/modules/1.js'])
 
 		it 'should add modules from base directory', ->
 			pckg.addModule('./modules/*.js<$>')
-			expect(pckg.modules).to.include.keys([
-				'modules/1.js'
-				'modules/2.js'
-				'modules/3.js'
-				'modules/4.js'
-				'modules/6.js'
+			expect(pckg.modules).to.be.eql([
+				dir + '/modules/1.js'
+				dir + '/modules/2.js'
+				dir + '/modules/3.js'
+				dir + '/modules/4.js'
+				dir + '/modules/6.js'
 			])
 
 		it 'should add installed npm module', ->
 			pckg.addModule('module/test.js')
-			expect(pckg.modules).to.include.keys('module/test.js')
-			expect(pckg.modules['module/test.js']).to.be.equal(dir + '/node_modules/module/test.js')
+			expect(pckg.modules).to.be.eql([dir + '/node_modules/module/test.js'])
 
 		it 'should add installed npm modules', ->
 			pckg.addModule('module/*.js<$>')
-			expect(pckg.modules).to.include.keys([
-				'module',
-				'module/test.js',
-				'module/test2.js'
+			expect(pckg.modules).to.be.eql([
+				dir + '/node_modules/module/index.js',
+				dir + '/node_modules/module/test.js',
+				dir + '/node_modules/module/test2.js'
 			])
 
 	describe '#addAlias()', ->
@@ -92,46 +90,54 @@ describe 'Package/Package.baseNamespace', ->
 		it 'should create new module for alias', ->
 			pckg.addModule('module/test.js')
 			pckg.addAlias('module/test.js', 'test')
-			expect(pckg.modules).to.include.keys(['module/test.js', 'test'])
-			expect(pckg.modules.test).to.be.equal("`module.exports = require('module/test.js');`")
+			expect(pckg.modules).to.be.eql([
+				dir + '/node_modules/module/test.js'
+				"`module.exports = require('module/test.js');`"
+			])
 
 		it 'should create new module for alias without extension', ->
 			pckg.addModule('module/test.js')
 			pckg.addAlias('module/test', 'test')
-			expect(pckg.modules).to.include.keys(['module/test.js', 'test'])
+			expect(pckg.modules).to.be.eql([
+				dir + '/node_modules/module/test.js'
+				"`module.exports = require('module/test.js');`"
+			])
 
 		it 'should create new module for alias without exact file path', ->
 			pckg.addModule('module/any/index.json')
 			pckg.addAlias('module/any', 'any')
-			expect(pckg.modules).to.include.keys(['module/any/index.json', 'any'])
+			expect(pckg.modules).to.be.eql([
+				dir + '/node_modules/module/any/index.json'
+				"`module.exports = require('module/any/index.json');`"
+			])
 
 	describe '#addToAutorun()', ->
 		it 'should add module to autorun', ->
 			pckg.addModule('module/test.js')
 			pckg.addToAutorun('module/test.js')
-			expect(pckg.run).to.include.members(['module/test.js'])
+			expect(pckg.run).to.be.eql(['module/test.js'])
 
 		it 'should add module to autorun without extension', ->
 			pckg.addModule('module/test.js')
 			pckg.addToAutorun('module/test')
-			expect(pckg.run).to.include.members(['module/test.js'])
+			expect(pckg.run).to.be.eql(['module/test.js'])
 
 		it 'should add module to autorun without exact file path', ->
 			pckg.addModule('module/any/index.json')
 			pckg.addToAutorun('module/any')
-			expect(pckg.run).to.include.members(['module/any/index.json'])
+			expect(pckg.run).to.be.eql(['module/any/index.json'])
 
 		it 'should add library from absolute path', ->
 			pckg.addToAutorun(dir + '/libs/begin/1.js')
-			expect(pckg.run).to.include.members([dir + '/libs/begin/1.js'])
+			expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js'])
 
 		it 'should add library from relative path', ->
 			pckg.addToAutorun('./libs/begin/1.js')
-			expect(pckg.run).to.include.members([dir + '/libs/begin/1.js'])
+			expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js'])
 
 		it 'should add all js libraries from absolute path', ->
 			pckg.addToAutorun(dir + '/libs/begin/*.js<$>')
-			expect(pckg.run).to.include.members([
+			expect(pckg.run).to.be.eql([
 				dir + '/libs/begin/1.js'
 				dir + '/libs/begin/2.js'
 				dir + '/libs/begin/3.js'
@@ -141,7 +147,7 @@ describe 'Package/Package.baseNamespace', ->
 
 		it 'should add all js libraries from relative path', ->
 			pckg.addToAutorun('./libs/begin/*.js<$>')
-			expect(pckg.run).to.include.members([
+			expect(pckg.run).to.be.eql([
 				dir + '/libs/begin/1.js'
 				dir + '/libs/begin/2.js'
 				dir + '/libs/begin/3.js'
