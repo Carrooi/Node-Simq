@@ -51,14 +51,19 @@ class SimQ
 		return (new Builder(@packages[name])).build()
 
 
-	buildPackageToFile: (name, file) ->
+	buildPackageToFile: (name) ->
 		if !@hasPackage(name)
 			throw new Error 'Package ' + name + ' is not registered.'
 
 		deferred = Q.defer()
 
-		@buildPackage(name).then( (data) ->
-			fs.writeFileSync(file, data)
+		@buildPackage(name).then( (data) =>
+			if data.js != null
+				fs.writeFileSync(@packages[name].application, data.js)
+
+			if data.css != null
+				fs.writeFileSync(@packages[name].style.out, data.css)
+
 			deferred.resolve(data)
 		).fail( (err) ->
 			deferred.reject(err)
@@ -95,7 +100,7 @@ class SimQ
 		result = []
 		for name, pckg of @packages
 			if pckg.application != null
-				result.push(@buildPackageToFile(name, pckg.application))
+				result.push(@buildPackageToFile(name))
 
 		Q.all(result).then( (data) =>
 			result = {}

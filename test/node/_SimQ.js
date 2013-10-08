@@ -74,11 +74,12 @@
         pckg.addToAutorun('libs/begin/4.js');
         return simq.build().then(function(data) {
           expect(data).to.include.keys(['test']);
-          expect(data.test).to.have.string("'package/modules/2.js'");
-          expect(data.test).to.have.string("'package/modules/3.js'");
-          expect(data.test).to.have.string("'module'");
-          expect(data.test).to.have.string("require('modules/1.js');");
-          expect(data.test).to.have.string('// 4');
+          expect(data.test).to.include.keys(['css', 'js']);
+          expect(data.test.js).to.have.string("'package/modules/2.js'");
+          expect(data.test.js).to.have.string("'package/modules/3.js'");
+          expect(data.test.js).to.have.string("'module'");
+          expect(data.test.js).to.have.string("require('modules/1.js');");
+          expect(data.test.js).to.have.string('// 4');
           return done();
         }).done();
       });
