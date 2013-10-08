@@ -83,11 +83,10 @@ class Builder extends Package
 
 		name = @pckg.resolveRegisteredModule(_path)
 		if name == null
-			fs.readFile(_path, encoding: 'utf8', (err, data) ->
-				if err
-					deferred.reject(err)
-				else
-					deferred.resolve(data)
+			Compiler.compileFile(_path).then( (data) ->
+				deferred.resolve(data)
+			).fail( (err) ->
+				deferred.reject(err)
 			)
 		else
 			deferred.resolve("require('#{name}');")
