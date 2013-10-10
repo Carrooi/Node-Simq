@@ -67,9 +67,11 @@
         pckg = createPackage('libraries');
         return expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js', dir + '/libs/begin/2.js', dir + '/libs/end/1.js', dir + '/libs/end/2.js']);
       });
-      return it.skip('should create package with modules to run', function() {
+      return it('should create package with modules to run', function() {
         var pckg;
-        return pckg = createPackage('run');
+        pckg = createPackage('run');
+        expect(pckg.modules).to.be.eql([dir + '/app/Application.coffee', dir + '/app/controllers/Menu.js']);
+        return expect(pckg.run).to.be.eql(['app/Application.coffee', 'app/controllers/Menu.js']);
       });
     });
   });

@@ -1,6 +1,10 @@
 {
 	"packages": {
 		"application": {
+			"modules": [
+				"./app/Application.coffee",
+				"./app/controllers/Menu.js"
+			],
 			"run": [
 				"app/Application",
 				"app/controllers/Menu.js"

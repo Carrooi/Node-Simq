@@ -54,5 +54,13 @@ describe 'Package/Factory', ->
 				dir + '/libs/end/2.js'
 			])
 
-		it.skip 'should create package with modules to run', ->
+		it 'should create package with modules to run', ->
 			pckg = createPackage('run')
+			expect(pckg.modules).to.be.eql([
+				dir + '/app/Application.coffee'
+				dir + '/app/controllers/Menu.js'
+			])
+			expect(pckg.run).to.be.eql([
+				'app/Application.coffee'
+				'app/controllers/Menu.js'
+			])
