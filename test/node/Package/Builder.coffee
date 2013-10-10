@@ -5,6 +5,8 @@ Info = require 'module-info'
 Package = require '../../../lib/Package/Package'
 Builder = require '../../../lib/Package/Builder'
 
+SyntaxException = require 'source-compiler/Exceptions/SyntaxException'
+
 dir = path.resolve(__dirname + '/../../data/package')
 pckg = null
 builder = null
@@ -43,6 +45,24 @@ describe 'Package/Builder', ->
 					"require('modules/1.js');"
 					'// 4'
 				].join('\n'))
+				done()
+			).done()
+
+	describe '#buildStyles()', ->
+		it 'should build styles', (done) ->
+			pckg.setStyle('./css/style.less', './public/style.css')
+			builder.buildStyles().then( (data) ->
+				expect(data).to.be.equal('body {\n  color: #000000;\n}\n')
+				done()
+			).done()
+
+		it 'should return an error for bad style', (done) ->
+			pckg.setStyle('./css/with-errors.less', './public/style.css')
+			builder.buildStyles().fail( (err) ->
+				expect(err).to.be.an.instanceof(SyntaxException)
+				expect(err.message).to.be.equal('missing closing `}`')
+				expect(err.line).to.be.equal(1)
+				expect(err.column).to.be.equal(0)
 				done()
 			).done()
 

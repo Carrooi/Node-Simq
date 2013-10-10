@@ -83,11 +83,10 @@ class Builder extends Package
 
 
 	buildStyles: ->
-		deferred = Q.defer()
-
 		if @pckg.style == null
 			return Q.resolve(null)
 
+		deferred = Q.defer()
 		options = {}
 		if @pckg.style.dependencies != null
 			options.dependents = @pckg.style.dependencies

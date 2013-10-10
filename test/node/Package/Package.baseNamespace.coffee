@@ -32,6 +32,7 @@ describe 'Package/Package.baseNamespace', ->
 				dir + '/css/common.less'
 				dir + '/css/style.less'
 				dir + '/css/variables.less'
+				dir + '/css/with-errors.less'
 			])
 
 		it 'should throw an error if input file does not exists', ->
