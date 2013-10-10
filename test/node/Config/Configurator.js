@@ -26,18 +26,10 @@
           skip: false,
           application: null,
           base: null,
-          style: {
-            "in": null,
-            out: null,
-            dependencies: null
-          },
+          style: null,
           modules: [],
           aliases: {},
-          run: [],
-          libraries: {
-            begin: [],
-            end: []
-          }
+          run: []
         });
       });
       it('should throw an error when there is fsModules section', function() {

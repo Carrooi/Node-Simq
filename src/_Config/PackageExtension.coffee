@@ -14,13 +14,13 @@ class PackageExtension extends Extension
 			out: null
 			dependencies: null
 		modules: []
-		coreModules: null
-		fsModules: null
+		coreModules: null	# deprecated
+		fsModules: null		# deprecated
 		aliases: {}
 		run: []
-		libraries:
-			begin: []
-			end: []
+		libraries:			# deprecated
+			begin: []		# deprecated
+			end: []			# deprecated
 
 
 	loadConfiguration: ->
@@ -35,8 +35,15 @@ class PackageExtension extends Extension
 			if pckg.fsModules != null
 				throw new Error 'Config: fsModules section is deprecated. Please take a look in new documentation.'
 
+			pckg.run.unshift.apply(pckg.run, pckg.libraries.begin)
+			pckg.run.push.apply(pckg.run, pckg.libraries.end)
+
+			if pckg.style.in == null || pckg.style.out == null
+				pckg.style = null
+
 			delete pckg.coreModules
 			delete pckg.fsModules
+			delete pckg.libraries
 
 		return config
 

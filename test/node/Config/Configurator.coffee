@@ -19,16 +19,10 @@ describe 'Configurator', ->
 				skip: false
 				application: null
 				base: null
-				style:
-					in: null
-					out: null
-					dependencies: null
+				style: null
 				modules: []
 				aliases: {}
 				run: []
-				libraries:
-					begin: []
-					end: []
 			)
 
 		it 'should throw an error when there is fsModules section', ->
