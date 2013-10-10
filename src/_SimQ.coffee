@@ -20,11 +20,17 @@ class SimQ
 		return typeof @packages[name] != 'undefined'
 
 
-	addPackage: (name) ->
+	addPackage: (name, pckg = null) ->
 		if @hasPackage(name)
 			throw new Error 'Package ' + name + ' is already registered.'
 
-		@packages[name] = new Package(@basePath)
+		if pckg == null
+			@packages[name] = new Package(@basePath)
+		else
+			if pckg !instanceof Package
+				throw new Error 'Package ' + name + ' must be an instance of Package/Package.'
+
+			@packages[name] = pckg
 
 		return @packages[name]
 

@@ -24,6 +24,15 @@ describe 'SimQ', ->
 			simq.addPackage('test')
 			expect( -> simq.addPackage('test') ).to.throw(Error)
 
+		it 'should add new package directly', ->
+			pckg = new Package(dir)
+			simq.addPackage('test', pckg)
+			expect(simq.hasPackage('test')).to.be.true
+			expect(simq.getPackage('test')).to.be.equal(pckg)
+
+		it 'should throw an error if package to add is not an instance of Package/Package', ->
+			expect( -> simq.addPackage('test', new Array)).to.throw(Error, 'Package test must be an instance of Package/Package.')
+
 	describe '#hasPackage()', ->
 		it 'should return false', ->
 			expect(simq.hasPackage('test')).to.be.false

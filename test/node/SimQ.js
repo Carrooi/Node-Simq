@@ -26,11 +26,23 @@
         expect(simq.packages).to.include.keys('test');
         return expect(simq.packages.test).to.be.an["instanceof"](Package);
       });
-      return it('should throw an error if package is already added', function() {
+      it('should throw an error if package is already added', function() {
         simq.addPackage('test');
         return expect(function() {
           return simq.addPackage('test');
         }).to["throw"](Error);
+      });
+      it('should add new package directly', function() {
+        var pckg;
+        pckg = new Package(dir);
+        simq.addPackage('test', pckg);
+        expect(simq.hasPackage('test')).to.be["true"];
+        return expect(simq.getPackage('test')).to.be.equal(pckg);
+      });
+      return it('should throw an error if package to add is not an instance of Package/Package', function() {
+        return expect(function() {
+          return simq.addPackage('test', new Array);
+        }).to["throw"](Error, 'Package test must be an instance of Package/Package.');
       });
     });
     describe('#hasPackage()', function() {
