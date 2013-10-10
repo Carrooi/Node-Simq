@@ -5,11 +5,8 @@ path = require 'path'
 class PackageExtension extends Extension
 
 
-	loadConfiguration: ->
-		config = @getConfig()
-
-		defaultsPackage =
-			skip: false
+	defaultsPackage:
+		skip: false
 			application: null
 			base: null
 			style:
@@ -25,8 +22,12 @@ class PackageExtension extends Extension
 				begin: []		# deprecated
 				end: []			# deprecated
 
+
+	loadConfiguration: ->
+		config = @getConfig()
+
 		for name, pckg of config
-			config[name] = @configurator.merge(pckg, defaultsPackage)
+			config[name] = @configurator.merge(pckg, @defaultsPackage)
 
 			if pckg.coreModules != null
 				throw new Error 'Config: coreModules section is deprecated. Please take a look in new documentation.'
