@@ -1,0 +1,9 @@
+{
+	"packages": {
+		"application": {
+			"fsModules": {
+				"/var/www/some/path": []
+			}
+		}
+	}
+}

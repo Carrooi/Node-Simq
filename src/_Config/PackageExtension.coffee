@@ -27,6 +27,8 @@ class PackageExtension extends Extension
 		config = @getConfig()
 
 		for name, pckg of config
+			config[name] = @configurator.merge(pckg, @defaultsPackage)
+
 			if pckg.coreModules != null
 				throw new Error 'Config: coreModules section is deprecated. Please take a look in new documentation.'
 
@@ -35,8 +37,6 @@ class PackageExtension extends Extension
 
 			delete pckg.coreModules
 			delete pckg.fsModules
-
-			config[name] = @configurator.merge(pckg, @defaultsPackage)
 
 		return config
 
