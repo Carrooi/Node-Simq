@@ -30,3 +30,46 @@ describe 'Configurator', ->
 		it 'should throw an error when there is coreModules section', ->
 			expect( -> getConfig('core-modules')).to.throw(Error, 'Config: coreModules section is deprecated. Please take a look in new documentation.')
 
+		it 'should load configuration with includes', ->
+			config = getConfig('advanced/config')
+			expect(config.packages.application.application).to.be.equal('./public/application.js')
+
+		it 'should load configuration with styles', ->
+			styles = getConfig('styles/styles').packages.application.style
+			expect(styles.in).to.be.equal('./css/style.less')
+			expect(styles.out).to.be.equal('./public/style.css')
+
+		it 'should not load styles from configuration because there is no in file', ->
+			styles = getConfig('styles/no-in').packages.application.style
+			expect(styles).to.be.null
+
+		it 'should not load styles from configuration because there is no out file', ->
+			styles = getConfig('styles/no-out').packages.application.style
+			expect(styles).to.be.null
+
+		it 'should load transformed libraries section into run section', ->
+			config = getConfig('libraries')
+			expect(config.packages.application.run).to.be.eql([
+				'/begin/first.js'
+				'/begin/second.js'
+				'/end/first.js'
+				'/end/second.js'
+			])
+
+		it 'should load config with modules in run section', ->
+			config = getConfig('run')
+			expect(config.packages.application.run).to.be.eql([
+				'app/application'
+				'controllers/Menu.js'
+			])
+
+		it 'should load config with modules in run section and with libraries', ->
+			config = getConfig('run-and-libraries')
+			expect(config.packages.application.run).to.be.eql([
+				'/begin/first.js'
+				'/begin/second.js'
+				'app/application'
+				'controllers/Menu.js'
+				'/end/first.js'
+				'/end/second.js'
+			])

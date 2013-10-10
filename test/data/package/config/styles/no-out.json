@@ -1,0 +1,9 @@
+{
+	"packages": {
+		"application": {
+			"style": {
+				"in": "./css/style.less"
+			}
+		}
+	}
+}

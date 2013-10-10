@@ -1,0 +1,7 @@
+{
+	"packages": {
+		"application": {
+			"application": "./public/application.js"
+		}
+	}
+}

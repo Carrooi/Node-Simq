@@ -1,0 +1,16 @@
+{
+	"packages": {
+		"application": {
+			"libraries": {
+				"begin": [
+					"/begin/first.js",
+					"/begin/second.js"
+				],
+				"end": [
+					"/end/first.js",
+					"/end/second.js"
+				]
+			}
+		}
+	}
+}

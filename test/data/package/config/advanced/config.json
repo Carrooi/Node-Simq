@@ -1,0 +1,10 @@
+{
+	"includes": [
+		"./application.json"
+	],
+	"packages": {
+		"application": {
+
+		}
+	}
+}

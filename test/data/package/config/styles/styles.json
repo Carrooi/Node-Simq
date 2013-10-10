@@ -1,0 +1,10 @@
+{
+	"packages": {
+		"application": {
+			"style": {
+				"in": "./css/style.less",
+				"out": "./public/style.css"
+			}
+		}
+	}
+}

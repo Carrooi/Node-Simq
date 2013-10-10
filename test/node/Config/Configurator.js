@@ -36,10 +36,46 @@
           return getConfig('fs-modules');
         }).to["throw"](Error, 'Config: fsModules section is deprecated. Please take a look in new documentation.');
       });
-      return it('should throw an error when there is coreModules section', function() {
+      it('should throw an error when there is coreModules section', function() {
         return expect(function() {
           return getConfig('core-modules');
         }).to["throw"](Error, 'Config: coreModules section is deprecated. Please take a look in new documentation.');
+      });
+      it('should load configuration with includes', function() {
+        var config;
+        config = getConfig('advanced/config');
+        return expect(config.packages.application.application).to.be.equal('./public/application.js');
+      });
+      it('should load configuration with styles', function() {
+        var styles;
+        styles = getConfig('styles/styles').packages.application.style;
+        expect(styles["in"]).to.be.equal('./css/style.less');
+        return expect(styles.out).to.be.equal('./public/style.css');
+      });
+      it('should not load styles from configuration because there is no in file', function() {
+        var styles;
+        styles = getConfig('styles/no-in').packages.application.style;
+        return expect(styles).to.be["null"];
+      });
+      it('should not load styles from configuration because there is no out file', function() {
+        var styles;
+        styles = getConfig('styles/no-out').packages.application.style;
+        return expect(styles).to.be["null"];
+      });
+      it('should load transformed libraries section into run section', function() {
+        var config;
+        config = getConfig('libraries');
+        return expect(config.packages.application.run).to.be.eql(['/begin/first.js', '/begin/second.js', '/end/first.js', '/end/second.js']);
+      });
+      it('should load config with modules in run section', function() {
+        var config;
+        config = getConfig('run');
+        return expect(config.packages.application.run).to.be.eql(['app/application', 'controllers/Menu.js']);
+      });
+      return it('should load config with modules in run section and with libraries', function() {
+        var config;
+        config = getConfig('run-and-libraries');
+        return expect(config.packages.application.run).to.be.eql(['/begin/first.js', '/begin/second.js', 'app/application', 'controllers/Menu.js', '/end/first.js', '/end/second.js']);
       });
     });
   });

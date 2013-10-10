@@ -1,0 +1,9 @@
+{
+	"packages": {
+		"application": {
+			"style": {
+				"out": "./public/style.css"
+			}
+		}
+	}
+}
