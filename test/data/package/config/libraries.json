@@ -3,12 +3,12 @@
 		"application": {
 			"libraries": {
 				"begin": [
-					"/begin/first.js",
-					"/begin/second.js"
+					"./libs/begin/1.js",
+					"./libs/begin/2.js"
 				],
 				"end": [
-					"/end/first.js",
-					"/end/second.js"
+					"./libs/end/1.js",
+					"./libs/end/2.js"
 				]
 			}
 		}

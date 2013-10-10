@@ -65,17 +65,17 @@
       it('should load transformed libraries section into run section', function() {
         var config;
         config = getConfig('libraries');
-        return expect(config.packages.application.run).to.be.eql(['/begin/first.js', '/begin/second.js', '/end/first.js', '/end/second.js']);
+        return expect(config.packages.application.run).to.be.eql(['./libs/begin/1.js', './libs/begin/2.js', './libs/end/1.js', './libs/end/2.js']);
       });
       it('should load config with modules in run section', function() {
         var config;
         config = getConfig('run');
-        return expect(config.packages.application.run).to.be.eql(['app/application', 'controllers/Menu.js']);
+        return expect(config.packages.application.run).to.be.eql(['app/Application', 'app/controllers/Menu.js']);
       });
       return it('should load config with modules in run section and with libraries', function() {
         var config;
         config = getConfig('run-and-libraries');
-        return expect(config.packages.application.run).to.be.eql(['/begin/first.js', '/begin/second.js', 'app/application', 'controllers/Menu.js', '/end/first.js', '/end/second.js']);
+        return expect(config.packages.application.run).to.be.eql(['./libs/begin/1.js', './libs/begin/2.js', 'app/Application', 'app/controllers/Menu.js', './libs/end/1.js', './libs/end/2.js']);
       });
     });
   });

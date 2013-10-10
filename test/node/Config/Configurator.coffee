@@ -50,26 +50,26 @@ describe 'Configurator', ->
 		it 'should load transformed libraries section into run section', ->
 			config = getConfig('libraries')
 			expect(config.packages.application.run).to.be.eql([
-				'/begin/first.js'
-				'/begin/second.js'
-				'/end/first.js'
-				'/end/second.js'
+				'./libs/begin/1.js'
+				'./libs/begin/2.js'
+				'./libs/end/1.js'
+				'./libs/end/2.js'
 			])
 
 		it 'should load config with modules in run section', ->
 			config = getConfig('run')
 			expect(config.packages.application.run).to.be.eql([
-				'app/application'
-				'controllers/Menu.js'
+				'app/Application'
+				'app/controllers/Menu.js'
 			])
 
 		it 'should load config with modules in run section and with libraries', ->
 			config = getConfig('run-and-libraries')
 			expect(config.packages.application.run).to.be.eql([
-				'/begin/first.js'
-				'/begin/second.js'
-				'app/application'
-				'controllers/Menu.js'
-				'/end/first.js'
-				'/end/second.js'
+				'./libs/begin/1.js'
+				'./libs/begin/2.js'
+				'app/Application'
+				'app/controllers/Menu.js'
+				'./libs/end/1.js'
+				'./libs/end/2.js'
 			])

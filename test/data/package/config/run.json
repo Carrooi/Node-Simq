@@ -2,8 +2,8 @@
 	"packages": {
 		"application": {
 			"run": [
-				"app/application",
-				"controllers/Menu.js"
+				"app/Application",
+				"app/controllers/Menu.js"
 			]
 		}
 	}

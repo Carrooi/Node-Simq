@@ -1,20 +1,6 @@
 {
-	"packages": {
-		"application": {
-			"run": [
-				"app/application",
-				"controllers/Menu.js"
-			],
-			"libraries": {
-				"begin": [
-					"/begin/first.js",
-					"/begin/second.js"
-				],
-				"end": [
-					"/end/first.js",
-					"/end/second.js"
-				]
-			}
-		}
-	}
+	"includes": [
+		"./run.json",
+		"./libraries.json"
+	]
 }
