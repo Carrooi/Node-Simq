@@ -1,7 +1,7 @@
 {
 	"packages": {
 		"test": {
-			"application": "./tests.js"
+			"application": "./public/application.js"
 		}
 	}
 }
