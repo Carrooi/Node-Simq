@@ -36,7 +36,7 @@
 		"required": "~0.3.1",
 		"express": "~3.4.0",
 		"mime": "~1.2.11",
-		"easy-configuration": "~1.5.0",
+		"easy-configuration": "~1.5.3",
 		"fs-finder": "~1.7.4",
 		"source-compiler": "~2.0.0",
 		"recursive-merge": "~1.0.0",
