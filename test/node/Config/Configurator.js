@@ -20,7 +20,6 @@
         var config;
         config = getConfig('empty');
         expect(config).to.include.keys(['packages', 'template', 'cache', 'debugger', 'server', 'routes']);
-        expect(config.packages).to.be.a('object');
         expect(config.packages).to.include.keys(['application']);
         return expect(config.packages.application).to.be.eql({
           skip: false,
