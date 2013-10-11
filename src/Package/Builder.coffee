@@ -2,6 +2,7 @@ Q = require 'q'
 required = require 'flatten-required'
 Info = require 'module-info'
 Compiler = require 'source-compiler'
+Module = require 'module'
 path = require 'path'
 fs = require 'fs'
 
@@ -148,8 +149,13 @@ class Builder extends Package
 				if @pckg.getPackageInfo().isFileInModule(file)
 					result['/' + @pckg.getPackageInfo().getModuleName(file, true)] = file
 				else
-					info = Info.fromFile(file)
-					result[info.getModuleName(file)] = file
+					dir = path.dirname(file)
+					if Module.globalPaths.indexOf(dir) == -1
+						info = Info.fromFile(file)
+						result[info.getModuleName(file)] = file
+					else
+						name = path.basename(file, path.extname(file))
+						result[name] = file
 
 			for name, _path in data.core
 				if _path != null

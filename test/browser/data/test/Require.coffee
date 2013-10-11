@@ -1,5 +1,6 @@
 
 
+# rewrite module specific require
 require = window.require
 
 
@@ -66,6 +67,10 @@ describe 'require', ->
 			data = require('any/package')
 			expect(data).to.include.keys(['name'])
 			expect(data.name).to.be.equal('any')
+
+		it 'should load node core module', ->
+			events = new require('events').EventEmitter
+			expect(events).to.satisfy( (events) -> return Object.prototype.toString.call(events) == '[object Function]')
 
 	describe 'cache', ->
 		it 'should be empty', ->

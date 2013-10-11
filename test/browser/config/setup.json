@@ -6,7 +6,8 @@
 			"modules": [
 				"./app/*",
 				"./test/*",
-				"./setup.js"
+				"./setup.js",
+				"events"
 			],
 			"run": [
 				"/test/Require"
