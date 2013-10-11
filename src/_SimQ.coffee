@@ -15,6 +15,9 @@ class SimQ
 	constructor: (@basePath) ->
 		@packages = {}
 
+		if !fs.existsSync(@basePath + '/package.json')
+			throw new Error @basePath + '/package.json file does not exists.'
+
 
 	hasPackage: (name) ->
 		return typeof @packages[name] != 'undefined'

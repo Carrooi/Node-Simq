@@ -7,20 +7,20 @@ class PackageExtension extends Extension
 
 	defaultsPackage:
 		skip: false
-			application: null
-			base: null
-			style:
-				in: null
-				out: null
-				dependencies: null
-			modules: []
-			coreModules: null	# deprecated
-			fsModules: null		# deprecated
-			aliases: {}
-			run: []
-			libraries:			# deprecated
-				begin: []		# deprecated
-				end: []			# deprecated
+		application: null
+		base: null
+		style:
+			in: null
+			out: null
+			dependencies: null
+		modules: []
+		coreModules: null	# deprecated
+		fsModules: null		# deprecated
+		aliases: {}
+		run: []
+		libraries:			# deprecated
+			begin: []		# deprecated
+			end: []			# deprecated
 
 
 	loadConfiguration: ->
