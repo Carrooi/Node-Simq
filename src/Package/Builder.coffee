@@ -25,6 +25,8 @@ class Builder extends Package
 		if !fs.existsSync(@pckg.getBasePath() + '/package.json')
 			throw new Error 'Package has not got package.json file.'
 
+		@pckg.prepare()
+
 
 	build: ->
 		deferred = Q.defer()
@@ -133,17 +135,15 @@ class Builder extends Package
 		for _path in @pckg.modules
 			paths.push(_path)
 
-		mainInfo = new Info(@pckg.getBasePath())
-
-		required.findMany(paths, true, require('../../data.json').supportedCores).then( (data) ->
+		required.findMany(paths, true, require('../../data.json').supportedCores).then( (data) =>
 			result = {}
 
 			data.files = data.files.concat(paths)
 			data.files = data.files.filter( (el, pos) -> return data.files.indexOf(el) == pos)
 
 			for file in data.files
-				if mainInfo.isFileInModule(file)
-					result['/' + mainInfo.getModuleName(file, true)] = file
+				if @pckg.getPackageInfo().isFileInModule(file)
+					result['/' + @pckg.getPackageInfo().getModuleName(file, true)] = file
 				else
 					info = Info.fromFile(file)
 					result[info.getModuleName(file)] = file

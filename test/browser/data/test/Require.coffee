@@ -32,8 +32,17 @@ describe 'require', ->
 		it 'should resolve name in root without extension', ->
 			expect(require.resolve('/setup')).to.be.equal('/setup.js')
 
-		it.skip 'should resolve name for main file', ->
+		it 'should resolve name for main file', ->
 			expect(require.resolve('/index.js')).to.be.equal('/index.js')
+
+		it 'should resolve name for main file without extension', ->
+			expect(require.resolve('/index')).to.be.equal('/index.js')
+
+		it 'should resolve name for package file', ->
+			expect(require.resolve('/package.json')).to.be.equal('/package.json')
+
+		it 'should resolve name for package file withoud extension', ->
+			expect(require.resolve('/package')).to.be.equal('/package.json')
 
 	describe '#require()', ->
 		it 'should load simple module', ->

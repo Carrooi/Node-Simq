@@ -27,6 +27,10 @@ class Package
 
 	run: null
 
+	info: null
+
+	initialized: false
+
 
 	constructor: (@basePath) ->
 		@basePath = path.resolve(@basePath)
@@ -36,12 +40,29 @@ class Package
 		@run = []
 
 
+	prepare: ->
+		if @initialized == false
+			@addModule(@getPackageInfo().getPackagePath())
+			main = @getPackageInfo().getMainFile()
+			if main != null
+				@addModule(main)
+
+			@initialized = true
+
+
 	getBasePath: ->
 		return @basePath + (if @base == null then '' else '/' + @base)
 
 
 	getPath: (_path) ->
 		return path.resolve(@getBasePath() + '/' + _path)
+
+
+	getPackageInfo: ->
+		if @info == null
+			@info = new Info(@getBasePath())
+
+		return @info
 
 
 	expandPaths: (paths) ->

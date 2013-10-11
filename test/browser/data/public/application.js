@@ -191,8 +191,17 @@
 	      it('should resolve name in root without extension', function() {
 	        return expect(require.resolve('/setup')).to.be.equal('/setup.js');
 	      });
-	      return it('should resolve name for main file', function() {
+	      it('should resolve name for main file', function() {
 	        return expect(require.resolve('/index.js')).to.be.equal('/index.js');
+	      });
+	      it('should resolve name for main file without extension', function() {
+	        return expect(require.resolve('/index')).to.be.equal('/index.js');
+	      });
+	      it('should resolve name for package file', function() {
+	        return expect(require.resolve('/package.json')).to.be.equal('/package.json');
+	      });
+	      return it('should resolve name for package file withoud extension', function() {
+	        return expect(require.resolve('/package')).to.be.equal('/package.json');
 	      });
 	    });
 	    describe('#require()', function() {
@@ -227,6 +236,37 @@
 	var __filename = '/setup.js';
 	var __dirname = '/';
 	var process = {cwd: function() {return '/';}, argv: ['node', '/setup.js'], env: {}};
+
+},'/package.json': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/package.json');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/package.json';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/package.json';
+	var __dirname = '/';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/package.json'], env: {}};
+
+	/** code **/
+	module.exports = (function() {
+	return {
+		"name": "browser-test",
+		"version": "1.0.0"
+	}
+	}).call(this);
+	
+
+},'/index.js': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/index.js');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/index.js';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/index.js';
+	var __dirname = '/';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/index.js'], env: {}};
 
 }
 });
