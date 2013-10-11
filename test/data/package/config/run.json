@@ -6,8 +6,8 @@
 				"./app/controllers/Menu.js"
 			],
 			"run": [
-				"app/Application",
-				"app/controllers/Menu.js"
+				"/app/Application",
+				"/app/controllers/Menu.js"
 			]
 		}
 	}

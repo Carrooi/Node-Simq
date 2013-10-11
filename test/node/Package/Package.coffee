@@ -84,59 +84,56 @@ describe 'Package/Package', ->
 			])
 
 	describe '#addAlias()', ->
-		it 'should throw an error if module is not registered', ->
-			expect( -> pckg.addAlias('unknown', 'new')).to.throw(Error)
-
 		it 'should create new module for alias', ->
 			pckg.addModule('module/test.js')
-			pckg.addAlias('module/test.js', 'test')
+			pckg.addAlias('/module/test.js', 'test')
 			expect(pckg.modules).to.be.eql([
 				dir + '/node_modules/module/test.js'
-				"`module.exports = require('module/test.js');`"
+				"`module.exports = require('/module/test.js');`"
 			])
 
 		it 'should create new module for alias without extension', ->
 			pckg.addModule('module/test.js')
-			pckg.addAlias('module/test', 'test')
+			pckg.addAlias('/module/test', 'test')
 			expect(pckg.modules).to.be.eql([
 				dir + '/node_modules/module/test.js'
-				"`module.exports = require('module/test.js');`"
+				"`module.exports = require('/module/test');`"
 			])
 
 		it 'should create new module for alias without exact file path', ->
 			pckg.addModule('module/any/index.json')
-			pckg.addAlias('module/any', 'any')
+			pckg.addAlias('/module/any', 'any')
 			expect(pckg.modules).to.be.eql([
 				dir + '/node_modules/module/any/index.json'
-				"`module.exports = require('module/any/index.json');`"
+				"`module.exports = require('/module/any');`"
 			])
 
 	describe '#addToAutorun()', ->
 		it 'should add module to autorun', ->
 			pckg.addModule('module/test.js')
-			pckg.addToAutorun('module/test.js')
-			expect(pckg.run).to.be.eql(['module/test.js'])
+			pckg.addToAutorun('/module/test.js')
+			expect(pckg.run).to.be.eql(['/module/test.js'])
 
 		it 'should add module to autorun without extension', ->
 			pckg.addModule('module/test.js')
-			pckg.addToAutorun('module/test')
-			expect(pckg.run).to.be.eql(['module/test.js'])
+			pckg.addToAutorun('/module/test')
+			expect(pckg.run).to.be.eql(['/module/test'])
 
 		it 'should add module to autorun without exact file path', ->
 			pckg.addModule('module/any/index.json')
-			pckg.addToAutorun('module/any')
-			expect(pckg.run).to.be.eql(['module/any/index.json'])
+			pckg.addToAutorun('/module/any')
+			expect(pckg.run).to.be.eql(['/module/any'])
 
 		it 'should add library from absolute path', ->
-			pckg.addToAutorun(dir + '/libs/begin/1.js')
+			pckg.addToAutorun('- ' + dir + '/libs/begin/1.js')
 			expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js'])
 
 		it 'should add library from relative path', ->
-			pckg.addToAutorun('./libs/begin/1.js')
+			pckg.addToAutorun('- ./libs/begin/1.js')
 			expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js'])
 
 		it 'should add all js libraries from absolute path', ->
-			pckg.addToAutorun(dir + '/libs/begin/*.js<$>')
+			pckg.addToAutorun('- ' + dir + '/libs/begin/*.js<$>')
 			expect(pckg.run).to.be.eql([
 				dir + '/libs/begin/1.js'
 				dir + '/libs/begin/2.js'
@@ -146,7 +143,7 @@ describe 'Package/Package', ->
 			])
 
 		it 'should add all js libraries from relative path', ->
-			pckg.addToAutorun('./libs/begin/*.js<$>')
+			pckg.addToAutorun('- ./libs/begin/*.js<$>')
 			expect(pckg.run).to.be.eql([
 				dir + '/libs/begin/1.js'
 				dir + '/libs/begin/2.js'
@@ -154,22 +151,3 @@ describe 'Package/Package', ->
 				dir + '/libs/begin/4.js'
 				dir + '/libs/begin/6.js'
 			])
-
-		it 'should throw an error if module or library does not exists', ->
-			expect( -> pckg.addToAutorun('unknown')).to.throw(Error)
-
-	describe '#resolveRegisteredModule()', ->
-		it 'should return same name', ->
-			pckg.addModule('module/test.js')
-			expect(pckg.resolveRegisteredModule('module/test.js')).to.be.equal('module/test.js')
-
-		it 'should return full name from name without extension', ->
-			pckg.addModule('module/test.js')
-			expect(pckg.resolveRegisteredModule('module/test')).to.be.equal('module/test.js')
-
-		it 'should return full name from directory', ->
-			pckg.addModule('module/any/index.json')
-			expect(pckg.resolveRegisteredModule('module/any')).to.be.equal('module/any/index.json')
-
-		it 'should return null if module is not registered', ->
-			expect(pckg.resolveRegisteredModule('unknown')).to.be.null

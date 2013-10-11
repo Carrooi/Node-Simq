@@ -61,8 +61,8 @@ describe 'Package/Factory', ->
 				dir + '/app/controllers/Menu.js'
 			])
 			expect(pckg.run).to.be.eql([
-				'app/Application.coffee'
-				'app/controllers/Menu.js'
+				'/app/Application'
+				'/app/controllers/Menu.js'
 			])
 
 		it 'should create package with modules and libraries in run section', ->
@@ -74,8 +74,8 @@ describe 'Package/Factory', ->
 			expect(pckg.run).to.be.eql([
 				dir + '/libs/begin/1.js'
 				dir + '/libs/begin/2.js'
-				'app/Application.coffee'
-				'app/controllers/Menu.js'
+				'/app/Application'
+				'/app/controllers/Menu.js'
 				dir + '/libs/end/1.js'
 				dir + '/libs/end/2.js'
 			])

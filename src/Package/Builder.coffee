@@ -114,15 +114,14 @@ class Builder extends Package
 	loadForAutorun: (_path) ->
 		deferred = Q.defer()
 
-		name = @pckg.resolveRegisteredModule(_path)
-		if name == null
+		if fs.existsSync(_path)
 			Compiler.compileFile(_path).then( (data) ->
 				deferred.resolve(data)
 			).fail( (err) ->
 				deferred.reject(err)
 			)
 		else
-			deferred.resolve("require('#{name}');")
+			deferred.resolve("require('#{_path}');")
 
 		return deferred.promise
 
@@ -144,7 +143,7 @@ class Builder extends Package
 
 			for file in data.files
 				if mainInfo.isFileInModule(file)
-					result[mainInfo.getModuleName(file, true)] = file
+					result['/' + mainInfo.getModuleName(file, true)] = file
 				else
 					info = Info.fromFile(file)
 					result[info.getModuleName(file)] = file
@@ -176,7 +175,7 @@ class Builder extends Package
 				result = '\n'
 
 			globals = '\t' + Helpers.getGlobalsForModule(name).join('\n').replace(/\n/g, '\n\t')
-			result = "'#{name}': function(exports, __require, module) {\n\n\t/** node globals **/\n#{globals}#{result}\n}"
+			result = "'#{name}': function(exports, module) {\n\n\t/** node globals **/\n#{globals}#{result}\n}"
 
 			deferred.resolve(result)
 		).fail( (err) ->

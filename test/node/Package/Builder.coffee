@@ -22,8 +22,8 @@ describe 'Package/Builder', ->
 		it 'should build one module from absolute path', (done) ->
 			pckg.addModule(dir + '/modules/1.js')
 			builder.buildModules().then( (data) ->
-				expect(data).to.have.string("'modules/2.js'")
-				expect(data).to.have.string("'modules/3.js'")
+				expect(data).to.have.string("'/modules/2.js'")
+				expect(data).to.have.string("'/modules/3.js'")
 				expect(data).to.have.string("'module'")
 				done()
 			).done()
@@ -38,11 +38,11 @@ describe 'Package/Builder', ->
 	describe '#buildAutorun()', ->
 		it 'should build autorun section', (done) ->
 			pckg.addModule('./modules/1.js')
-			pckg.addToAutorun('modules/1')
-			pckg.addToAutorun('libs/begin/4.js')
+			pckg.addToAutorun('/modules/1')
+			pckg.addToAutorun('- ./libs/begin/4.js')
 			builder.buildAutorun().then( (data) ->
 				expect(data).to.be.equal([
-					"require('modules/1.js');"
+					"require('/modules/1');"
 					'// 4'
 				].join('\n'))
 				done()
@@ -69,14 +69,14 @@ describe 'Package/Builder', ->
 	describe '#build()', ->
 		it 'should build whole section', (done) ->
 			pckg.addModule('./modules/1.js')
-			pckg.addToAutorun('modules/1')
-			pckg.addToAutorun('libs/begin/4.js')
+			pckg.addToAutorun('/modules/1')
+			pckg.addToAutorun('- ./libs/begin/4.js')
 			builder.build().then( (data) ->
 				expect(data).to.include.keys(['css', 'js'])
-				expect(data.js).to.have.string("'modules/2.js'")
-				expect(data.js).to.have.string("'modules/3.js'")
+				expect(data.js).to.have.string("'/modules/2.js'")
+				expect(data.js).to.have.string("'/modules/3.js'")
 				expect(data.js).to.have.string("'module'")
-				expect(data.js).to.have.string("require('modules/1.js');")
+				expect(data.js).to.have.string("require('/modules/1');")
 				expect(data.js).to.have.string('// 4')
 				done()
 			).done()

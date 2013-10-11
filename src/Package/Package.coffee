@@ -118,7 +118,7 @@ class Package
 			if fs.existsSync(_path)
 				found = true
 				pckg = Info.fromFile(_path)
-				name = pckg.getModuleName(_path).replace(new RegExp('^' + pckg.getName() + '\/'), '')
+				name = pckg.getModuleName(name).replace(new RegExp('^' + pckg.getName() + '\/'), '')
 				@registerModule(name, _path)
 			else
 				paths = Finder.findFiles(_path)
@@ -155,47 +155,33 @@ class Package
 
 
 	addAlias: (original, alias) ->
-		original = @resolveRegisteredModule(original)
-
-		if original == null
-			throw new Error 'Module ' + original + ' is not registered.'
+		if original.match(/^\//) == null
+			throw new Error 'Module ' + original + ' for alias is not valid.'
 
 		@registerModule(alias, "`module.exports = require('#{original}');`")
-
 		return @
 
 
 	addToAutorun: (name) ->
-		fullName = @resolveRegisteredModule(name)
+		if name.match(/^-\s/) == null
+			if name[0] != '/'
+				throw new Error 'Module to run ' + name + ' is not valid.'
 
-		if fullName == null
-			fullName = path.resolve(@getBasePath(), name)
-			if !fs.existsSync(fullName)
-				files = Finder.findFiles(fullName)
+			@run.push(name)
+		else
+			name = name.replace(/^-\s/, '')
+			name = path.resolve(@getBasePath(), name)
+			if fs.existsSync(name)
+				@run.push(name)
+			else
+				files = Finder.findFiles(name)
 				if files.length == 0
-					throw new Error 'Module or library' + name + ' was not found.'
+					throw new Error 'Library to run ' + name + ' was not found.'
 
 				for file in files
 					@addToAutorun(file)
 
-				return @
-
-		@run.push(fullName)
-
 		return @
-
-
-	resolveRegisteredModule: (name) ->
-		if typeof @names[name] != 'undefined'
-			return name
-
-		for ext in Package.SUPPORTED
-			return name + '.' + ext if typeof @names[name + '.' + ext] != 'undefined'
-
-		for ext in Package.SUPPORTED
-			return name + '/index.' + ext if typeof @names[name + '/index.' + ext] != 'undefined'
-
-		return null
 
 
 module.exports = Package

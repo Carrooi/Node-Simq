@@ -82,15 +82,15 @@
         var pckg;
         pckg = simq.addPackage('test');
         pckg.addModule('./modules/1.js');
-        pckg.addToAutorun('modules/1');
-        pckg.addToAutorun('libs/begin/4.js');
+        pckg.addToAutorun('/modules/1');
+        pckg.addToAutorun('- ./libs/begin/4.js');
         return simq.build().then(function(data) {
           expect(data).to.include.keys(['test']);
           expect(data.test).to.include.keys(['css', 'js']);
-          expect(data.test.js).to.have.string("'modules/2.js'");
-          expect(data.test.js).to.have.string("'modules/3.js'");
+          expect(data.test.js).to.have.string("'/modules/2.js'");
+          expect(data.test.js).to.have.string("'/modules/3.js'");
           expect(data.test.js).to.have.string("'module'");
-          expect(data.test.js).to.have.string("require('modules/1.js');");
+          expect(data.test.js).to.have.string("require('/modules/1');");
           expect(data.test.js).to.have.string('// 4');
           return done();
         }).done();
@@ -106,17 +106,17 @@
         var pckg;
         pckg = simq.addPackage('test');
         pckg.addModule('./modules/1.js');
-        pckg.addToAutorun('modules/1');
-        pckg.addToAutorun('libs/begin/4.js');
+        pckg.addToAutorun('/modules/1');
+        pckg.addToAutorun('- ./libs/begin/4.js');
         pckg.setApplication('public/application.js');
         return simq.buildToFiles().then(function(data) {
           data = fs.readFileSync(dir + '/public/application.js', {
             encoding: 'utf8'
           });
-          expect(data).to.have.string("'modules/2.js'");
-          expect(data).to.have.string("'modules/3.js'");
+          expect(data).to.have.string("'/modules/2.js'");
+          expect(data).to.have.string("'/modules/3.js'");
           expect(data).to.have.string("'module'");
-          expect(data).to.have.string("require('modules/1.js');");
+          expect(data).to.have.string("require('/modules/1');");
           expect(data).to.have.string('// 4');
           return done();
         }).done();

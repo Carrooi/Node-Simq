@@ -4,7 +4,12 @@
 			"application": "./public/application.js",
 			"base": "data",
 			"modules": [
-				"./app/*"
+				"./app/*",
+				"./test/*",
+				"./setup.js"
+			],
+			"run": [
+				"/test/Require"
 			]
 		}
 	}

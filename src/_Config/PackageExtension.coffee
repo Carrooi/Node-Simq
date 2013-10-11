@@ -35,6 +35,11 @@ class PackageExtension extends Extension
 			if pckg.fsModules != null
 				throw new Error 'Config: fsModules section is deprecated. Please take a look in new documentation.'
 
+			for lib, i in pckg.libraries.begin
+				pckg.libraries.begin[i] = '- ' + lib
+			for lib, i in pckg.libraries.end
+				pckg.libraries.end[i] = '- ' + lib
+
 			pckg.run.unshift.apply(pckg.run, pckg.libraries.begin)
 			pckg.run.push.apply(pckg.run, pckg.libraries.end)
 

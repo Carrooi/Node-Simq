@@ -8,7 +8,7 @@ if !@require
 	cache = {}
 
 
-	require: (name, parent = null) ->
+	require = (name, parent = null) ->
 		fullName = resolve(name, parent)
 		if fullName == null
 			throw new Error 'Module ' + name + ' was not found.'
@@ -22,22 +22,22 @@ if !@require
 				parent: null
 				children: null
 
-			modules[fullName].apply(modules[fullName], [m.exports, (fullName, parent = null) =>
-				return @require(fullName, parent)
-			, m])
+			modules[fullName].apply(modules[fullName], [m.exports, m])
 
-			m.loaded = false
+			m.loaded = true
 
 			cache[fullName] = m
 
 		return cache[fullName].exports
 
 
-	resolve: (name, parent = null) ->
-		if typeof modules[name] != 'undefined'
-			return name
-
+	resolve = (name, parent = null) ->
 		if parent != null && name[0] != '/'
+
+			# get directory path
+			num = parent.lastIndexOf('/')
+			if num != -1 then parent = parent.substr(0, num)
+
 			name = parent + '/' + name
 			parts = name.split('/')
 			result = []
@@ -53,10 +53,10 @@ if !@require
 
 				prev = part
 
-			name = result.join('/')
+			name = '/' + result.join('/')
 
-			if typeof modules[name] != 'undefined'
-				return name
+		if typeof modules[name] != 'undefined'
+			return name
 
 		for ext in SUPPORTED
 			return name + '.' + ext if typeof modules[name + '.' + ext] != 'undefined'
@@ -78,6 +78,11 @@ if !@require
 	@require.define = (bundle) ->
 		for name, m of bundle
 			modules[name] = m
+
+
+	@require.release = ->
+		for name of cache
+			delete cache[name]
 
 
 	@require.cache = cache
