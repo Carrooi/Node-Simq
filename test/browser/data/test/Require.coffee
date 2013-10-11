@@ -89,3 +89,13 @@ describe 'require', ->
 		it 'should contain required module', ->
 			require('/app/Application')
 			expect(require.cache).to.include.keys(['/app/Application.coffee'])
+
+		it 'should load random number from cache', ->
+			old = require('/app/Random').generate()
+			expect(old).to.be.equal(require('/app/Random').generate())
+
+		it 'should save module to cache again', ->
+			old = require('/app/Random').generate()
+			name = require.resolve('/app/Random')
+			delete require.cache[name]
+			expect(old).not.to.be.equal(require('/app/Random').generate())

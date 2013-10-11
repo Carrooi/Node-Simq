@@ -190,6 +190,42 @@
 	}).call(this);
 	
 
+},'/app/Random.coffee': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/app/Random.coffee');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/app/Random.coffee';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/app/Random.coffee';
+	var __dirname = '/app';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/app/Random.coffee'], env: {}};
+
+	/** code **/
+	(function() {
+	  var Random;
+	
+	  Random = (function() {
+	    function Random() {}
+	
+	    Random.prototype.num = null;
+	
+	    Random.prototype.generate = function() {
+	      if (this.num === null) {
+	        this.num = Math.random();
+	      }
+	      return this.num;
+	    };
+	
+	    return Random;
+	
+	  })();
+	
+	  module.exports = new Random;
+	
+	}).call(this);
+	
+
 },'/app/views/message.eco': function(exports, module) {
 
 	/** node globals **/
@@ -362,9 +398,21 @@
 	      it('should be empty', function() {
 	        return expect(require.cache).to.be.eql({});
 	      });
-	      return it('should contain required module', function() {
+	      it('should contain required module', function() {
 	        require('/app/Application');
 	        return expect(require.cache).to.include.keys(['/app/Application.coffee']);
+	      });
+	      it('should load random number from cache', function() {
+	        var old;
+	        old = require('/app/Random').generate();
+	        return expect(old).to.be.equal(require('/app/Random').generate());
+	      });
+	      return it('should save module to cache again', function() {
+	        var name, old;
+	        old = require('/app/Random').generate();
+	        name = require.resolve('/app/Random');
+	        delete require.cache[name];
+	        return expect(old).not.to.be.equal(require('/app/Random').generate());
 	      });
 	    });
 	  });
