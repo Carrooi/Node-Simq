@@ -21,4 +21,6 @@ for (var name in config.packages) {
 	}
 }
 
-commands.build();
+commands.build().fail(function(err) {
+	throw err;
+}).done();

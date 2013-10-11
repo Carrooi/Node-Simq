@@ -77,17 +77,26 @@
       it('should create new module for alias', function() {
         pckg.addModule('module/test.js');
         pckg.addAlias('/module/test.js', 'test');
-        return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/test.js', "`module.exports = require('/module/test.js');`"]);
+        expect(pckg.aliases).to.be.eql({
+          test: '/module/test.js'
+        });
+        return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/test.js']);
       });
       it('should create new module for alias without extension', function() {
         pckg.addModule('module/test.js');
         pckg.addAlias('/module/test', 'test');
-        return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/test.js', "`module.exports = require('/module/test');`"]);
+        expect(pckg.aliases).to.be.eql({
+          test: '/module/test'
+        });
+        return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/test.js']);
       });
       return it('should create new module for alias without exact file path', function() {
         pckg.addModule('module/any/index.json');
         pckg.addAlias('/module/any', 'any');
-        return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/any/index.json', "`module.exports = require('/module/any');`"]);
+        expect(pckg.aliases).to.be.eql({
+          any: '/module/any'
+        });
+        return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/any/index.json']);
       });
     });
     return describe('#addToAutorun()', function() {

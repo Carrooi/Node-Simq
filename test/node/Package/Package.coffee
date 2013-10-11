@@ -87,25 +87,31 @@ describe 'Package/Package', ->
 		it 'should create new module for alias', ->
 			pckg.addModule('module/test.js')
 			pckg.addAlias('/module/test.js', 'test')
+			expect(pckg.aliases).to.be.eql(
+				test: '/module/test.js'
+			)
 			expect(pckg.modules).to.be.eql([
 				dir + '/node_modules/module/test.js'
-				"`module.exports = require('/module/test.js');`"
 			])
 
 		it 'should create new module for alias without extension', ->
 			pckg.addModule('module/test.js')
 			pckg.addAlias('/module/test', 'test')
+			expect(pckg.aliases).to.be.eql(
+				test: '/module/test'
+			)
 			expect(pckg.modules).to.be.eql([
 				dir + '/node_modules/module/test.js'
-				"`module.exports = require('/module/test');`"
 			])
 
 		it 'should create new module for alias without exact file path', ->
 			pckg.addModule('module/any/index.json')
 			pckg.addAlias('/module/any', 'any')
+			expect(pckg.aliases).to.be.eql(
+				any: '/module/any'
+			)
 			expect(pckg.modules).to.be.eql([
 				dir + '/node_modules/module/any/index.json'
-				"`module.exports = require('/module/any');`"
 			])
 
 	describe '#addToAutorun()', ->

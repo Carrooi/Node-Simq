@@ -62,6 +62,9 @@ class Builder extends Package
 			for name, _path of modules
 				c.push(@compileModule(name, _path))
 
+			for alias, original of @pckg.aliases
+				c.push(Q.resolve("'#{alias}': function(exports, module) { module.exports = window.require('#{original}'); }"))
+
 			Q.all(c).then( (data) ->
 				main = data.shift()
 				deferred.resolve("#{main}({\n#{data}\n});")

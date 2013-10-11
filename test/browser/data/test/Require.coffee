@@ -51,6 +51,15 @@ describe 'require', ->
 		it 'should load simple module without extension', ->
 			expect(require('/app/Application')).to.be.equal('Application')
 
+		it 'should load package file', ->
+			expect(require('/package')).to.be.eql(
+				name: 'browser-test'
+				version: '1.0.0'
+			)
+
+		it 'should load package from alias', ->
+			expect(require('app')).to.be.equal('Application')
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})

@@ -208,8 +208,17 @@
 	      it('should load simple module', function() {
 	        return expect(require('/app/Application.coffee')).to.be.equal('Application');
 	      });
-	      return it('should load simple module without extension', function() {
+	      it('should load simple module without extension', function() {
 	        return expect(require('/app/Application')).to.be.equal('Application');
+	      });
+	      it('should load package file', function() {
+	        return expect(require('/package')).to.be.eql({
+	          name: 'browser-test',
+	          version: '1.0.0'
+	        });
+	      });
+	      return it('should load package from alias', function() {
+	        return expect(require('app')).to.be.equal('Application');
 	      });
 	    });
 	    return describe('cache', function() {
@@ -268,7 +277,7 @@
 	var __dirname = '/';
 	var process = {cwd: function() {return '/';}, argv: ['node', '/index.js'], env: {}};
 
-}
+},'app': function(exports, module) { module.exports = window.require('/app/Application'); }
 });
 
 /** run section **/

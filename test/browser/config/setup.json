@@ -10,7 +10,10 @@
 			],
 			"run": [
 				"/test/Require"
-			]
+			],
+			"aliases": {
+				"app": "/app/Application"
+			}
 		}
 	}
 }

@@ -10,6 +10,8 @@ class Package
 
 	@SUPPORTED = ['js', 'json', 'ts', 'coffee']
 
+	@ALIAS_REGEXP = '^\\<([a-zA-Z0-9/-]+)\\|([a-zA-Z0-9/-]+)\\>$'
+
 
 	basePath: null
 
@@ -22,6 +24,8 @@ class Package
 	style: null
 
 	modules: null
+
+	aliases: null
 
 	names: null
 
@@ -36,6 +40,7 @@ class Package
 		@basePath = path.resolve(@basePath)
 
 		@modules = []
+		@aliases = {}
 		@names = {}
 		@run = []
 
@@ -179,7 +184,7 @@ class Package
 		if original.match(/^\//) == null
 			throw new Error 'Module ' + original + ' for alias is not valid.'
 
-		@registerModule(alias, "`module.exports = require('#{original}');`")
+		@aliases[alias] = original
 		return @
 
 

@@ -74,7 +74,7 @@ class Commands
 
 
 	build: ->
-		@simq.buildToFiles()
+		return @simq.buildToFiles()
 
 
 	watch: ->
