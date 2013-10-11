@@ -212,13 +212,22 @@
 	        return expect(require('/app/Application')).to.be.equal('Application');
 	      });
 	      it('should load package file', function() {
-	        return expect(require('/package')).to.be.eql({
-	          name: 'browser-test',
-	          version: '1.0.0'
-	        });
+	        var data;
+	        data = require('/package');
+	        expect(data).to.include.keys(['name']);
+	        return expect(data.name).to.be.equal('browser-test');
 	      });
-	      return it('should load package from alias', function() {
+	      it('should load package from alias', function() {
 	        return expect(require('app')).to.be.equal('Application');
+	      });
+	      it('should load npm module', function() {
+	        return expect(require('any')).to.be.equal('hello');
+	      });
+	      return it('should load package file from npm module', function() {
+	        var data;
+	        data = require('any/package');
+	        expect(data).to.include.keys(['name']);
+	        return expect(data.name).to.be.equal('any');
 	      });
 	    });
 	    return describe('cache', function() {
@@ -261,7 +270,10 @@
 	module.exports = (function() {
 	return {
 		"name": "browser-test",
-		"version": "1.0.0"
+		"version": "1.0.0",
+		"dependencies": {
+			"any": "latest"
+		}
 	}
 	}).call(this);
 	
@@ -276,6 +288,40 @@
 	var __filename = '/index.js';
 	var __dirname = '/';
 	var process = {cwd: function() {return '/';}, argv: ['node', '/index.js'], env: {}};
+
+},'any/package.json': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'any/package.json');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'any/package.json';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'any/package.json';
+	var __dirname = 'any';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'any/package.json'], env: {}};
+
+	/** code **/
+	module.exports = (function() {
+	return {
+		"name": "any",
+		"version": "1.0.0"
+	}
+	}).call(this);
+	
+
+},'any': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'any');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'any';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'any';
+	var __dirname = '.';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'any'], env: {}};
+
+	/** code **/
+	module.exports = 'hello';
 
 },'app': function(exports, module) { module.exports = window.require('/app/Application'); }
 });

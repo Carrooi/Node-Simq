@@ -49,6 +49,24 @@ class Package
 			if main != null
 				@addModule(main)
 
+			dependencies = @getPackageInfo().getData().dependencies
+			if typeof dependencies == 'object'
+				basePath = @getBasePath()
+
+				if !fs.existsSync(basePath + '/node_modules')
+					throw new Error "Npm modules not found. Did you run 'npm install .' command?"
+
+				for name of dependencies
+					_path = basePath + '/node_modules/' + name
+					if !fs.existsSync(_path)
+						throw new Error "Npm module '#{name}' not found. Did you run 'npm install .' command?"
+
+					pckg = new Info(_path)
+					@addModule(pckg.getPackagePath())
+					main = pckg.getMainFile()
+					if main != null
+						@addModule(main)
+
 			@initialized = true
 
 

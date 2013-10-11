@@ -52,13 +52,20 @@ describe 'require', ->
 			expect(require('/app/Application')).to.be.equal('Application')
 
 		it 'should load package file', ->
-			expect(require('/package')).to.be.eql(
-				name: 'browser-test'
-				version: '1.0.0'
-			)
+			data = require '/package'
+			expect(data).to.include.keys(['name'])
+			expect(data.name).to.be.equal('browser-test')
 
 		it 'should load package from alias', ->
 			expect(require('app')).to.be.equal('Application')
+
+		it 'should load npm module', ->
+			expect(require('any')).to.be.equal('hello')
+
+		it 'should load package file from npm module', ->
+			data = require('any/package')
+			expect(data).to.include.keys(['name'])
+			expect(data.name).to.be.equal('any')
 
 	describe 'cache', ->
 		it 'should be empty', ->
