@@ -2,6 +2,7 @@
 	"packages": {
 		"test": {
 			"application": "./public/application.js",
+			"base": "data",
 			"modules": [
 				"./app/*"
 			]

@@ -118,7 +118,7 @@ class Package
 			if fs.existsSync(_path)
 				found = true
 				pckg = Info.fromFile(_path)
-				name = pckg.getModuleName(name).replace(new RegExp('^' + pckg.getName() + '\/'), '')
+				name = pckg.getModuleName(_path).replace(new RegExp('^' + pckg.getName() + '\/'), '')
 				@registerModule(name, _path)
 			else
 				paths = Finder.findFiles(_path)

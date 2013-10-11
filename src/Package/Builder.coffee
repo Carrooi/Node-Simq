@@ -21,6 +21,11 @@ class Builder extends Package
 			throw new Error 'Package must be an instance of Package/Package'
 
 
+	check: ->
+		if !fs.existsSync(@pckg.getBasePath() + '/package.json')
+			throw new Error 'Package has not got package.json file.'
+
+
 	build: ->
 		deferred = Q.defer()
 
@@ -45,6 +50,8 @@ class Builder extends Package
 
 
 	buildModules: ->
+		@check()
+
 		deferred = Q.defer()
 
 		@prepareModules().then( (modules) =>
@@ -67,6 +74,8 @@ class Builder extends Package
 
 
 	buildAutorun: ->
+		@check()
+
 		deferred = Q.defer()
 
 		run = []
@@ -83,6 +92,8 @@ class Builder extends Package
 
 
 	buildStyles: ->
+		@check()
+
 		if @pckg.style == null
 			return Q.resolve(null)
 
