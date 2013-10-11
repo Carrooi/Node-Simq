@@ -41,7 +41,6 @@ class Package
 
 		@modules = []
 		@aliases = {}
-		@names = {}
 		@run = []
 
 
@@ -177,7 +176,6 @@ class Package
 
 	registerModule: (name, data) ->
 		@modules.push(data)
-		@names[name] = @modules.length - 1
 
 
 	addAlias: (original, alias) ->
