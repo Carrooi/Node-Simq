@@ -82,6 +82,13 @@ describe 'require', ->
 		it 'should load advanced npm module', ->
 			expect(require('advanced')).to.be.equal('advanced/one/two/three')
 
+		it 'should test module which uses core module', (done) ->
+			obj = new (require('/app/WithEvents'))
+			obj.on 'call', (message) ->
+				expect(message).to.be.equal('hello')
+				done()
+			obj.callMe()
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})

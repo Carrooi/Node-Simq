@@ -226,6 +226,46 @@
 	}).call(this);
 	
 
+},'/app/WithEvents.coffee': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/app/WithEvents.coffee');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/app/WithEvents.coffee';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/app/WithEvents.coffee';
+	var __dirname = '/app';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/app/WithEvents.coffee'], env: {}};
+
+	/** code **/
+	(function() {
+	  var EventEmitter, WithEvents, _ref,
+	    __hasProp = {}.hasOwnProperty,
+	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+	
+	  EventEmitter = require('events').EventEmitter;
+	
+	  WithEvents = (function(_super) {
+	    __extends(WithEvents, _super);
+	
+	    function WithEvents() {
+	      _ref = WithEvents.__super__.constructor.apply(this, arguments);
+	      return _ref;
+	    }
+	
+	    WithEvents.prototype.callMe = function() {
+	      return this.emit('call', 'hello');
+	    };
+	
+	    return WithEvents;
+	
+	  })(EventEmitter);
+	
+	  module.exports = WithEvents;
+	
+	}).call(this);
+	
+
 },'/app/views/message.eco': function(exports, module) {
 
 	/** node globals **/
@@ -390,8 +430,17 @@
 	        });
 	        return expect(template).to.be.equal('<span>hello David</span>');
 	      });
-	      return it('should load advanced npm module', function() {
+	      it('should load advanced npm module', function() {
 	        return expect(require('advanced')).to.be.equal('advanced/one/two/three');
+	      });
+	      return it('should test module which uses core module', function(done) {
+	        var obj;
+	        obj = new (require('/app/WithEvents'));
+	        obj.on('call', function(message) {
+	          expect(message).to.be.equal('hello');
+	          return done();
+	        });
+	        return obj.callMe();
 	      });
 	    });
 	    return describe('cache', function() {
