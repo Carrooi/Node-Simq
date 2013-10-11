@@ -63,7 +63,7 @@ describe 'require', ->
 		it 'should load npm module', ->
 			expect(require('any')).to.be.equal('hello')
 
-		it.skip 'should load npm module main file directly', ->
+		it 'should load npm module main file directly', ->
 			expect(require('any/index')).to.be.equal('hello')
 
 		it 'should load package file from npm module', ->

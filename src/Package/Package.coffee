@@ -186,9 +186,6 @@ class Package
 
 
 	addAlias: (original, alias) ->
-		if original.match(/^\//) == null
-			throw new Error 'Module ' + original + ' for alias is not valid.'
-
 		@aliases[alias] = original
 		return @
 

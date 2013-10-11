@@ -289,7 +289,7 @@
 	      it('should load npm module', function() {
 	        return expect(require('any')).to.be.equal('hello');
 	      });
-	      it.skip('should load npm module main file directly', function() {
+	      it('should load npm module main file directly', function() {
 	        return expect(require('any/index')).to.be.equal('hello');
 	      });
 	      it('should load package file from npm module', function() {
@@ -710,7 +710,7 @@
 	/** code **/
 	module.exports = 'hello';
 
-},'app': function(exports, module) { module.exports = window.require('/app/Application'); }
+},'app': function(exports, module) { module.exports = window.require('/app/Application'); },'any/index.js': function(exports, module) { module.exports = window.require('any'); }
 });
 
 /** run section **/

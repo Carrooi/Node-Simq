@@ -5,6 +5,7 @@ Compiler = require 'source-compiler'
 Module = require 'module'
 path = require 'path'
 fs = require 'fs'
+escapeRegexp = require 'escape-regexp'
 
 Package = require './Package'
 Helpers = require '../Helpers'
@@ -158,7 +159,13 @@ class Builder extends Package
 					# installed npm module
 					if Module.globalPaths.indexOf(dir) == -1
 						info = Info.fromFile(file)
-						result[info.getModuleName(file)] = file
+						name = info.getModuleName(file)
+						result[name] = file
+
+						baseName = escapeRegexp(path.basename(file))
+						if name.match(new RegExp(baseName + '$')) == null
+							fullName = info.getName() + '/' + path.relative(info.getPath(), file)
+							@pckg.addAlias(name, fullName)
 
 					# core module
 					else
