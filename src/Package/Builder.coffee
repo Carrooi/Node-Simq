@@ -136,15 +136,10 @@ class Builder extends Package
 	prepareModules: ->
 		deferred = Q.defer()
 
-		# why?
-		paths = []
-		for _path in @pckg.modules
-			paths.push(_path)
-
-		required.findMany(paths, true, require('../../data.json').supportedCores).then( (data) =>
+		required.findMany(@pckg.modules, true, require('../../data.json').supportedCores).then( (data) =>
 			result = {}
 
-			data.files = data.files.concat(paths)
+			data.files = data.files.concat(@pckg.modules)
 			data.files = data.files.filter( (el, pos) -> return data.files.indexOf(el) == pos)
 
 			for file in data.files
