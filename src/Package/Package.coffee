@@ -27,8 +27,6 @@ class Package
 
 	aliases: null
 
-	names: null
-
 	run: null
 
 	info: null
