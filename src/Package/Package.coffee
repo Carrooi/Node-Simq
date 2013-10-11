@@ -120,7 +120,6 @@ class Package
 					if main != null then @modules.push(main)
 					@modules.push(pckg.getPackagePath())
 				else
-					pckg = Info.fromFile(name)
 					@modules.push(name)
 			else
 				paths = Finder.findFiles(name)
@@ -141,8 +140,6 @@ class Package
 			_path = @getPath(name)
 			if fs.existsSync(_path)
 				found = true
-				pckg = Info.fromFile(_path)
-				name = pckg.getModuleName(name).replace(new RegExp('^' + pckg.getName() + '\/'), '')
 				@modules.push(_path)
 			else
 				paths = Finder.findFiles(_path)
@@ -157,7 +154,6 @@ class Package
 			_path = @getPath('./node_modules/' + name)
 			if fs.existsSync(_path)
 				found = true
-				pckg = Info.fromFile(_path)
 				@modules.push(_path)
 			else
 				paths = Finder.findFiles(_path)
