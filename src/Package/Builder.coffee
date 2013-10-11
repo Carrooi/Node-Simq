@@ -135,6 +135,7 @@ class Builder extends Package
 	prepareModules: ->
 		deferred = Q.defer()
 
+		# why?
 		paths = []
 		for _path in @pckg.modules
 			paths.push(_path)
@@ -146,13 +147,20 @@ class Builder extends Package
 			data.files = data.files.filter( (el, pos) -> return data.files.indexOf(el) == pos)
 
 			for file in data.files
+				# module in package
 				if @pckg.getPackageInfo().isFileInModule(file)
 					result['/' + @pckg.getPackageInfo().getModuleName(file, true)] = file
+
+				# core or npm module
 				else
 					dir = path.dirname(file)
+
+					# installed npm module
 					if Module.globalPaths.indexOf(dir) == -1
 						info = Info.fromFile(file)
 						result[info.getModuleName(file)] = file
+
+					# core module
 					else
 						name = path.basename(file, path.extname(file))
 						result[name] = file
@@ -172,7 +180,7 @@ class Builder extends Package
 	compileModule: (name, _path) ->
 		deferred = Q.defer()
 
-		Compiler.compileFile(_path).then( (result) =>
+		Compiler.compileFile(_path, {precompile: true}).then( (result) =>
 			type = path.extname(_path)
 
 			if @autoModule.indexOf(type) != -1

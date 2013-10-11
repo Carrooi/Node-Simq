@@ -6,7 +6,7 @@
   var SUPPORTED, cache, modules, require, resolve;
 
   if (!this.require) {
-    SUPPORTED = ['js', 'json', 'ts', 'coffee'];
+    SUPPORTED = ['js', 'json', 'ts', 'coffee', 'eco'];
     modules = {};
     cache = {};
     require = function(name, parent) {
@@ -143,10 +143,76 @@
 
 	/** code **/
 	(function() {
-	  require('');
+	
 	
 	}).call(this);
 	
+
+},'/app/views/message.eco': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/app/views/message.eco');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/app/views/message.eco';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/app/views/message.eco';
+	var __dirname = '/app/views';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/app/views/message.eco'], env: {}};
+
+	/** code **/
+	module.exports = (function() {
+	  return function(__obj) {
+	    if (!__obj) __obj = {};
+	    var __out = [], __capture = function(callback) {
+	      var out = __out, result;
+	      __out = [];
+	      callback.call(this);
+	      result = __out.join('');
+	      __out = out;
+	      return __safe(result);
+	    }, __sanitize = function(value) {
+	      if (value && value.ecoSafe) {
+	        return value;
+	      } else if (typeof value !== 'undefined' && value != null) {
+	        return __escape(value);
+	      } else {
+	        return '';
+	      }
+	    }, __safe, __objSafe = __obj.safe, __escape = __obj.escape;
+	    __safe = __obj.safe = function(value) {
+	      if (value && value.ecoSafe) {
+	        return value;
+	      } else {
+	        if (!(typeof value !== 'undefined' && value != null)) value = '';
+	        var result = new String(value);
+	        result.ecoSafe = true;
+	        return result;
+	      }
+	    };
+	    if (!__escape) {
+	      __escape = __obj.escape = function(value) {
+	        return ('' + value)
+	          .replace(/&/g, '&amp;')
+	          .replace(/</g, '&lt;')
+	          .replace(/>/g, '&gt;')
+	          .replace(/"/g, '&quot;');
+	      };
+	    }
+	    (function() {
+	      (function() {
+	        __out.push('<span>hello ');
+	      
+	        __out.push(__sanitize(this.name));
+	      
+	        __out.push('</span>');
+	      
+	      }).call(this);
+	      
+	    }).call(__obj);
+	    __obj.safe = __objSafe, __obj.escape = __escape;
+	    return __out.join('');
+	  }
+	}).call(this);
 
 },'/test/Require.coffee': function(exports, module) {
 
@@ -223,18 +289,28 @@
 	      it('should load npm module', function() {
 	        return expect(require('any')).to.be.equal('hello');
 	      });
+	      it.skip('should load npm module main file directly', function() {
+	        return expect(require('any/index')).to.be.equal('hello');
+	      });
 	      it('should load package file from npm module', function() {
 	        var data;
 	        data = require('any/package');
 	        expect(data).to.include.keys(['name']);
 	        return expect(data.name).to.be.equal('any');
 	      });
-	      return it('should load node core module', function() {
+	      it('should load node core module', function() {
 	        var events;
 	        events = new require('events').EventEmitter;
 	        return expect(events).to.satisfy(function(events) {
 	          return Object.prototype.toString.call(events) === '[object Function]';
 	        });
+	      });
+	      return it('should load eco template', function() {
+	        var template;
+	        template = require('/app/views/message.eco')({
+	          name: 'David'
+	        });
+	        return expect(template).to.be.equal('<span>hello David</span>');
 	      });
 	    });
 	    return describe('cache', function() {

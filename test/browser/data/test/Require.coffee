@@ -63,6 +63,9 @@ describe 'require', ->
 		it 'should load npm module', ->
 			expect(require('any')).to.be.equal('hello')
 
+		it.skip 'should load npm module main file directly', ->
+			expect(require('any/index')).to.be.equal('hello')
+
 		it 'should load package file from npm module', ->
 			data = require('any/package')
 			expect(data).to.include.keys(['name'])
@@ -71,6 +74,10 @@ describe 'require', ->
 		it 'should load node core module', ->
 			events = new require('events').EventEmitter
 			expect(events).to.satisfy( (events) -> return Object.prototype.toString.call(events) == '[object Function]')
+
+		it 'should load eco template', ->
+			template = require('/app/views/message.eco')(name: 'David')
+			expect(template).to.be.equal('<span>hello David</span>')
 
 	describe 'cache', ->
 		it 'should be empty', ->

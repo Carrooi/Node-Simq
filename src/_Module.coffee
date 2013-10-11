@@ -1,7 +1,7 @@
 if !@require
 
 
-	SUPPORTED = ['js', 'json', 'ts', 'coffee']
+	SUPPORTED = ['js', 'json', 'ts', 'coffee', 'eco']
 
 	modules = {}
 
