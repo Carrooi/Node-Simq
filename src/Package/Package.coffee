@@ -117,12 +117,11 @@ class Package
 				if fs.statSync(name).isDirectory()
 					pckg = new Info(name)
 					main = pckg.getMainFile()
-					if main != null
-						@registerModule(pckg.getName(), main)
-					@registerModule(pckg.getName() + '/package.json', pckg.getPackagePath())
+					if main != null then @modules.push(main)
+					@modules.push(pckg.getPackagePath())
 				else
 					pckg = Info.fromFile(name)
-					@registerModule(pckg.getModuleName(name), name)
+					@modules.push(name)
 			else
 				paths = Finder.findFiles(name)
 				if paths.length > 0
@@ -135,7 +134,7 @@ class Package
 			_path = Helpers.getCoreModulePath(name)
 			if _path != null
 				found = true
-				@registerModule(name, _path)
+				@modules.push(_path)
 
 		# own modules from project
 		if name[0] == '.' && found == false
@@ -144,7 +143,7 @@ class Package
 				found = true
 				pckg = Info.fromFile(_path)
 				name = pckg.getModuleName(name).replace(new RegExp('^' + pckg.getName() + '\/'), '')
-				@registerModule(name, _path)
+				@modules.push(_path)
 			else
 				paths = Finder.findFiles(_path)
 				if paths.length > 0
@@ -159,7 +158,7 @@ class Package
 			if fs.existsSync(_path)
 				found = true
 				pckg = Info.fromFile(_path)
-				@registerModule(pckg.getModuleName(_path), _path)
+				@modules.push(_path)
 			else
 				paths = Finder.findFiles(_path)
 				if paths.length > 0
@@ -172,10 +171,6 @@ class Package
 			throw new Error 'Module ' + name + ' was not found.'
 
 		return @
-
-
-	registerModule: (name, data) ->
-		@modules.push(data)
 
 
 	addAlias: (original, alias) ->
