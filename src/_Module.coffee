@@ -32,7 +32,7 @@ if !@require
 
 
 	resolve = (name, parent = null) ->
-		if parent != null && name[0] != '/'
+		if parent != null && name[0] == '.'
 
 			# get directory path
 			num = parent.lastIndexOf('/')

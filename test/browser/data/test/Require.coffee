@@ -79,6 +79,9 @@ describe 'require', ->
 			template = require('/app/views/message.eco')(name: 'David')
 			expect(template).to.be.equal('<span>hello David</span>')
 
+		it 'should load advanced npm module', ->
+			expect(require('advanced')).to.be.equal('advanced/one/two/three')
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})

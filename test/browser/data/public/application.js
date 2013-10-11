@@ -38,7 +38,7 @@
       if (parent == null) {
         parent = null;
       }
-      if (parent !== null && name[0] !== '/') {
+      if (parent !== null && name[0] === '.') {
         num = parent.lastIndexOf('/');
         if (num !== -1) {
           parent = parent.substr(0, num);
@@ -112,7 +112,49 @@
   return this.require.define;
 
 }).call(this)({
-'/app/Application.coffee': function(exports, module) {
+'one': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'one');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'one';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'one';
+	var __dirname = '.';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'one'], env: {}};
+
+	/** code **/
+	module.exports = 'one/' + require('two');
+
+},'two': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'two');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'two';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'two';
+	var __dirname = '.';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'two'], env: {}};
+
+	/** code **/
+	module.exports = 'two/' + require('three');
+
+},'three': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'three');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'three';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'three';
+	var __dirname = '.';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'three'], env: {}};
+
+	/** code **/
+	module.exports = 'three';
+
+},'/app/Application.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/Application.coffee');};
@@ -305,12 +347,15 @@
 	          return Object.prototype.toString.call(events) === '[object Function]';
 	        });
 	      });
-	      return it('should load eco template', function() {
+	      it('should load eco template', function() {
 	        var template;
 	        template = require('/app/views/message.eco')({
 	          name: 'David'
 	        });
 	        return expect(template).to.be.equal('<span>hello David</span>');
+	      });
+	      return it('should load advanced npm module', function() {
+	        return expect(require('advanced')).to.be.equal('advanced/one/two/three');
 	      });
 	    });
 	    return describe('cache', function() {
@@ -659,7 +704,8 @@
 		"name": "browser-test",
 		"version": "1.0.0",
 		"dependencies": {
-			"any": "latest"
+			"any": "latest",
+			"advanced": "latest"
 		}
 	}
 	}).call(this);
@@ -710,7 +756,40 @@
 	/** code **/
 	module.exports = 'hello';
 
-},'app': function(exports, module) { module.exports = window.require('/app/Application'); },'any/index.js': function(exports, module) { module.exports = window.require('any'); }
+},'advanced/package.json': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'advanced/package.json');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'advanced/package.json';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'advanced/package.json';
+	var __dirname = 'advanced';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'advanced/package.json'], env: {}};
+
+	/** code **/
+	module.exports = (function() {
+	return {
+		"name": "advanced"
+	}
+	}).call(this);
+	
+
+},'advanced': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'advanced');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'advanced';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'advanced';
+	var __dirname = '.';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'advanced'], env: {}};
+
+	/** code **/
+	module.exports = 'advanced/' + require('one');
+
+},'app': function(exports, module) { module.exports = window.require('/app/Application'); },'one/index.js': function(exports, module) { module.exports = window.require('one'); },'two/index.js': function(exports, module) { module.exports = window.require('two'); },'three/index.js': function(exports, module) { module.exports = window.require('three'); },'any/index.js': function(exports, module) { module.exports = window.require('any'); },'advanced/index.js': function(exports, module) { module.exports = window.require('advanced'); }
 });
 
 /** run section **/
