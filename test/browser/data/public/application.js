@@ -385,7 +385,7 @@
 	      });
 	      it('should load eco template', function() {
 	        var template;
-	        template = require('/app/views/message.eco')({
+	        template = require('/app/views/message')({
 	          name: 'David'
 	        });
 	        return expect(template).to.be.equal('<span>hello David</span>');

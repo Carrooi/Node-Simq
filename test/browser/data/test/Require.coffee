@@ -76,7 +76,7 @@ describe 'require', ->
 			expect(events).to.satisfy( (events) -> return Object.prototype.toString.call(events) == '[object Function]')
 
 		it 'should load eco template', ->
-			template = require('/app/views/message.eco')(name: 'David')
+			template = require('/app/views/message')(name: 'David')
 			expect(template).to.be.equal('<span>hello David</span>')
 
 		it 'should load advanced npm module', ->
