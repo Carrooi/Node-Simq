@@ -29,8 +29,8 @@
       it('should build one module from absolute path', function(done) {
         pckg.addModule(dir + '/modules/1.js');
         return builder.buildModules().then(function(data) {
-          expect(data).to.have.string("'package/modules/2.js'");
-          expect(data).to.have.string("'package/modules/3.js'");
+          expect(data).to.have.string("'modules/2.js'");
+          expect(data).to.have.string("'modules/3.js'");
           expect(data).to.have.string("'module'");
           return done();
         }).done();
@@ -80,8 +80,8 @@
         pckg.addToAutorun('libs/begin/4.js');
         return builder.build().then(function(data) {
           expect(data).to.include.keys(['css', 'js']);
-          expect(data.js).to.have.string("'package/modules/2.js'");
-          expect(data.js).to.have.string("'package/modules/3.js'");
+          expect(data.js).to.have.string("'modules/2.js'");
+          expect(data.js).to.have.string("'modules/3.js'");
           expect(data.js).to.have.string("'module'");
           expect(data.js).to.have.string("require('modules/1.js');");
           expect(data.js).to.have.string('// 4');

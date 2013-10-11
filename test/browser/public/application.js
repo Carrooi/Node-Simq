@@ -113,5 +113,29 @@
   return this.require.define;
 
 }).call(this)({
+'app/Application.coffee': function(exports, __require, module) {
 
+	/** node globals **/
+	var require = function(name) {return __require(name, 'app/Application.coffee');};
+	var __filename = 'app/Application.coffee';
+	var __dirname = 'app';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'app/Application.coffee'], env: {}};
+
+	/** code **/
+	(function() {
+	  var Application;
+	
+	  Application = (function() {
+	    function Application() {}
+	
+	    return Application;
+	
+	  })();
+	
+	  module.exports = Application;
+	
+	}).call(this);
+	
+
+}
 });

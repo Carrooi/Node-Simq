@@ -123,6 +123,8 @@ class Builder extends Package
 		for _path in @pckg.modules
 			paths.push(_path)
 
+		mainInfo = new Info(@pckg.getBasePath())
+
 		required.findMany(paths, true, require('../../data.json').supportedCores).then( (data) ->
 			result = {}
 
@@ -130,8 +132,11 @@ class Builder extends Package
 			data.files = data.files.filter( (el, pos) -> return data.files.indexOf(el) == pos)
 
 			for file in data.files
-				info = Info.fromFile(file)
-				result[info.getModuleName(file)] = file
+				if mainInfo.isFileInModule(file)
+					result[mainInfo.getModuleName(file, true)] = file
+				else
+					info = Info.fromFile(file)
+					result[info.getModuleName(file)] = file
 
 			for name, _path in data.core
 				if _path != null

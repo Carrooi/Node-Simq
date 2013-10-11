@@ -22,8 +22,8 @@ describe 'Package/Builder', ->
 		it 'should build one module from absolute path', (done) ->
 			pckg.addModule(dir + '/modules/1.js')
 			builder.buildModules().then( (data) ->
-				expect(data).to.have.string("'package/modules/2.js'")
-				expect(data).to.have.string("'package/modules/3.js'")
+				expect(data).to.have.string("'modules/2.js'")
+				expect(data).to.have.string("'modules/3.js'")
 				expect(data).to.have.string("'module'")
 				done()
 			).done()
@@ -73,8 +73,8 @@ describe 'Package/Builder', ->
 			pckg.addToAutorun('libs/begin/4.js')
 			builder.build().then( (data) ->
 				expect(data).to.include.keys(['css', 'js'])
-				expect(data.js).to.have.string("'package/modules/2.js'")
-				expect(data.js).to.have.string("'package/modules/3.js'")
+				expect(data.js).to.have.string("'modules/2.js'")
+				expect(data.js).to.have.string("'modules/3.js'")
 				expect(data.js).to.have.string("'module'")
 				expect(data.js).to.have.string("require('modules/1.js');")
 				expect(data.js).to.have.string('// 4')

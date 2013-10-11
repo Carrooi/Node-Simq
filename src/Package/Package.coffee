@@ -91,7 +91,9 @@ class Package
 				found = true
 				if fs.statSync(name).isDirectory()
 					pckg = new Info(name)
-					@registerModule(pckg.getName(), pckg.getMainFile())
+					main = pckg.getMainFile()
+					if main != null
+						@registerModule(pckg.getName(), main)
 					@registerModule(pckg.getName() + '/package.json', pckg.getPackagePath())
 				else
 					pckg = Info.fromFile(name)
