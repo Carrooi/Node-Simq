@@ -1,5 +1,6 @@
 optimist = require 'optimist'
 path = require 'path'
+Compiler = require 'source-compiler'
 
 SimQ = require './lib/_SimQ'
 Commands = require './lib/Commands'
@@ -35,6 +36,13 @@ if argv.command in ['server', 'build', 'watch']
 	commands.on 'build', (simq) ->
 		configurator.invalidate()
 		config = configurator.load()
+
+		cacheDirectory = config.cache.directory
+		if cacheDirectory != null
+			cacheDirectory = path.resolve(basePath, cacheDirectory)
+			Compiler.setCache(cacheDirectory)
+		else
+			Compiler.cache = null
 
 		simq.release()
 		simq.jquerify = config.template.jquerify
