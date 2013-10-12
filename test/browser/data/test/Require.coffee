@@ -89,6 +89,9 @@ describe 'require', ->
 				done()
 			obj.callMe()
 
+		it 'should load module with require to relative module in it', ->
+			expect(require('/app/Bootstrap')).to.be.equal('Bootstrap - Application')
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})

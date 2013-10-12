@@ -185,7 +185,7 @@
 
 	/** code **/
 	(function() {
-	
+	  module.exports = 'Bootstrap - ' + require('./Application');
 	
 	}).call(this);
 	
@@ -478,7 +478,7 @@
 	      it('should load advanced npm module', function() {
 	        return expect(require('advanced')).to.be.equal('advanced/one/two/three');
 	      });
-	      return it('should test module which uses core module', function(done) {
+	      it('should test module which uses core module', function(done) {
 	        var obj;
 	        obj = new (require('/app/WithEvents'));
 	        obj.on('call', function(message) {
@@ -486,6 +486,9 @@
 	          return done();
 	        });
 	        return obj.callMe();
+	      });
+	      return it('should load module with require to relative module in it', function() {
+	        return expect(require('/app/Bootstrap')).to.be.equal('Bootstrap - Application');
 	      });
 	    });
 	    return describe('cache', function() {

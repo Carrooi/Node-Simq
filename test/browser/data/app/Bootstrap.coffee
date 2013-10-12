@@ -1,1 +1,1 @@
-#require ''
+module.exports = 'Bootstrap - ' + require('./Application')
