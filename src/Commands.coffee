@@ -20,7 +20,6 @@ class Commands extends EventEmitter
 
 		main = path.resolve(@basePath + '/' + config.routes.main)
 		if fs.existsSync(main)
-			console.log "Mapping file '#{main}' to '#{base}'" if @v
 			app.get(base, (req, res) ->
 				res.setHeader('Content-Type', 'text/html')
 				res.sendfile(main)
@@ -32,11 +31,9 @@ class Commands extends EventEmitter
 			data = {route: route, path: _path}
 
 			if fs.statSync(_path).isDirectory()
-				console.log "Mapping directory '#{_path}' to '#{route}'" if @v
 				app.use(route, express.static(_path))
 			else
 				((data) =>
-					console.log "Mapping file '#{data.path}' to '#{data.route}'" if @v
 					app.get(data.route, (req, res) ->
 						res.setHeader('Content-Type', mime.lookup(data.path))
 						res.sendfile(data.path)
@@ -49,7 +46,6 @@ class Commands extends EventEmitter
 				((pckg) =>
 					if @hasPackageApplication(pckg.name)
 						_path = base + path.relative(@basePath, pckg.application)
-						console.log 'Mapping file \'' + path.resolve(pckg.application) + '\' to \'' + _path + '\'' if @v
 						app.get(_path, (req, res) =>
 							@buildApplication(pckg.name).then( (content) ->
 								res.setHeader('Content-Type', 'application/javascript')
@@ -59,7 +55,6 @@ class Commands extends EventEmitter
 
 					if @hasPackageStyles(pckg.name)
 						_path = base + path.relative(@basePath, pckg.style.out)
-						console.log 'Mapping file \'' + path.resolve(pckg.style.out) + '\' to \'' + _path + '\'' if @v
 						app.get(_path, (req, res) =>
 							@buildStyles(pckg.name).then( (content) ->
 								res.setHeader('Content-Type', 'text/css')
@@ -117,7 +112,6 @@ class Commands extends EventEmitter
 			#if config.cache.directory != null
 			#	_path = path.resolve(@basePath + '/' + config.cache.directory + '/__source_compiler.json')
 			#	if fs.existsSync(_path)
-			#		console.log "Removing temp files" if @v
 			#		fs.unlinkSync(_path)
 
 

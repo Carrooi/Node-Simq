@@ -16,7 +16,6 @@ argv = optimist.usage([
 	'	--help: show this help'
 ].join('\n'))
 .alias('c', 'config').describe('c', 'set custom config file')
-.alias('v', 'verbose').describe('v', 'make SimQ more talkative')
 .argv
 
 argv.command = argv._[0]
