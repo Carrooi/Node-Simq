@@ -4,21 +4,11 @@ class DebuggerExtension extends Extension
 
 
 	defaults:
-		styles: false
-		scripts: false
-		sourceMap: false
-		sourceMaps: false
+		minify: true
 
 
 	loadConfiguration: ->
-		config = @getConfig(@defaults)
-
-		if config.sourceMap == true && config.sourceMaps == false
-			config.sourceMaps = config.sourceMap
-
-		delete config.sourceMap
-
-		return config
+		return @getConfig(@defaults)
 
 
 module.exports = DebuggerExtension

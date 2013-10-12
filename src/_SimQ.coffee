@@ -13,6 +13,8 @@ class SimQ
 
 	jquerify: false
 
+	minify: false
+
 
 	constructor: (@basePath) ->
 		@packages = {}
@@ -63,6 +65,7 @@ class SimQ
 
 		builder = new Builder(@packages[name])
 		builder.jquerify = @jquerify
+		builder.minify = @minify
 
 		return builder.build()
 
