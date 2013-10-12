@@ -90,23 +90,21 @@ class Commands extends EventEmitter
 
 
 	create: (name) ->
-		deferred = Q.defer()
-
 		if !name
-			deferred.reject(new Error 'Please enter name of new application.')
+			return Q.reject(new Error 'Please enter name of new application.')
 
 		_path = path.resolve(@simq.basePath + '/' + name)
 
 		if fs.existsSync(_path)
-			deferred.reject(new Error 'Directory ' + name + ' already exists.')
+			return Q.reject(new Error 'Directory ' + name + ' already exists.')
 
+		deferred = Q.defer()
 		ncp.ncp(path.normalize(__dirname + '/../sandbox'), _path, (err) ->
 			if err
 				deferred.reject(new Error 'There is some error with creating new application.')
 			else
 				deferred.resolve()
 		)
-
 		return deferred.promise
 
 

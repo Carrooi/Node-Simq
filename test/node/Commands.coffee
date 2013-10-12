@@ -37,3 +37,7 @@ describe 'Commands', ->
 				])
 				rimraf(dir + '/test', -> done())
 			).done()
+
+	#describe '#clean()', ->
+	#	it 'should remove all files created by simq', ->
+	#		simq = new SimQ(dir + '/')
