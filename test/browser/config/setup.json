@@ -7,14 +7,16 @@
 				"./app/*",
 				"./test/*",
 				"./setup.js",
-				"events"
+				"events",
+				"./libs/jquery.js"
 			],
 			"run": [
 				"- ./libs/one.js",
-				"/test/Require",
 				"/app/Two",
 				"- ./libs/three.js",
-				"/test/Libraries"
+				"/test/Require",
+				"/test/Libraries",
+				"/test/Styles"
 			],
 			"libraries": {
 				"begin": [
@@ -23,6 +25,10 @@
 			},
 			"aliases": {
 				"app": "/app/Application"
+			},
+			"style": {
+				"in": "./styles/style.less",
+				"out": "./public/style.css"
 			}
 		}
 	}
