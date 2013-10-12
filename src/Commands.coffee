@@ -2,13 +2,12 @@ fs = require 'fs'
 ncp = require 'ncp'
 path = require 'path'
 express = require 'express'
+EventEmitter = require('events').EventEmitter
 
-class Commands
+class Commands extends EventEmitter
 
 
 	simq: null
-
-	v: false
 
 
 	constructor: (@simq) ->
@@ -74,6 +73,7 @@ class Commands
 
 
 	build: ->
+		@emit('build', @simq)
 		return @simq.buildToFiles()
 
 
@@ -85,9 +85,8 @@ class Commands
 			if pckg.application != null then ignore.push(pckg.application)
 			if pckg.style != null then ignore.push(pckg.style.out)
 
-		watch.watchTree(@basePath, {},  (file, curr, prev) =>
+		watch.watchTree(@simq.basePath, {},  (file, curr, prev) =>
 			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^\./) == null && ignore.indexOf(path.resolve(file)) == -1		# filter in option is not working...
-				console.log file if @v
 				@build()
 		)
 
@@ -110,11 +109,9 @@ class Commands
 	clean: ->
 		for name, pckg in @simq.packages
 			if pckg.application != null && fs.existsSync(pckg.application)
-				console.log "Removing '#{pckg.application}' file" if @v
 				fs.unlinkSync(pckg.application)
 
 			if pckg.style != null && fs.existsSync(pckg.style.out)
-				console.log "Removing '#{pckg.style.out}' file" if @v
 				fs.unlinkSync(pckg.style.out)
 
 			#if config.cache.directory != null

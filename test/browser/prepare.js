@@ -12,16 +12,20 @@ var simq = new SimQ(basePath);
 var commands = new Commands(simq);
 var configurator = new Configurator(configPath);
 
-var config = configurator.load();
+commands.on('build', function(simq) {
+	configurator.invalidate();
+	var config = configurator.load();
 
-simq.jquerify = config.template.jquerify;
+	simq.release();
+	simq.jquerify = config.template.jquerify;
 
-for (var name in config.packages) {
-	if (config.packages.hasOwnProperty(name)) {
-		var pckg = Factory.create(basePath, config.packages[name]);
-		simq.addPackage(name, pckg);
+	for (var name in config.packages) {
+		if (config.packages.hasOwnProperty(name)) {
+			var pckg = Factory.create(basePath, config.packages[name]);
+			simq.addPackage(name, pckg);
+		}
 	}
-}
+});
 
 commands.build().fail(function(err) {
 	throw err;

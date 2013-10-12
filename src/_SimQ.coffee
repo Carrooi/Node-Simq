@@ -18,6 +18,11 @@ class SimQ
 		@packages = {}
 
 
+	release: ->
+		@packages = {}
+		@jquerify = false
+
+
 	hasPackage: (name) ->
 		return typeof @packages[name] != 'undefined'
 

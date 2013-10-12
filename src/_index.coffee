@@ -31,14 +31,18 @@ if argv.command in ['server', 'build', 'watch']
 	configPath = basePath + '/' + (if argv.c then argv.c else './config/setup.json')
 	configPath = path.resolve(configPath)
 
-	config = new Configurator(configPath)
-	config = config.load()
+	configurator = new Configurator(configPath)
 
-	simq.jquerify = config.template.jquerify
+	commands.on 'build', (simq) ->
+		configurator.invalidate()
+		config = configurator.load()
 
-	for name, pckg of config.packages
-		pckg = Factory.create(basePath, pckg)
-		simq.addPackage(name, pckg)
+		simq.release()
+		simq.jquerify = config.template.jquerify
+
+		for name, pckg of config.packages
+			pckg = Factory.create(basePath, pckg)
+			simq.addPackage(name, pckg)
 
 switch argv.command
 	when 'create' then commands.create(argv.targets[0])
