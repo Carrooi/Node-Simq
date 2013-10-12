@@ -3,6 +3,8 @@
 # rewrite module specific require
 require = window.require
 
+$ = require '/libs/jquery'
+
 
 describe 'require', ->
 
@@ -77,7 +79,8 @@ describe 'require', ->
 
 		it 'should load eco template', ->
 			template = require('/app/views/message')(name: 'David')
-			expect(template).to.be.equal('<span>hello David</span>')
+			expect(template).to.be.an.instanceof($)
+			expect(template.html()).to.be.equal('hello David')
 
 		it 'should load advanced npm module', ->
 			expect(require('advanced')).to.be.equal('advanced/one/two/three')

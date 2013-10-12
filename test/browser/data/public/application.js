@@ -296,8 +296,13 @@
 	var process = {cwd: function() {return '/';}, argv: ['node', '/app/views/message.eco'], env: {}};
 
 	/** code **/
-	module.exports = (function() {
-	  return function(__obj) {
+	module.exports = function (values, data) {
+	var $ = jQuery, result = $();
+	values = $.makeArray(values);
+	data = data || {};
+	for (var i=0; i < values.length; i++) {
+	var value = $.extend({}, values[i], data, {index: i});
+	var elem  = $((function(__obj) {
 	    if (!__obj) __obj = {};
 	    var __out = [], __capture = function(callback) {
 	      var out = __out, result;
@@ -347,8 +352,12 @@
 	    }).call(__obj);
 	    __obj.safe = __objSafe, __obj.escape = __escape;
 	    return __out.join('');
-	  }
-	}).call(this);
+	  })(value));
+	elem.data('item', value);
+	$.merge(result, elem);
+	}
+	return result;
+	};
 
 }, '/test/Libraries.coffee': function(exports, module) {
 
@@ -390,9 +399,11 @@
 
 	/** code **/
 	(function() {
-	  var require;
+	  var $, require;
 	
 	  require = window.require;
+	
+	  $ = require('/libs/jquery');
 	
 	  describe('require', function() {
 	    beforeEach(function() {
@@ -473,7 +484,8 @@
 	        template = require('/app/views/message')({
 	          name: 'David'
 	        });
-	        return expect(template).to.be.equal('<span>hello David</span>');
+	        expect(template).to.be.an["instanceof"]($);
+	        return expect(template.html()).to.be.equal('hello David');
 	      });
 	      it('should load advanced npm module', function() {
 	        return expect(require('advanced')).to.be.equal('advanced/one/two/three');

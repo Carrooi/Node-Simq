@@ -12,7 +12,9 @@ var simq = new SimQ(basePath);
 var commands = new Commands(simq);
 var configurator = new Configurator(configPath);
 
-var config = configurator.load()
+var config = configurator.load();
+
+simq.jquerify = config.template.jquerify;
 
 for (var name in config.packages) {
 	if (config.packages.hasOwnProperty(name)) {

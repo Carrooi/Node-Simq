@@ -34,6 +34,8 @@ if argv.command in ['server', 'build', 'watch']
 	config = new Configurator(configPath)
 	config = config.load()
 
+	simq.jquerify = config.template.jquerify
+
 	for name, pckg of config.packages
 		pckg = Factory.create(basePath, pckg)
 		simq.addPackage(name, pckg)

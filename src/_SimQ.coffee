@@ -11,6 +11,8 @@ class SimQ
 
 	basePath: null
 
+	jquerify: false
+
 
 	constructor: (@basePath) ->
 		@packages = {}
@@ -54,7 +56,10 @@ class SimQ
 		if !@hasPackage(name)
 			throw new Error 'Package ' + name + ' is not registered.'
 
-		return (new Builder(@packages[name])).build()
+		builder = new Builder(@packages[name])
+		builder.jquerify = @jquerify
+
+		return builder.build()
 
 
 	buildPackageToFile: (name) ->

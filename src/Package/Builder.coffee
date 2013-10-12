@@ -15,6 +15,8 @@ class Builder extends Package
 
 	pckg: null
 
+	jquerify: false
+
 	autoModule: ['.json', '.eco']
 
 
@@ -184,7 +186,7 @@ class Builder extends Package
 	compileModule: (name, _path) ->
 		deferred = Q.defer()
 
-		Compiler.compileFile(_path, {precompile: true}).then( (result) =>
+		Compiler.compileFile(_path, {precompile: true, jquerify: @jquerify}).then( (result) =>
 			type = path.extname(_path)
 
 			if @autoModule.indexOf(type) != -1
