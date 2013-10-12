@@ -34,10 +34,25 @@ describe 'Commands', ->
 				expect(files).to.be.eql([
 					dir + '/test/config/setup.json'
 					dir + '/test/css/style.less'
+					dir + '/test/package.json'
 					dir + '/test/public/application.js'
 					dir + '/test/public/index.html'
 				])
 				rimraf(dir + '/test', -> done())
+			).done()
+
+		it 'should build application from sandbox', (done) ->
+			commands.create('test').then( ->
+				s = new SimQ(dir + '/test')
+				c = new Commands(s)
+
+				configurator = new Configurator(dir + '/test/config/setup.json')
+				pckg = Factory.create(s.basePath, configurator.load().packages.application)
+				s.addPackage('test', pckg)
+
+				c.build().then( ->
+					rimraf(dir + '/test', -> done())
+				).done()
 			).done()
 
 	describe.skip '#clean()', ->

@@ -37,14 +37,29 @@
           return done();
         }).done();
       });
-      return it('should create new project from sandbox', function(done) {
+      it('should create new project from sandbox', function(done) {
         return commands.create('test').then(function() {
           var files;
           files = Finder.findFiles(dir + '/test/*');
-          expect(files).to.be.eql([dir + '/test/config/setup.json', dir + '/test/css/style.less', dir + '/test/public/application.js', dir + '/test/public/index.html']);
+          expect(files).to.be.eql([dir + '/test/config/setup.json', dir + '/test/css/style.less', dir + '/test/package.json', dir + '/test/public/application.js', dir + '/test/public/index.html']);
           return rimraf(dir + '/test', function() {
             return done();
           });
+        }).done();
+      });
+      return it('should build application from sandbox', function(done) {
+        return commands.create('test').then(function() {
+          var c, configurator, pckg, s;
+          s = new SimQ(dir + '/test');
+          c = new Commands(s);
+          configurator = new Configurator(dir + '/test/config/setup.json');
+          pckg = Factory.create(s.basePath, configurator.load().packages.application);
+          s.addPackage('test', pckg);
+          return c.build().then(function() {
+            return rimraf(dir + '/test', function() {
+              return done();
+            });
+          }).done();
         }).done();
       });
     });

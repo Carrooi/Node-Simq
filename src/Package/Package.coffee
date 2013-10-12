@@ -159,11 +159,10 @@ class Package
 				@modules.push(_path)
 			else
 				paths = Finder.findFiles(_path)
-				if paths.length > 0
-					found = true
-					for _path in paths
-						_path = path.relative(@getBasePath(), _path)
-						@addModule('./' + _path)
+				found = true
+				for _path in paths
+					_path = path.relative(@getBasePath(), _path)
+					@addModule('./' + _path)
 
 		# npm modules in node_modules directory
 		if found == false
