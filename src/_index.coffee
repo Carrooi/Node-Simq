@@ -23,6 +23,7 @@ argv.command = argv._[0]
 argv.targets = argv._[1..]
 
 basePath = process.cwd()
+cacheDirectory = null
 
 simq = new SimQ(basePath)
 commands = new Commands(simq)
@@ -57,4 +58,5 @@ switch argv.command
 	when 'server' then commands.server()
 	when 'build' then commands.build()
 	when 'watch' then commands.watch()
+	when 'clean' then commands.clean(cacheDirectory)
 	else optimist.showHelp()

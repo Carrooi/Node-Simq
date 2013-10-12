@@ -2,6 +2,7 @@ fs = require 'fs'
 ncp = require 'ncp'
 path = require 'path'
 express = require 'express'
+Compiler = require 'source-compiler'
 EventEmitter = require('events').EventEmitter
 
 class Commands extends EventEmitter
@@ -101,7 +102,7 @@ class Commands extends EventEmitter
 		)
 
 
-	clean: ->
+	clean: (cacheDirectory = null) ->
 		for name, pckg in @simq.packages
 			if pckg.application != null && fs.existsSync(pckg.application)
 				fs.unlinkSync(pckg.application)
@@ -109,10 +110,10 @@ class Commands extends EventEmitter
 			if pckg.style != null && fs.existsSync(pckg.style.out)
 				fs.unlinkSync(pckg.style.out)
 
-			#if config.cache.directory != null
-			#	_path = path.resolve(@basePath + '/' + config.cache.directory + '/__source_compiler.json')
-			#	if fs.existsSync(_path)
-			#		fs.unlinkSync(_path)
+			if cacheDirectory != null
+				_path = path.resolve(cacheDirectory + '/__' + Compiler.CACHE_NAMESPACE + '.json')
+				if fs.existsSync(_path)
+					fs.unlinkSync(_path)
 
 
 
