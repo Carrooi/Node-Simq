@@ -90,7 +90,7 @@ class Builder extends Package
 			run.push(@loadForAutorun(_path))
 
 		Q.all(run).then( (data) ->
-			deferred.resolve(data.join('\n'))
+			deferred.resolve(data.join('\n\n'))
 		).fail( (err) ->
 			deferred.reject(err)
 		)
@@ -122,13 +122,15 @@ class Builder extends Package
 		deferred = Q.defer()
 
 		if fs.existsSync(_path)
-			Compiler.compileFile(_path).then( (data) ->
+			Compiler.compileFile(_path).then( (data) =>
+				p = path.relative(@pckg.getBasePath(), _path)
+				data = "/** #{p} **/\n#{data}"
 				deferred.resolve(data)
 			).fail( (err) ->
 				deferred.reject(err)
 			)
 		else
-			deferred.resolve("require('#{_path}');")
+			deferred.resolve("/** #{_path} **/\nrequire('#{_path}');")
 
 		return deferred.promise
 

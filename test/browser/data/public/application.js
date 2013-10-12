@@ -942,11 +942,22 @@
 
 /** run section **/
 
+/** libs/prepare.js **/
 window._test = {
 	initialized: true
 };
+
+/** libs/one.js **/
 window._test.one = true;
+
+/** /test/Require **/
 require('/test/Require');
+
+/** /app/Two **/
 require('/app/Two');
+
+/** libs/three.js **/
 window._test.three = true;
+
+/** /test/Libraries **/
 require('/test/Libraries');

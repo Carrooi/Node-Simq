@@ -41,7 +41,8 @@
         pckg.addToAutorun('/modules/1');
         pckg.addToAutorun('- ./libs/begin/4.js');
         return builder.buildAutorun().then(function(data) {
-          expect(data).to.be.equal(["require('/modules/1');", '// 4'].join('\n'));
+          expect(data).to.have.string("require('/modules/1');");
+          expect(data).to.have.string('// 4');
           return done();
         }).done();
       });
