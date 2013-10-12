@@ -6,7 +6,7 @@ rimraf = require 'rimraf'
 SimQ = require '../../lib/_SimQ'
 Commands = require '../../lib/Commands'
 
-dir = path.resolve(__dirname + '/../data')
+dir = path.resolve(__dirname + '/..')
 
 simq = null
 commands = null
@@ -20,9 +20,9 @@ describe 'Commands', ->
 
 	describe '#create()', ->
 		it 'should throw an error if path already exists', (done) ->
-			commands.create('package').fail( (err) ->
+			commands.create('data').fail( (err) ->
 				expect(err).to.be.an.instanceof(Error)
-				expect(err.message).to.be.equal('Directory package already exists.')
+				expect(err.message).to.be.equal('Directory data already exists.')
 				done()
 			).done()
 
@@ -35,6 +35,5 @@ describe 'Commands', ->
 					dir + '/test/public/application.js'
 					dir + '/test/public/index.html'
 				])
-
 				rimraf(dir + '/test', -> done())
 			).done()

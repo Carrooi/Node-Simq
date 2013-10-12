@@ -14,7 +14,7 @@
 
   Commands = require('../../lib/Commands');
 
-  dir = path.resolve(__dirname + '/../data');
+  dir = path.resolve(__dirname + '/..');
 
   simq = null;
 
@@ -27,9 +27,9 @@
     });
     return describe('#create()', function() {
       it('should throw an error if path already exists', function(done) {
-        return commands.create('package').fail(function(err) {
+        return commands.create('data').fail(function(err) {
           expect(err).to.be.an["instanceof"](Error);
-          expect(err.message).to.be.equal('Directory package already exists.');
+          expect(err.message).to.be.equal('Directory data already exists.');
           return done();
         }).done();
       });

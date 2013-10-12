@@ -47,7 +47,7 @@ describe 'Package/Builder', ->
 			).done()
 
 	describe '#buildStyles()', ->
-		it.skip 'should build styles', (done) ->
+		it 'should build styles', (done) ->
 			pckg.setStyle('./css/style.less', './public/style.css')
 			builder.buildStyles().then( (data) ->
 				expect(data).to.be.equal('body {\n  color: #000000;\n}\n')
