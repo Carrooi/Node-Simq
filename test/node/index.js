@@ -4,4 +4,5 @@ require('./Package/Builder');
 require('./Package/Builder.baseNamespace');
 require('./SimQ');
 require('./Config/Configurator');
-require('./Package/Factory')
+require('./Package/Factory');
+require('./Commands');

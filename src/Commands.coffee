@@ -3,6 +3,7 @@ ncp = require 'ncp'
 path = require 'path'
 express = require 'express'
 Compiler = require 'source-compiler'
+Q = require 'q'
 EventEmitter = require('events').EventEmitter
 
 class Commands extends EventEmitter
@@ -83,23 +84,30 @@ class Commands extends EventEmitter
 
 		watch.watchTree(@simq.basePath, {},  (file, curr, prev) =>
 			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^\./) == null && ignore.indexOf(path.resolve(file)) == -1		# filter in option is not working...
+				console.log file
 				@build()
 		)
 
 
 	create: (name) ->
-		if !name
-			throw new Error 'Please enter name of new application.'
+		deferred = Q.defer()
 
-		_path = path.resolve(name)
+		if !name
+			deferred.reject(new Error 'Please enter name of new application.')
+
+		_path = path.resolve(@simq.basePath + '/' + name)
 
 		if fs.existsSync(_path)
-			throw new Error 'Directory with ' + name + ' name is already exists.'
+			deferred.reject(new Error 'Directory ' + name + ' already exists.')
 
 		ncp.ncp(path.normalize(__dirname + '/../sandbox'), _path, (err) ->
 			if err
-				throw new Error 'There is some error with creating new application.'
+				deferred.reject(new Error 'There is some error with creating new application.')
+			else
+				deferred.resolve()
 		)
+
+		return deferred.promise
 
 
 	clean: (cacheDirectory = null) ->

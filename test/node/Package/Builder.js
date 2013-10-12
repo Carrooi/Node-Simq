@@ -56,7 +56,7 @@
       });
     });
     describe('#buildStyles()', function() {
-      it('should build styles', function(done) {
+      it.skip('should build styles', function(done) {
         pckg.setStyle('./css/style.less', './public/style.css');
         return builder.buildStyles().then(function(data) {
           expect(data).to.be.equal('body {\n  color: #000000;\n}\n');
