@@ -5,8 +5,10 @@ rimraf = require 'rimraf'
 
 SimQ = require '../../lib/_SimQ'
 Commands = require '../../lib/Commands'
+Factory = require '../../lib/Package/Factory'
+Configurator = require '../../lib/_Config/Configurator'
 
-dir = path.resolve(__dirname + '/..')
+dir = path.resolve(__dirname + '/../data')
 
 simq = null
 commands = null
@@ -20,9 +22,9 @@ describe 'Commands', ->
 
 	describe '#create()', ->
 		it 'should throw an error if path already exists', (done) ->
-			commands.create('data').fail( (err) ->
+			commands.create('package').fail( (err) ->
 				expect(err).to.be.an.instanceof(Error)
-				expect(err.message).to.be.equal('Directory data already exists.')
+				expect(err.message).to.be.equal('Directory package already exists.')
 				done()
 			).done()
 
@@ -38,6 +40,17 @@ describe 'Commands', ->
 				rimraf(dir + '/test', -> done())
 			).done()
 
-	#describe '#clean()', ->
-	#	it 'should remove all files created by simq', ->
-	#		simq = new SimQ(dir + '/')
+	describe.skip '#clean()', ->
+		it 'should remove all files created by simq', (done) ->
+			commands.create('test').then( ->
+				simq = new SimQ(dir + '/test')
+				commands = new Commands(simq)
+
+				configurator = new Configurator(dir + '/test/config/setup.json')
+				pckg = Factory.create(simq.basePath, configurator.load().packages.application)
+				simq.addPackage('test', pckg)
+
+				commands.build().then( ->
+					rimraf(dir + '/test', -> done())
+				).done()
+			).done()
