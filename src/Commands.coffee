@@ -109,7 +109,7 @@ class Commands extends EventEmitter
 
 
 	clean: (cacheDirectory = null) ->
-		for name, pckg in @simq.packages
+		for name, pckg of @simq.packages
 			if pckg.application != null && fs.existsSync(pckg.application)
 				fs.unlinkSync(pckg.application)
 
@@ -117,7 +117,7 @@ class Commands extends EventEmitter
 				fs.unlinkSync(pckg.style.out)
 
 			if cacheDirectory != null
-				_path = path.resolve(cacheDirectory + '/__' + Compiler.CACHE_NAMESPACE + '.json')
+				_path = path.join(@simq.basePath, cacheDirectory + '/__' + Compiler.CACHE_NAMESPACE + '.json')
 				if fs.existsSync(_path)
 					fs.unlinkSync(_path)
 

@@ -3,6 +3,7 @@ path = require 'path'
 Finder = require 'fs-finder'
 rimraf = require 'rimraf'
 fs = require 'fs'
+Compiler = require 'source-compiler'
 
 SimQ = require '../../lib/_SimQ'
 Commands = require '../../lib/Commands'
@@ -58,17 +59,24 @@ describe 'Commands', ->
 				).done()
 			).done()
 
-	describe.skip '#clean()', ->
+	describe '#clean()', ->
 		it 'should remove all files created by simq', (done) ->
 			commands.create('test').then( ->
-				simq = new SimQ(dir + '/test')
-				commands = new Commands(simq)
+				s = new SimQ(dir + '/test')
+				c = new Commands(s)
 
 				configurator = new Configurator(dir + '/test/config/setup.json')
-				pckg = Factory.create(simq.basePath, configurator.load().packages.application)
-				simq.addPackage('test', pckg)
+				pckg = Factory.create(s.basePath, configurator.load().packages.application)
+				s.addPackage('test', pckg)
 
-				commands.build().then( ->
+				c.build().then( ->
+					fs.writeFileSync(dir + '/cache/__' + Compiler.CACHE_NAMESPACE + '.json', '{}')
+					c.clean('../cache')
+
+					expect(fs.existsSync(dir + '/test/public/application.js')).to.be.false
+					expect(fs.existsSync(dir + '/test/public/style.css')).to.be.false
+					expect(fs.existsSync(dir + '/cache/__' + Compiler.CACHE_NAMESPACE + '.json')).to.be.false
+
 					rimraf(dir + '/test', -> done())
 				).done()
 			).done()
