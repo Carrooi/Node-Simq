@@ -10,8 +10,17 @@
 				"events"
 			],
 			"run": [
-				"/test/Require"
+				"- ./libs/one.js",
+				"/test/Require",
+				"/app/Two",
+				"- ./libs/three.js",
+				"/test/Libraries"
 			],
+			"libraries": {
+				"begin": [
+					"./libs/prepare.js"
+				]
+			},
 			"aliases": {
 				"app": "/app/Application"
 			}

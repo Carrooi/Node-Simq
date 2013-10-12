@@ -226,6 +226,24 @@
 	}).call(this);
 	
 
+},'/app/Two.coffee': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/app/Two.coffee');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/app/Two.coffee';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/app/Two.coffee';
+	var __dirname = '/app';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/app/Two.coffee'], env: {}};
+
+	/** code **/
+	(function() {
+	  window._test.two = true;
+	
+	}).call(this);
+	
+
 },'/app/WithEvents.coffee': function(exports, module) {
 
 	/** node globals **/
@@ -331,6 +349,33 @@
 	    return __out.join('');
 	  }
 	}).call(this);
+
+},'/test/Libraries.coffee': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/test/Libraries.coffee');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/test/Libraries.coffee';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/test/Libraries.coffee';
+	var __dirname = '/test';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/test/Libraries.coffee'], env: {}};
+
+	/** code **/
+	(function() {
+	  describe('Libraries & run', function() {
+	    return it('should be created test variable in window', function() {
+	      return expect(window._test).to.be.eql({
+	        initialized: true,
+	        one: true,
+	        two: true,
+	        three: true
+	      });
+	    });
+	  });
+	
+	}).call(this);
+	
 
 },'/test/Require.coffee': function(exports, module) {
 
@@ -891,4 +936,11 @@
 
 /** run section **/
 
+window._test = {
+	initialized: true
+};
+window._test.one = true;
 require('/test/Require');
+require('/app/Two');
+window._test.three = true;
+require('/test/Libraries');
