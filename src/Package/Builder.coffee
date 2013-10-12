@@ -65,7 +65,7 @@ class Builder extends Package
 				c.push(@compileModule(name, _path))
 
 			for alias, original of @pckg.aliases
-				c.push(Q.resolve("'#{alias}': function(exports, module) { module.exports = window.require('#{original}'); }"))
+				c.push(Q.resolve(" '#{alias}': function(exports, module) { module.exports = window.require('#{original}'); }\n"))
 
 			Q.all(c).then( (data) ->
 				main = data.shift()
@@ -194,7 +194,7 @@ class Builder extends Package
 				result = '\n'
 
 			globals = '\t' + Helpers.getGlobalsForModule(name).join('\n').replace(/\n/g, '\n\t')
-			result = "'#{name}': function(exports, module) {\n\n\t/** node globals **/\n#{globals}#{result}\n}"
+			result = " '#{name}': function(exports, module) {\n\n\t/** node globals **/\n#{globals}#{result}\n}"
 
 			deferred.resolve(result)
 		).fail( (err) ->

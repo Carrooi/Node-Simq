@@ -112,7 +112,7 @@
   return this.require.define;
 
 }).call(this)({
-'one': function(exports, module) {
+ 'one': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'one');};
@@ -126,7 +126,7 @@
 	/** code **/
 	module.exports = 'one/' + require('two');
 
-},'two': function(exports, module) {
+}, 'two': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'two');};
@@ -140,7 +140,7 @@
 	/** code **/
 	module.exports = 'two/' + require('three');
 
-},'three': function(exports, module) {
+}, 'three': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'three');};
@@ -154,7 +154,7 @@
 	/** code **/
 	module.exports = 'three';
 
-},'/app/Application.coffee': function(exports, module) {
+}, '/app/Application.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/Application.coffee');};
@@ -172,7 +172,7 @@
 	}).call(this);
 	
 
-},'/app/Bootstrap.coffee': function(exports, module) {
+}, '/app/Bootstrap.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/Bootstrap.coffee');};
@@ -190,7 +190,7 @@
 	}).call(this);
 	
 
-},'/app/Random.coffee': function(exports, module) {
+}, '/app/Random.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/Random.coffee');};
@@ -226,7 +226,7 @@
 	}).call(this);
 	
 
-},'/app/Two.coffee': function(exports, module) {
+}, '/app/Two.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/Two.coffee');};
@@ -244,7 +244,7 @@
 	}).call(this);
 	
 
-},'/app/WithEvents.coffee': function(exports, module) {
+}, '/app/WithEvents.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/WithEvents.coffee');};
@@ -284,7 +284,7 @@
 	}).call(this);
 	
 
-},'/app/views/message.eco': function(exports, module) {
+}, '/app/views/message.eco': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/app/views/message.eco');};
@@ -350,7 +350,7 @@
 	  }
 	}).call(this);
 
-},'/test/Libraries.coffee': function(exports, module) {
+}, '/test/Libraries.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/test/Libraries.coffee');};
@@ -377,7 +377,7 @@
 	}).call(this);
 	
 
-},'/test/Require.coffee': function(exports, module) {
+}, '/test/Require.coffee': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/test/Require.coffee');};
@@ -514,7 +514,7 @@
 	}).call(this);
 	
 
-},'/setup.js': function(exports, module) {
+}, '/setup.js': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/setup.js');};
@@ -525,7 +525,7 @@
 	var __dirname = '/';
 	var process = {cwd: function() {return '/';}, argv: ['node', '/setup.js'], env: {}};
 
-},'events': function(exports, module) {
+}, 'events': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'events');};
@@ -829,7 +829,7 @@
 	};
 	
 
-},'/package.json': function(exports, module) {
+}, '/package.json': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/package.json');};
@@ -853,7 +853,7 @@
 	}).call(this);
 	
 
-},'/index.js': function(exports, module) {
+}, '/index.js': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, '/index.js');};
@@ -864,7 +864,7 @@
 	var __dirname = '/';
 	var process = {cwd: function() {return '/';}, argv: ['node', '/index.js'], env: {}};
 
-},'any/package.json': function(exports, module) {
+}, 'any/package.json': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'any/package.json');};
@@ -884,7 +884,7 @@
 	}).call(this);
 	
 
-},'any': function(exports, module) {
+}, 'any': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'any');};
@@ -898,7 +898,7 @@
 	/** code **/
 	module.exports = 'hello';
 
-},'advanced/package.json': function(exports, module) {
+}, 'advanced/package.json': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'advanced/package.json');};
@@ -917,7 +917,7 @@
 	}).call(this);
 	
 
-},'advanced': function(exports, module) {
+}, 'advanced': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'advanced');};
@@ -931,7 +931,13 @@
 	/** code **/
 	module.exports = 'advanced/' + require('one');
 
-},'app': function(exports, module) { module.exports = window.require('/app/Application'); },'one/index.js': function(exports, module) { module.exports = window.require('one'); },'two/index.js': function(exports, module) { module.exports = window.require('two'); },'three/index.js': function(exports, module) { module.exports = window.require('three'); },'any/index.js': function(exports, module) { module.exports = window.require('any'); },'advanced/index.js': function(exports, module) { module.exports = window.require('advanced'); }
+}, 'app': function(exports, module) { module.exports = window.require('/app/Application'); }
+, 'one/index.js': function(exports, module) { module.exports = window.require('one'); }
+, 'two/index.js': function(exports, module) { module.exports = window.require('two'); }
+, 'three/index.js': function(exports, module) { module.exports = window.require('three'); }
+, 'any/index.js': function(exports, module) { module.exports = window.require('any'); }
+, 'advanced/index.js': function(exports, module) { module.exports = window.require('advanced'); }
+
 });
 
 /** run section **/
