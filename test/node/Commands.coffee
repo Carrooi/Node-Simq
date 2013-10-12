@@ -2,6 +2,7 @@ expect = require('chai').expect
 path = require 'path'
 Finder = require 'fs-finder'
 rimraf = require 'rimraf'
+fs = require 'fs'
 
 SimQ = require '../../lib/_SimQ'
 Commands = require '../../lib/Commands'
@@ -51,6 +52,8 @@ describe 'Commands', ->
 				s.addPackage('test', pckg)
 
 				c.build().then( ->
+					expect(fs.readFileSync(dir + '/test/public/application.js', encoding: 'utf8')).to.have.string("'/package.json'")
+					expect(fs.readFileSync(dir + '/test/public/style.css', encoding: 'utf8')).to.be.equal('')
 					rimraf(dir + '/test', -> done())
 				).done()
 			).done()
