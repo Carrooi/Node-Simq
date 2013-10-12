@@ -2,6 +2,7 @@ fs = require 'fs'
 ncp = require 'ncp'
 path = require 'path'
 express = require 'express'
+mime = require 'mime'
 Compiler = require 'source-compiler'
 Q = require 'q'
 EventEmitter = require('events').EventEmitter
@@ -15,19 +16,18 @@ class Commands extends EventEmitter
 	constructor: (@simq) ->
 
 
-	server: ->
-		###app = express()
-		config = @config.load()
-		base = if config.routes.prefix == null then '/' else '/' + config.routes.prefix
+	server: (prefix = null, main = './public/index.html', routes = {}, port = 3000) ->
+		app = express()
+		base = if prefix == null then '/' else '/' + prefix
 
-		main = path.resolve(@basePath + '/' + config.routes.main)
+		main = path.join(@simq.basePath, main)
 		if fs.existsSync(main)
 			app.get(base, (req, res) ->
 				res.setHeader('Content-Type', 'text/html')
 				res.sendfile(main)
 			)
 
-		for route, _path of config.routes.routes
+		for route, _path of routes
 			route = base + route
 			_path = path.resolve(@basePath + '/' + _path)
 			data = {route: route, path: _path}
@@ -42,31 +42,31 @@ class Commands extends EventEmitter
 					)
 				)(data)
 
-		for name, pckg of config.packages
+		for name, pckg of @simq.packages
 			if pckg.skip == false
 				pckg.name = name
 				((pckg) =>
-					if @hasPackageApplication(pckg.name)
-						_path = base + path.relative(@basePath, pckg.application)
+					if pckg.application != null
+						_path = base + path.relative(@simq.basePath, pckg.application)
 						app.get(_path, (req, res) =>
-							@buildApplication(pckg.name).then( (content) ->
+							@simq.buildPackage(pckg.name).then( (data) ->
 								res.setHeader('Content-Type', 'application/javascript')
-								res.send(content)
+								res.send(data.js)
 							)
 						)
 
-					if @hasPackageStyles(pckg.name)
+					if pckg.style != null
 						_path = base + path.relative(@basePath, pckg.style.out)
 						app.get(_path, (req, res) =>
-							@buildStyles(pckg.name).then( (content) ->
+							@simq.buildPackage(pckg.name).then( (data) ->
 								res.setHeader('Content-Type', 'text/css')
-								res.send(content)
+								res.send(data.css)
 							)
 						)
 				)(pckg)
 
-		app.listen(config.server.port)
-		console.log 'Listening on port ' + config.server.port###
+		app.listen(port)
+		console.log 'Listening on port ' + port
 
 
 	build: ->

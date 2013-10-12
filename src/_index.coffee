@@ -33,6 +33,7 @@ if argv.command in ['server', 'build', 'watch']
 	configPath = path.resolve(configPath)
 
 	configurator = new Configurator(configPath)
+	config = configurator.load()
 
 	commands.on 'build', (simq) ->
 		configurator.invalidate()
@@ -55,7 +56,7 @@ if argv.command in ['server', 'build', 'watch']
 
 switch argv.command
 	when 'create' then commands.create(argv.targets[0])
-	when 'server' then commands.server()
+	when 'server' then commands.server(config.routes.prefix, config.routes.main, config.routes.routes, config.server.port)
 	when 'build' then commands.build()
 	when 'watch' then commands.watch()
 	when 'clean' then commands.clean(cacheDirectory)
