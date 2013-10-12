@@ -13,14 +13,14 @@
 			"run": [
 				"- ./libs/one.js",
 				"/app/Two",
-				"- ./libs/three.js",
-				"/test/Require",
-				"/test/Libraries",
-				"/test/Styles"
+				"- ./libs/three.js"
 			],
 			"libraries": {
 				"begin": [
 					"./libs/prepare.js"
+				],
+				"end": [
+					"./libs/end.coffee"
 				]
 			},
 			"aliases": {

@@ -366,10 +366,10 @@
 	  describe('Libraries & run', function() {
 	    return it('should be created test variable in window', function() {
 	      return expect(window._test).to.be.eql({
-	        initialized: true,
-	        one: true,
-	        two: true,
-	        three: true
+	        initialized: 'hello',
+	        one: 'hello',
+	        two: 'hello',
+	        three: 'hello'
 	      });
 	    });
 	  });
@@ -10788,11 +10788,14 @@ require('/app/Two');
 /** libs/three.js **/
 window._test.three = true;
 
-/** /test/Require **/
-require('/test/Require');
+/** libs/end.coffee **/
+(function() {
+  var name, value, _ref;
 
-/** /test/Libraries **/
-require('/test/Libraries');
+  _ref = window._test;
+  for (name in _ref) {
+    value = _ref[name];
+    window._test[name] = 'hello';
+  }
 
-/** /test/Styles **/
-require('/test/Styles');
+}).call(this);

@@ -18,6 +18,10 @@
 		</script>
 		<script src="./data/public/application.js"></script>
 		<script>
+			require('/test/Require');
+			require('/test/Libraries');
+			require('/test/Styles');
+
 			if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
 			else { mocha.run(); }
 		</script>
