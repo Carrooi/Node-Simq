@@ -286,7 +286,7 @@
           });
         });
       });
-      return it('should create server with package (css) and prefix', function(done) {
+      it('should create server with package (css) and prefix', function(done) {
         var pckg;
         pckg = simq.addPackage('app');
         pckg.setStyle('./css/style.less', './public/style.css');
@@ -304,6 +304,93 @@
             return done();
           });
         });
+      });
+      it('should create server from sandbox (main)', function(done) {
+        var c, s;
+        s = new SimQ(dir);
+        c = new Commands(s);
+        return c.create('test').then(function() {
+          var configurator, pckg;
+          simq = new SimQ(dir + '/test');
+          commands = new Commands(simq);
+          configurator = new Configurator(dir + '/test/config/setup.json');
+          pckg = Factory.create(simq.basePath, configurator.load().packages.application);
+          simq.addPackage('test', pckg);
+          server = commands.server();
+          return http.get('http://localhost:3000', function(res) {
+            var data;
+            data = [];
+            res.setEncoding('utf8');
+            res.on('data', function(chunk) {
+              return data.push(chunk);
+            });
+            return res.on('end', function() {
+              data = data.join('');
+              expect(data).to.have.string('<!-- your content -->');
+              return rimraf(dir + '/test', function() {
+                return done();
+              });
+            });
+          });
+        }).done();
+      });
+      it('should create server from sandbox (js)', function(done) {
+        var c, s;
+        s = new SimQ(dir);
+        c = new Commands(s);
+        return c.create('test').then(function() {
+          var configurator, pckg;
+          simq = new SimQ(dir + '/test');
+          commands = new Commands(simq);
+          configurator = new Configurator(dir + '/test/config/setup.json');
+          pckg = Factory.create(simq.basePath, configurator.load().packages.application);
+          simq.addPackage('test', pckg);
+          server = commands.server();
+          return http.get('http://localhost:3000/public/application.js', function(res) {
+            var data;
+            data = [];
+            res.setEncoding('utf8');
+            res.on('data', function(chunk) {
+              return data.push(chunk);
+            });
+            return res.on('end', function() {
+              data = data.join('');
+              expect(data).to.have.string("'/package.json'");
+              return rimraf(dir + '/test', function() {
+                return done();
+              });
+            });
+          });
+        }).done();
+      });
+      return it('should create server from sandbox (css)', function(done) {
+        var c, s;
+        s = new SimQ(dir);
+        c = new Commands(s);
+        return c.create('test').then(function() {
+          var configurator, pckg;
+          simq = new SimQ(dir + '/test');
+          commands = new Commands(simq);
+          configurator = new Configurator(dir + '/test/config/setup.json');
+          pckg = Factory.create(simq.basePath, configurator.load().packages.application);
+          simq.addPackage('test', pckg);
+          server = commands.server();
+          return http.get('http://localhost:3000/public/style.css', function(res) {
+            var data;
+            data = [];
+            res.setEncoding('utf8');
+            res.on('data', function(chunk) {
+              return data.push(chunk);
+            });
+            return res.on('end', function() {
+              data = data.join('');
+              expect(data).to.be.equal('');
+              return rimraf(dir + '/test', function() {
+                return done();
+              });
+            });
+          });
+        }).done();
       });
     });
   });

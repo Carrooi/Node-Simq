@@ -254,3 +254,81 @@ describe 'Commands', ->
 					expect(data).to.be.equal('body {\n  color: #000000;\n}\n')
 					done()
 			)
+
+		it 'should create server from sandbox (main)', (done) ->
+			s = new SimQ(dir)
+			c = new Commands(s)
+
+			c.create('test').then( ->
+				simq = new SimQ(dir + '/test')
+				commands = new Commands(simq)
+
+				configurator = new Configurator(dir + '/test/config/setup.json')
+				pckg = Factory.create(simq.basePath, configurator.load().packages.application)
+				simq.addPackage('test', pckg)
+
+				server = commands.server()
+
+				http.get('http://localhost:3000', (res) ->
+					data = []
+					res.setEncoding('utf8')
+					res.on 'data', (chunk) -> data.push(chunk)
+					res.on 'end', ->
+						data = data.join('')
+						expect(data).to.have.string('<!-- your content -->')
+
+						rimraf(dir + '/test', -> done())
+				)
+			).done()
+
+		it 'should create server from sandbox (js)', (done) ->
+			s = new SimQ(dir)
+			c = new Commands(s)
+
+			c.create('test').then( ->
+				simq = new SimQ(dir + '/test')
+				commands = new Commands(simq)
+
+				configurator = new Configurator(dir + '/test/config/setup.json')
+				pckg = Factory.create(simq.basePath, configurator.load().packages.application)
+				simq.addPackage('test', pckg)
+
+				server = commands.server()
+
+				http.get('http://localhost:3000/public/application.js', (res) ->
+					data = []
+					res.setEncoding('utf8')
+					res.on 'data', (chunk) -> data.push(chunk)
+					res.on 'end', ->
+						data = data.join('')
+						expect(data).to.have.string("'/package.json'")
+
+						rimraf(dir + '/test', -> done())
+				)
+			).done()
+
+		it 'should create server from sandbox (css)', (done) ->
+			s = new SimQ(dir)
+			c = new Commands(s)
+
+			c.create('test').then( ->
+				simq = new SimQ(dir + '/test')
+				commands = new Commands(simq)
+
+				configurator = new Configurator(dir + '/test/config/setup.json')
+				pckg = Factory.create(simq.basePath, configurator.load().packages.application)
+				simq.addPackage('test', pckg)
+
+				server = commands.server()
+
+				http.get('http://localhost:3000/public/style.css', (res) ->
+					data = []
+					res.setEncoding('utf8')
+					res.on 'data', (chunk) -> data.push(chunk)
+					res.on 'end', ->
+						data = data.join('')
+						expect(data).to.be.equal('')
+
+						rimraf(dir + '/test', -> done())
+				)
+			).done()
