@@ -54,10 +54,14 @@ if argv.command in ['server', 'build', 'watch']
 			pckg = Factory.create(basePath, pckg)
 			simq.addPackage(name, pckg)
 
+promise = null
 switch argv.command
-	when 'create' then commands.create(argv.targets[0])
+	when 'create' then promise = commands.create(argv.targets[0])
 	when 'server' then commands.server(config.routes.prefix, config.routes.main, config.routes.routes, config.server.port)
-	when 'build' then commands.build()
+	when 'build' then promise = commands.build()
 	when 'watch' then commands.watch()
 	when 'clean' then commands.clean(cacheDirectory)
 	else optimist.showHelp()
+
+if promise != null
+	promise.fail( (err) -> throw err).done()

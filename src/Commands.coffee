@@ -53,7 +53,7 @@ class Commands extends EventEmitter
 							@simq.buildPackage(pckg.name).then( (data) ->
 								res.setHeader('Content-Type', 'application/javascript')
 								res.send(data.js)
-							)
+							).fail( (err) -> throw err).done()
 						)
 
 					if pckg.style != null
@@ -63,7 +63,7 @@ class Commands extends EventEmitter
 							@simq.buildPackage(pckg.name).then( (data) ->
 								res.setHeader('Content-Type', 'text/css')
 								res.send(data.css)
-							)
+							).fail( (err) -> throw err).done()
 						)
 				)(pckg)
 
@@ -76,7 +76,7 @@ class Commands extends EventEmitter
 
 
 	watch: ->
-		@build()
+		@build().fail( (err) -> throw err).done()
 
 		ignore = new Array
 		for name, pckg of @simq.packages
@@ -86,7 +86,7 @@ class Commands extends EventEmitter
 		watch.watchTree(@simq.basePath, {},  (file, curr, prev) =>
 			if typeof file == 'string' && file.match(/~$/) == null && file.match(/^\./) == null && ignore.indexOf(path.resolve(file)) == -1		# filter in option is not working...
 				console.log file
-				@build()
+				@build().fail( (err) -> throw err).done()
 		)
 
 
