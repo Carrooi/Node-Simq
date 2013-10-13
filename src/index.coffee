@@ -2,10 +2,10 @@ optimist = require 'optimist'
 path = require 'path'
 Compiler = require 'source-compiler'
 
-SimQ = require './lib/SimQ'
-Commands = require './lib/Commands'
-Configurator = require './lib/Config/Configurator'
-Factory = require './lib/Package/Factory'
+SimQ = require './SimQ'
+Commands = require './Commands'
+Configurator = require './Config/Configurator'
+Factory = require './Package/Factory'
 
 argv = optimist.usage([
 	'simq COMMAND'
