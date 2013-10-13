@@ -28,8 +28,8 @@ class Commands extends EventEmitter
 			)
 
 		for route, _path of routes
-			route = base + route
-			_path = path.resolve(@basePath + '/' + _path)
+			route = path.normalize(base + '/./' + route)
+			_path = path.resolve(@simq.basePath + '/' + _path)
 			data = {route: route, path: _path}
 
 			if fs.statSync(_path).isDirectory()
@@ -47,7 +47,8 @@ class Commands extends EventEmitter
 				pckg.name = name
 				((pckg) =>
 					if pckg.application != null
-						_path = base + path.relative(@simq.basePath, pckg.application)
+						_path = path.relative(@simq.basePath, pckg.application)
+						_path = path.normalize(base + '/./' + _path)
 						app.get(_path, (req, res) =>
 							@simq.buildPackage(pckg.name).then( (data) ->
 								res.setHeader('Content-Type', 'application/javascript')
@@ -56,7 +57,8 @@ class Commands extends EventEmitter
 						)
 
 					if pckg.style != null
-						_path = base + path.relative(@basePath, pckg.style.out)
+						_path = path.relative(@simq.basePath, pckg.style.out)
+						_path = path.normalize(base + '/./' + _path)
 						app.get(_path, (req, res) =>
 							@simq.buildPackage(pckg.name).then( (data) ->
 								res.setHeader('Content-Type', 'text/css')
@@ -65,8 +67,7 @@ class Commands extends EventEmitter
 						)
 				)(pckg)
 
-		app.listen(port)
-		console.log 'Listening on port ' + port
+		return app.listen(port)
 
 
 	build: ->
