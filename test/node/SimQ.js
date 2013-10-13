@@ -8,7 +8,7 @@
 
   fs = require('fs');
 
-  SimQ = require('../../lib/_SimQ');
+  SimQ = require('../../lib/SimQ');
 
   Package = require('../../lib/Package/Package');
 

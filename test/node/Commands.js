@@ -16,7 +16,7 @@
 
   http = require('http');
 
-  SimQ = require('../../lib/_SimQ');
+  SimQ = require('../../lib/SimQ');
 
   Commands = require('../../lib/Commands');
 

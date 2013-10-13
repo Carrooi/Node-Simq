@@ -2,7 +2,7 @@ optimist = require 'optimist'
 path = require 'path'
 Compiler = require 'source-compiler'
 
-SimQ = require './lib/_SimQ'
+SimQ = require './lib/SimQ'
 Commands = require './lib/Commands'
 Configurator = require './lib/_Config/Configurator'
 Factory = require './lib/Package/Factory'

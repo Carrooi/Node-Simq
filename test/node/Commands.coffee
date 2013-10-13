@@ -6,7 +6,7 @@ fs = require 'fs'
 Compiler = require 'source-compiler'
 http = require 'http'
 
-SimQ = require '../../lib/_SimQ'
+SimQ = require '../../lib/SimQ'
 Commands = require '../../lib/Commands'
 Factory = require '../../lib/Package/Factory'
 Configurator = require '../../lib/_Config/Configurator'
