@@ -42,6 +42,8 @@ class Commands extends EventEmitter
 					)
 				)(data)
 
+		@emit 'build', @simq
+
 		for name, pckg of @simq.packages
 			if pckg.skip == false
 				pckg.name = name
