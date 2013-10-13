@@ -6,32 +6,6 @@ path = require 'path'
 class Helpers
 
 
-	@supportedCores: null
-
-
-	@expandFilesList: (paths, basePath = null, base = null) ->
-		result = []
-		for _path in paths
-			if _path.match(/^http/) == null
-				if basePath != null
-					_path = basePath + '/' + (if base == null then '' else base) + _path
-
-				_path = path.resolve(_path)
-
-				if fs.existsSync(_path) && fs.statSync(_path).isFile()
-					result.push(_path)
-				else
-					result = result.concat(Finder.findFiles(_path))
-			else
-				result.push(_path)
-
-		return @removeDuplicates(result)
-
-
-	@removeDuplicates: (array) ->
-		return array.filter( (el, pos) -> return array.indexOf(el) == pos)
-
-
 	@getGlobalsForModule: (name) ->
 		dir = path.dirname(name)
 
@@ -50,18 +24,6 @@ class Helpers
 			result.push("#{key} = #{value};")
 
 		return result
-
-
-	@resolvePath: (basePath, _path, base = null) ->
-		_path = basePath + '/' + (if base == null then '' else base) + _path
-		return path.resolve(_path)
-
-
-	@isCoreModuleSupported: (name) ->
-		if @supportedCores == null
-			@supportedCores = require('../data.json').supportedCores
-
-		return @supportedCores.indexOf(name) != -1
 
 
 	@getCoreModulesPaths: ->
