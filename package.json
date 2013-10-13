@@ -39,7 +39,7 @@
 		"mime": "~1.2.11",
 		"easy-configuration": "~1.5.3",
 		"fs-finder": "~1.7.4",
-		"source-compiler": "~2.0.2",
+		"source-compiler": "~2.0.3",
 		"recursive-merge": "~1.0.0",
 		"flatten-required": "~1.1.1",
 		"module-info": "~1.2.1",
