@@ -219,7 +219,7 @@ class Builder extends Package
 	loadMain: ->
 		deferred = Q.defer()
 
-		_path = path.resolve(__dirname + '/../Module.js')
+		_path = path.resolve(__dirname + '/../Browser/Module.js')
 		fs.readFile(_path, encoding: 'utf8', (err, data) ->
 			if err
 				deferred.reject(err)
