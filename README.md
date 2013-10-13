@@ -31,16 +31,10 @@ Templates:
 Unfortunately typescript is really slow for processing by SimQ. This is because typescript does not provide any
 public API for other programmers, so there is just some slow workaround. This is really good point to use cache (see below).
 
-## Installing
-
-`terminal`:
-```
-$ npm install -g simq
-```
+For more information, please look into [source-compiler](https://npmjs.org/package/source-compiler) documentation.
 
 ## Creating application
 
-`terminal`:
 ```
 $ simq create name-of-my-new-application
 ```
@@ -51,6 +45,8 @@ This will create base and default skeleton for your new application.
 
 SimQ using [easy-configuration](https://npmjs.org/package/easy-configuration) module for configuration and configuration
 is loaded from json file. Default path for config file is `./config/setup.json`.
+
+Also you will need classic `package.json` file in your project. SimQ will use some information also from this file.
 
 There are several sections in your config files, but the main one is section `packages`. This section holds information
 about your modules and external libraries which will be packed into your final javascript or css file.
@@ -79,6 +75,10 @@ The name `packages` also suggests, that you can got more independent packages in
 				"end": [
 					"./some/external/library/in/the/end/of/the/result/file.js"
 				]
+			},
+			"style": {
+				"in": "./css/style.less",
+				"out": "./path/to/the/result/style/file.css"
 			}
 		},
 		"nameOfYourSecondPackage": {
@@ -92,9 +92,12 @@ This is the basic configuration, where you can see, how to load your modules and
 can be loaded with one by one or with asterisk or with regular expression, which have to be enclosed in <> (see full documentation of
 [fs-finder](https://npmjs.org/package/fs-finder)).
 
-If you are programing in plain javascript, maybe it will be enough for you, to define just base main js file. This is
-because of SimQ automatically looks for dependencies and include other dependent files automatically. Now this is only for
-.js files.
+SimQ automatically adds some modules to your project. If you defined `main` section in your `package.json` file or
+if you have got `index.js` file in your project directory, then this file will be added. Also all defined dependencies from
+`package.json` file. It adds these main files, `package.json` files and also try to look for other dependent files and pack
+them as well.
+
+Unfortunately looking for dependent files works just for `.js` files.
 
 ## External libraries
 
@@ -103,13 +106,15 @@ libraries and their position in result file (beginning or the end of the file).
 
 For libraries on remote server you can use http or https protocol.
 
+If you need more control over position of these libraries in result js file, please look below into documentation for `run
+section`.
+
 ## Styles
 
-If you are using some CSS framework, you can let SimQ to handle these files too. Styles definitions are also in packages
-and it is good to separate javascript application into one package and your styles into another, but in this example, we
-will add styles definition into our first package.
+If you are using some CSS framework, you can let SimQ to handle these files too.
 
-`./config/setup.json`:
+You just need to define `input` and `output` file.
+
 ```
 {
 	"nameOfYourFirstModule": {
@@ -130,11 +135,14 @@ section and you can use them just like every other module (see below).
 
 There is also configuration which can save you few characters and wrap your eco templates automatically into jquery.
 
-`./config/setup.json`:
 ```
 {
 	"packages": {
-
+		"my-package": {
+			"modules": [
+				"./app/views/*.eco"
+			]
+		}
 	},
 	"template": {
 		"jquerify": true
@@ -146,7 +154,6 @@ There is also configuration which can save you few characters and wrap your eco 
 
 There are three options how to build your application: build to disk, watch automatically for changes and create server.
 
-`terminal`:
 ```
 $ cd /var/www/my-application
 $ simq build
@@ -154,14 +161,12 @@ $ simq build
 
 Or auto watching for changes:
 
-`terminal`:
 ```
 $ simq watch
 ```
 
 Or server:
 
-`terminal`:
 ```
 $ simq server
 ```
@@ -180,7 +185,7 @@ Server has got it's own setup in your config file. You can set port of your serv
 		"main": "./index.html",
 		"prefix": "app/",
 		"routes": {
-			"data-in-directory": "./someDataOnMyDisk",
+			"data-in-directory": "./someDirectoryOnMyDisk",
 			"source-file": "./someRandomFileOnMyDisk"
 		}
 	}
@@ -195,15 +200,14 @@ If you set prefix, then every route url will be prefixed with it (default is `/`
 SimQ will also automatically set routes for your result javascript and style files.
 
 In this example there will be just three urls (if index.html file exists):
-* http://localhost:4000/app/
-* http://localhost:4000/app/data-in-directory/<some file>
-* http://localhost:4000/app/source-file
+* `http://localhost:4000/app/`
+* `http://localhost:4000/app/data-in-directory/<some file>`
+* `http://localhost:4000/app/source-file`
 
 ## Using modules
 
 In your application you can use modules you defined just like you used to in node js.
 
-`index.html`:
 ```
 <script type="text/javascript" src="path/to/the/result/javascript/file.js"></script>
 <script type="text/javascript">
@@ -233,26 +237,23 @@ var SomethingElse = require('../../SomethingElseWithExtension.js');
 You can also use modules from npm, but be carefully with this, because of usages of internal modules, which are not
 implemented in browser or in SimQ (see compatibility section bellow).
 
-`terminal`:
+Just define your module in your `package.json` file and run install command.
+
 ```
-$ cd /var/www/my-application
-$ npm install moment
+$ npm install .
 ```
 
-`lib/form.coffee`:
+Then you can use it.
+
 ```
 var moment = require('moment');
 ```
-
-If your application is written in coffee-script or in typescript, you have to add paths for these npm modules into modules
-section. You don't have to do this if your application is in plain javascript.
 
 ## Aliases
 
 Maybe you will want to shorten some frequently used modules like jQuery. For example our jquery is in ./lib/jquery directory,
 so every time we want to use jquery, we have to write `require('/lib/jquery/jquery')`. Solution for this is to use aliases.
 
-`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -267,21 +268,20 @@ Now you can use `require('jquery')`.
 
 ## Modules somewhere else
 
-Maybe you have got some modules somewhere else in your disk. Then you just have to use `fsModules` section.
+Maybe you have got some modules somewhere else in your disk.
 
 `./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
-		"fsModules": {
-			"/module/which/is/not/in/my/project": []
-		}
+		"modules": [
+			"/module/which/is/not/in/my/project"
+		]
 	}
 }
 ```
 
-There you can see, that it is just name of path to your module (directory) and array. This can be used, if you want to
-specifically set some other file paths in this module to be included.
+Directory to this module needs to contain `package.json` file.
 
 ## Node core modules
 
@@ -290,7 +290,9 @@ You can define all core modules (like `events`) if you want to use them in brows
 ```
 {
 	"nameOfYourFirstModule": {
-		"coreModules": ["events"]
+		"modules": [
+			"events"
+		]
 	}
 }
 ```
@@ -298,10 +300,9 @@ You can define all core modules (like `events`) if you want to use them in brows
 ## Run automatically
 
 It would be great if some modules can be started automatically after script is loaded to the page. You can got for example
-one Bootstrap.js module, which do not export anything but just load for example Application.js module and prepare your
+one Bootstrap.js module, which do not export anything but just loads for example Application.js module and prepare your
 application. With this in most cases you don't have to got any javascript code in your HTML files!
 
-`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -315,13 +316,27 @@ application. With this in most cases you don't have to got any javascript code i
 
 It is also possible to combine this `run` section with your own code. Just need to enclose it into `<>`.
 
-`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
 		"run": [
 			"/app/setup",
 			"<my.own.code();>",
+			"/app/Bootstrap"
+		]
+	}
+}
+```
+
+You may also need for some reason your libraries (not modules) in exact position (for example right before running module /app/Bootstrap).
+You just need to set paths to these libraries in run section and not in libraries section, prepended with `- `.
+
+```
+{
+	"nameOfYourFirstModule": {
+		"run": [
+			"/app/setup",
+			"- ./libs/some/setup.js",
 			"/app/Bootstrap"
 		]
 	}
@@ -350,32 +365,19 @@ anything like this: `require('_NEW_/app/Bootstrap')`. So you can set base "names
 $ simq build --config my/own/path/to/config.json
 ```
 
-## Debug mode
+## Minify result files
 
-In default, SimQ automatically minify all your scripts and styles, but for developer it would be better to see not-minified
-versions.
+It is better to minify your files in production version. Only thing what you will need to do, is add new section to your config file.
 
-Only thing what you will need to do, is add new section to your config file.
-
-`./config/setup.json`:
 ```
 {
 	"packages": {
 
     },
 	"debugger": {
-		"styles": true,
-		"scripts": false
+		"minify": true
 	}
 }
-```
-
-## Verbose mode
-
-SimQ can also tell you some more information in command line.
-
-```
-$ simq server -v
 ```
 
 ## Skip packages
@@ -416,7 +418,6 @@ must be invalidated. If you also want to use cache in styles, you have to define
 Luckily you don't have to write every file on your own, but let [fs-finder](https://npmjs.org/package/fs-finder) do
 the job for you.
 
-`./config/setup.json`:
 ```
 {
 	"nameOfYourFirstModule": {
@@ -430,6 +431,8 @@ the job for you.
 	}
 }
 ```
+
+For more information look into documentation of [source-compiler](https://npmjs.org/package/source-compiler).
 
 ## Compatibility with node
 
@@ -457,21 +460,6 @@ Module object:
 * module.parent: no
 * module.children: no
 
-## Source maps
-
-Less can also generate source maps with sass source maps syntax. If you want this function, you have to turn on debug
-mode for styles.
-
-`./config/setup.json`:
-```
-{
-	"debugger": {
-		"styles": true,
-		"sourceMap": true
-	}
-}
-```
-
 ## Remove files created by simq
 
 ```
@@ -492,6 +480,12 @@ $ npm test
 	+ Rewritten tests
 	+ Better documentation
 	+ Better error messages from compiler
+	+ SimQ is completely rewritten
+	+ Classes are not so dependent on each other like before (can be used programatically)
+	+ Auto searching for dependencies from `package.json`
+	+ Much better compatibility with node
+	+ Added many tests
+	+ Easier modules definition
 
 * 4.5.5
 	+ Bug with watching
