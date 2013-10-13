@@ -5,6 +5,7 @@ express = require 'express'
 mime = require 'mime'
 Compiler = require 'source-compiler'
 Q = require 'q'
+watch = require 'watch'
 EventEmitter = require('events').EventEmitter
 
 class Commands extends EventEmitter
