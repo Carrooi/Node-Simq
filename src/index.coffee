@@ -64,4 +64,17 @@ switch argv.command
 	else optimist.showHelp()
 
 if promise != null
-	promise.fail( (err) -> throw err).done()
+	promise.fail( (err) ->
+		e = new Error(err.message)
+
+		file = if typeof err.filename != 'undefined' && err.filename != null then err.filename else null
+		line = if typeof err.line != 'undefined' && err.line != null then err.line else null
+
+		if file != null
+			e.message += ' in ' + file
+
+		if line != null
+			e.message += ':' + line
+
+		throw e
+	).done()
