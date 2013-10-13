@@ -190,6 +190,9 @@ class Package
 
 
 	addToAutorun: (name) ->
+		if name.match(/^\<.+\>$/) != null
+			throw new Error 'Inline code in run section is not supported. Please, put that code into module.'
+
 		if name.match(/^-\s/) == null
 			if name[0] != '/'
 				throw new Error 'Module to run ' + name + ' is not valid.'

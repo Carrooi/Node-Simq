@@ -314,20 +314,6 @@ application. With this in most cases you don't have to got any javascript code i
 }
 ```
 
-It is also possible to combine this `run` section with your own code. Just need to enclose it into `<>`.
-
-```
-{
-	"nameOfYourFirstModule": {
-		"run": [
-			"/app/setup",
-			"<my.own.code();>",
-			"/app/Bootstrap"
-		]
-	}
-}
-```
-
 You may also need for some reason your libraries (not modules) in exact position (for example right before running module /app/Bootstrap).
 You just need to set paths to these libraries in run section and not in libraries section, prepended with `- `.
 
