@@ -5,10 +5,6 @@ path = require 'path'
 class PackageExtension extends Extension
 
 
-	pckg: null
-
-	basePath: '.'
-
 	defaultsPackage:
 		skip: false
 		application: null
@@ -18,18 +14,13 @@ class PackageExtension extends Extension
 			out: null
 			dependencies: null
 		modules: []
-		coreModules: []
-		fsModules: {}
+		coreModules: null	# deprecated
+		fsModules: null		# deprecated
 		aliases: {}
 		run: []
-		libraries:
-			begin: []
-			end: []
-
-	defaultFsModule: []
-
-
-	constructor: (@pckg, @basePath) ->
+		libraries:			# deprecated
+			begin: []		# deprecated
+			end: []			# deprecated
 
 
 	loadConfiguration: ->
@@ -38,57 +29,26 @@ class PackageExtension extends Extension
 		for name, pckg of config
 			config[name] = @configurator.merge(pckg, @defaultsPackage)
 
-			for _path, data of pckg.fsModules
-				if typeof data == 'string'
-					data = {
-						name: data
-					}
+			if pckg.coreModules != null
+				throw new Error 'Config: coreModules section is deprecated. Please take a look in new documentation.'
 
-				data = @configurator.merge(data, @defaultFsModule)
-				pckg.fsModules[_path] = data
+			if pckg.fsModules != null
+				throw new Error 'Config: fsModules section is deprecated. Please take a look in new documentation.'
 
-		return config
+			for lib, i in pckg.libraries.begin
+				pckg.libraries.begin[i] = '- ' + lib
+			for lib, i in pckg.libraries.end
+				pckg.libraries.end[i] = '- ' + lib
 
+			pckg.run.unshift.apply(pckg.run, pckg.libraries.begin)
+			pckg.run.push.apply(pckg.run, pckg.libraries.end)
 
-	afterCompile: (config) ->
-		for name, pckg of config
-			basePath = if pckg.base == null then @basePath else @basePath + '/' + pckg.base
-			basePath = path.normalize(basePath)
+			if pckg.style.in == null || pckg.style.out == null
+				pckg.style = null
 
-			pckg.libraries.begin = Helpers.expandFilesList(pckg.libraries.begin, basePath)
-			pckg.libraries.end = Helpers.expandFilesList(pckg.libraries.end, basePath)
-
-			pckg.modules = Helpers.expandFilesList(pckg.modules, basePath)
-
-			for _path, paths of pckg.fsModules
-				info = @pckg.loadModuleInfo(_path + '/package.json')
-				pckg.fsModules[_path] = Helpers.expandFilesList(paths, _path)
-				pckg.fsModules[_path].push info.main if pckg.fsModules[_path].indexOf(info.main) == -1
-
-			core = []
-			deps = require('../../coredeps.json')
-			for m in pckg.coreModules
-				core.push m
-				if typeof deps[m] != 'undefined'
-					deps = deps.concat(deps[m])
-			core = Helpers.removeDuplicates(core)
-			modules = {}
-			for m in core
-				_path = Helpers.getCoreModulePath(m)
-				if _path != null
-					modules[m] = _path
-			pckg.coreModules = modules
-
-			if pckg.application != null
-				pckg.application = path.resolve("#{basePath}/#{pckg.application}")
-
-			if pckg.style.in != null && pckg.style.out != null
-				pckg.style.in = path.resolve("#{basePath}/#{pckg.style.in}")
-				pckg.style.out = path.resolve("#{basePath}/#{pckg.style.out}")
-
-				if pckg.style.dependencies != null
-					for dep, i in pckg.style.dependencies
-						pckg.style.dependencies[i] = path.resolve("#{basePath}/#{dep}")
+			delete pckg.coreModules
+			delete pckg.fsModules
+			delete pckg.libraries
 
 		return config
 

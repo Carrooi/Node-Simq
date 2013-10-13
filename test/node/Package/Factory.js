@@ -10,7 +10,7 @@
 
   Package = require('../../../lib/Package/Package');
 
-  Configurator = require('../../../lib/_Config/Configurator');
+  Configurator = require('../../../lib/Config/Configurator');
 
   dir = path.resolve(__dirname + '/../../data/package');
 

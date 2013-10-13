@@ -4,7 +4,7 @@ Compiler = require 'source-compiler'
 
 SimQ = require './lib/SimQ'
 Commands = require './lib/Commands'
-Configurator = require './lib/_Config/Configurator'
+Configurator = require './lib/Config/Configurator'
 Factory = require './lib/Package/Factory'
 
 argv = optimist.usage([

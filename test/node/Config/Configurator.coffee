@@ -1,7 +1,7 @@
 expect = require('chai').expect
 path = require 'path'
 
-Configurator = require '../../../lib/_Config/Configurator'
+Configurator = require '../../../lib/Config/Configurator'
 
 dir = path.resolve(__dirname + '/../../data/package/config')
 

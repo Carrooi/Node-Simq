@@ -22,7 +22,7 @@
 
   Factory = require('../../lib/Package/Factory');
 
-  Configurator = require('../../lib/_Config/Configurator');
+  Configurator = require('../../lib/Config/Configurator');
 
   dir = path.resolve(__dirname + '/../data');
 

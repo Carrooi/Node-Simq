@@ -2,7 +2,7 @@ var path = require('path');
 
 var SimQ = require('../../lib/SimQ');
 var Commands = require('../../lib/Commands');
-var Configurator = require('../../lib/_Config/Configurator');
+var Configurator = require('../../lib/Config/Configurator');
 var Factory = require('../../lib/Package/Factory');
 
 var basePath = __dirname;

@@ -4,9 +4,7 @@ class DebuggerExtension extends Extension
 
 
 	defaults:
-		styles: false
-		scripts: false
-		sourceMap: false
+		minify: true
 
 
 	loadConfiguration: ->
