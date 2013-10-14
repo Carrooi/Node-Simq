@@ -159,7 +159,6 @@ class Builder extends Package
 				if @pckg.getPackageInfo().isFileInModule(file)
 					result['/' + @pckg.getPackageInfo().getModuleName(file, true)] = file
 
-				# core or npm module
 				else
 					dir = path.dirname(file)
 
@@ -167,12 +166,15 @@ class Builder extends Package
 					if Module.globalPaths.indexOf(dir) == -1
 						info = Info.fromFile(file)
 						name = info.getModuleName(file)
-						result[name] = file
 
 						baseName = escapeRegexp(path.basename(file))
 						if name.match(new RegExp(baseName + '$')) == null
 							fullName = info.getName() + '/' + path.relative(info.getPath(), file)
-							@pckg.addAlias(name, fullName)
+							@pckg.addAlias(fullName, name)
+							result[fullName] = file
+						else
+							result[name] = file
+
 
 					# core module
 					else

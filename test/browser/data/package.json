@@ -3,6 +3,8 @@
 	"version": "1.0.0",
 	"dependencies": {
 		"any": "latest",
-		"advanced": "latest"
+		"advanced": "latest",
+		"other": "latest",
+		"another": "latest"
 	}
 }
