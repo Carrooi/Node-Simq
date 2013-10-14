@@ -193,11 +193,11 @@ class Package
 		if name.match(/^\<.+\>$/) != null
 			throw new Error 'Inline code in run section is not supported. Please, put that code into module.'
 
+		# module to run
 		if name.match(/^-\s/) == null
-			if name[0] != '/'
-				throw new Error 'Module to run ' + name + ' is not valid.'
-
 			@run.push(name)
+
+		# file path
 		else
 			name = name.replace(/^-\s/, '')
 			name = path.resolve(@getBasePath(), name)

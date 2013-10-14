@@ -464,6 +464,7 @@ $ npm test
 
 * 5.0.1
 	+ Some bad tests
+	+ npm modules in run section did not work
 
 * 5.0.0
 	+ Rewritten tests

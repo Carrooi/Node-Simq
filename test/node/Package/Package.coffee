@@ -132,6 +132,10 @@ describe 'Package/Package', ->
 			pckg.addToAutorun('/modules/other')
 			expect(pckg.run).to.be.eql(['/modules/other'])
 
+		it 'should add npm module to autorun', ->
+			pckg.addModule('module/test.js')
+			pckg.addToAutorun('module/test')
+
 		it 'should add library from absolute path', ->
 			pckg.addToAutorun('- ' + dir + '/libs/begin/1.js')
 			expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js'])

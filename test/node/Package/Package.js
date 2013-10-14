@@ -114,6 +114,10 @@
         pckg.addToAutorun('/modules/other');
         return expect(pckg.run).to.be.eql(['/modules/other']);
       });
+      it('should add npm module to autorun', function() {
+        pckg.addModule('module/test.js');
+        return pckg.addToAutorun('module/test');
+      });
       it('should add library from absolute path', function() {
         pckg.addToAutorun('- ' + dir + '/libs/begin/1.js');
         return expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js']);
