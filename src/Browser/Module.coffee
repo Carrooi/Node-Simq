@@ -53,7 +53,8 @@ if !@require
 
 				prev = part
 
-			name = '/' + result.join('/')
+			name = result.join('/')
+			name = '/' + name if parent[0] == '/'
 
 		if typeof modules[name] != 'undefined'
 			return name

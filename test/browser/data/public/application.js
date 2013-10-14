@@ -58,7 +58,10 @@
           }
           prev = part;
         }
-        name = '/' + result.join('/');
+        name = result.join('/');
+        if (parent[0] === '/') {
+          name = '/' + name;
+        }
       }
       if (typeof modules[name] !== 'undefined') {
         return name;
@@ -112,7 +115,21 @@
   return this.require.define;
 
 }).call(this)({
- 'one': function(exports, module) {
+ 'advanced': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'advanced');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'advanced';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'advanced';
+	var __dirname = '.';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'advanced'], env: {}};
+
+	/** code **/
+	module.exports = 'advanced/' + require('one');
+
+}, 'one': function(exports, module) {
 
 	/** node globals **/
 	var require = function(name) {return window.require(name, 'one');};
@@ -489,6 +506,9 @@
 	      });
 	      it('should load advanced npm module', function() {
 	        return expect(require('advanced')).to.be.equal('advanced/one/two/three');
+	      });
+	      it('should load advanced npm module with relative requires', function() {
+	        return expect(require('advanced/other.js')).to.be.equal('advanced/one/two/three');
 	      });
 	      it('should test module which uses core module', function(done) {
 	        var obj;
@@ -10673,6 +10693,20 @@
 	})( window );
 	
 
+}, 'advanced/other.js': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, 'advanced/other.js');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = 'advanced/other.js';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = 'advanced/other.js';
+	var __dirname = 'advanced';
+	var process = {cwd: function() {return '/';}, argv: ['node', 'advanced/other.js'], env: {}};
+
+	/** code **/
+	module.exports = require('./index.js')
+
 }, '/package.json': function(exports, module) {
 
 	/** node globals **/
@@ -10761,26 +10795,12 @@
 	}).call(this);
 	
 
-}, 'advanced': function(exports, module) {
-
-	/** node globals **/
-	var require = function(name) {return window.require(name, 'advanced');};
-	require.resolve = function(name, parent) {if (parent === null) {parent = 'advanced';} return window.require.resolve(name, parent);};
-	require.define = function(bundle) {window.require.define(bundle);};
-	require.cache = window.require.cache;
-	var __filename = 'advanced';
-	var __dirname = '.';
-	var process = {cwd: function() {return '/';}, argv: ['node', 'advanced'], env: {}};
-
-	/** code **/
-	module.exports = 'advanced/' + require('one');
-
 }, 'app': function(exports, module) { module.exports = window.require('/app/Application'); }
+, 'advanced/index.js': function(exports, module) { module.exports = window.require('advanced'); }
 , 'one/index.js': function(exports, module) { module.exports = window.require('one'); }
 , 'two/index.js': function(exports, module) { module.exports = window.require('two'); }
 , 'three/index.js': function(exports, module) { module.exports = window.require('three'); }
 , 'any/index.js': function(exports, module) { module.exports = window.require('any'); }
-, 'advanced/index.js': function(exports, module) { module.exports = window.require('advanced'); }
 
 });
 

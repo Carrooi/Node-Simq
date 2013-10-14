@@ -462,6 +462,9 @@ $ npm test
 
 ## Changelog list
 
+* 5.0.2
+	+ Bug with requiring relative modules in npm module
+
 * 5.0.1
 	+ Some bad tests
 	+ npm modules in run section did not work

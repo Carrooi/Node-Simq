@@ -85,6 +85,9 @@ describe 'require', ->
 		it 'should load advanced npm module', ->
 			expect(require('advanced')).to.be.equal('advanced/one/two/three')
 
+		it 'should load advanced npm module with relative requires', ->
+			expect(require('advanced/other.js')).to.be.equal('advanced/one/two/three')
+
 		it 'should test module which uses core module', (done) ->
 			obj = new (require('/app/WithEvents'))
 			obj.on 'call', (message) ->

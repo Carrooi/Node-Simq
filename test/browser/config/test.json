@@ -8,7 +8,8 @@
 				"./test/*",
 				"./setup.js",
 				"events",
-				"./libs/jquery.js"
+				"./libs/jquery.js",
+				"advanced/other.js"
 			],
 			"run": [
 				"- ./libs/one.js",
