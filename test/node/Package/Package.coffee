@@ -50,6 +50,7 @@ describe 'Package/Package', ->
 				dir + '/modules/3.js'
 				dir + '/modules/4.js'
 				dir + '/modules/6.js'
+				dir + '/modules/other/index.js'
 			])
 
 		it 'should add core module', ->
@@ -69,6 +70,7 @@ describe 'Package/Package', ->
 				dir + '/modules/3.js'
 				dir + '/modules/4.js'
 				dir + '/modules/6.js'
+				dir + '/modules/other/index.js'
 			])
 
 		it 'should add installed npm module', ->
@@ -116,19 +118,19 @@ describe 'Package/Package', ->
 
 	describe '#addToAutorun()', ->
 		it 'should add module to autorun', ->
-			pckg.addModule('module/test.js')
-			pckg.addToAutorun('/module/test.js')
-			expect(pckg.run).to.be.eql(['/module/test.js'])
+			pckg.addModule('./modules/1.js')
+			pckg.addToAutorun('/modules/1.js')
+			expect(pckg.run).to.be.eql(['/modules/1.js'])
 
 		it 'should add module to autorun without extension', ->
-			pckg.addModule('module/test.js')
-			pckg.addToAutorun('/module/test')
-			expect(pckg.run).to.be.eql(['/module/test'])
+			pckg.addModule('./modules/1.js')
+			pckg.addToAutorun('/modules/1')
+			expect(pckg.run).to.be.eql(['/modules/1'])
 
 		it 'should add module to autorun without exact file path', ->
-			pckg.addModule('module/any/index.json')
-			pckg.addToAutorun('/module/any')
-			expect(pckg.run).to.be.eql(['/module/any'])
+			pckg.addModule('./modules/other/index.js')
+			pckg.addToAutorun('/modules/other')
+			expect(pckg.run).to.be.eql(['/modules/other'])
 
 		it 'should add library from absolute path', ->
 			pckg.addToAutorun('- ' + dir + '/libs/begin/1.js')

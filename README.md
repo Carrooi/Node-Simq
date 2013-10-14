@@ -462,6 +462,9 @@ $ npm test
 
 ## Changelog list
 
+* 5.0.1
+	+ Some bad tests
+
 * 5.0.0
 	+ Rewritten tests
 	+ Better documentation

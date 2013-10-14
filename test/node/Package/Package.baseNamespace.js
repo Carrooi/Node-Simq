@@ -49,7 +49,7 @@
       });
       it('should add modules with absolute path', function() {
         pckg.addModule(dir + '/modules/*.js<$>');
-        return expect(pckg.modules).to.be.eql([dir + '/modules/1.js', dir + '/modules/2.js', dir + '/modules/3.js', dir + '/modules/4.js', dir + '/modules/6.js']);
+        return expect(pckg.modules).to.be.eql([dir + '/modules/1.js', dir + '/modules/2.js', dir + '/modules/3.js', dir + '/modules/4.js', dir + '/modules/6.js', dir + '/modules/other/index.js']);
       });
       it('should add core module', function() {
         pckg.addModule('events');
@@ -62,7 +62,7 @@
       });
       it('should add modules from base directory', function() {
         pckg.addModule('./modules/*.js<$>');
-        return expect(pckg.modules).to.be.eql([dir + '/modules/1.js', dir + '/modules/2.js', dir + '/modules/3.js', dir + '/modules/4.js', dir + '/modules/6.js']);
+        return expect(pckg.modules).to.be.eql([dir + '/modules/1.js', dir + '/modules/2.js', dir + '/modules/3.js', dir + '/modules/4.js', dir + '/modules/6.js', dir + '/modules/other/index.js']);
       });
       it('should add installed npm module', function() {
         pckg.addModule('module/test.js');

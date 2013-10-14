@@ -51,6 +51,7 @@ describe 'Package/Package.baseNamespace', ->
 				dir + '/modules/3.js'
 				dir + '/modules/4.js'
 				dir + '/modules/6.js'
+				dir + '/modules/other/index.js'
 			])
 
 		it 'should add core module', ->
@@ -70,6 +71,7 @@ describe 'Package/Package.baseNamespace', ->
 				dir + '/modules/3.js'
 				dir + '/modules/4.js'
 				dir + '/modules/6.js'
+				dir + '/modules/other/index.js'
 			])
 
 		it 'should add installed npm module', ->
