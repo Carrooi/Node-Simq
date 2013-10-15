@@ -65,16 +65,14 @@ switch argv.command
 
 if promise != null
 	promise.fail( (err) ->
-		e = new Error(err.message)
-
 		file = if typeof err.filename != 'undefined' && err.filename != null then err.filename else null
 		line = if typeof err.line != 'undefined' && err.line != null then err.line else null
 
 		if file != null
-			e.message += ' in ' + file
+			err.message += ' in ' + file
 
 		if line != null
-			e.message += ':' + line
+			err.message += ':' + line
 
-		throw e
+		throw err
 	).done()

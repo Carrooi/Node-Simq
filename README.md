@@ -462,6 +462,9 @@ $ npm test
 
 ## Changelog list
 
+* 5.0.4
+	+ Better error messages
+
 * 5.0.2 - 5.0.3
 	+ Bug with requiring relative modules in npm module
 
