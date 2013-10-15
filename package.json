@@ -42,7 +42,7 @@
 		"source-compiler": "~2.0.3",
 		"recursive-merge": "~1.0.0",
 		"flatten-required": "~1.1.1",
-		"module-info": "~1.2.1",
+		"module-info": "~1.2.2",
 		"escape-regexp": "~0.0.1"
 	},
 	"devDependencies": {
