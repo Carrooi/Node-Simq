@@ -366,6 +366,30 @@ It is better to minify your files in production version. Only thing what you wil
 }
 ```
 
+## Files stats
+
+You may want to know some stats data of your modules (`atime`, `mtime`, `ctime`). You just need to allow this feature in
+your configuration.
+
+```
+{
+	"packages": {
+
+	},
+	"debugger": {
+		"filesStats": true
+	}
+}
+```
+
+Now you can get needed information.
+
+```
+var date = require.getStats('/name/of/some/module');	// Date object
+```
+
+Keep in mind, that `atime` is changed every time, you access module with `require` method.
+
 ## Skip packages
 
 If you want to temporary disable some packages from processing by SimQ, you can set `skip` option for this package in
@@ -467,9 +491,10 @@ $ npm test
 
 ## Changelog list
 
-* 5.0.5
+* 5.1.0
 	+ Some directories were not in git so some tests failed
 	+ Added some info about tests
+	+ Added `filesStats` option and `getStats` method
 
 * 5.0.4
 	+ Better error messages

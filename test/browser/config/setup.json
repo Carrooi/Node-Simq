@@ -4,5 +4,8 @@
 	],
 	"template": {
 		"jquerify": true
+	},
+	"debugger": {
+		"filesStats": true
 	}
 }

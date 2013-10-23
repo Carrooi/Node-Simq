@@ -5,6 +5,8 @@ if !@require
 
 	modules = {}
 
+	stats = {}
+
 	cache = {}
 
 
@@ -27,6 +29,9 @@ if !@require
 			m.loaded = true
 
 			cache[fullName] = m
+
+		if typeof stats[fullName] == 'undefined' then stats[fullName] = {atime: null, mtime: null, ctime: null}
+		stats[fullName].atime = new Date
 
 		return cache[fullName].exports
 
@@ -84,6 +89,23 @@ if !@require
 	@require.release = ->
 		for name of cache
 			delete cache[name]
+
+
+	@require.getStats = (name, parent = null) ->
+		fullName = resolve(name, parent)
+		if fullName == null
+			throw new Error 'Module ' + name + ' was not found.'
+
+		if typeof stats[fullName] == 'undefined' then stats[fullName] = {atime: null, mtime: null, ctime: null}
+		return stats[fullName]
+
+
+	@require.__setStats = (bundle) ->
+		for name, data of bundle
+			stats[name] =
+				atime: new Date(data.atime)
+				mtime: new Date(data.mtime)
+				ctime: new Date(data.ctime)
 
 
 	@require.cache = cache

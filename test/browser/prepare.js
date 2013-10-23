@@ -18,6 +18,7 @@ commands.on('build', function(simq) {
 
 	simq.release();
 	simq.jquerify = config.template.jquerify;
+	simq.stats = config.debugger.filesStats;
 
 	for (var name in config.packages) {
 		if (config.packages.hasOwnProperty(name)) {

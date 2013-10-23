@@ -21,6 +21,8 @@ class Builder extends Package
 
 	minify: false
 
+	stats: false
+
 	autoModule: ['.json', '.eco']
 
 
@@ -77,9 +79,17 @@ class Builder extends Package
 			for alias, original of @pckg.aliases
 				c.push(Q.resolve(" '#{alias}': function(exports, module) { module.exports = window.require('#{original}'); }\n"))
 
-			Q.all(c).then( (data) ->
+			Q.all(c).then( (data) =>
 				main = data.shift()
-				deferred.resolve("#{main}({\n#{data}\n});")
+				result = "#{main}({\n#{data}\n});"
+
+				if @stats == true
+					stats = JSON.stringify(@loadStats(modules))
+					result += "\nrequire.__setStats(#{stats});"
+
+				result += "\ndelete require.__setStats;"
+
+				deferred.resolve(result)
 			).fail( (err) ->
 				deferred.reject(err)
 			)
@@ -216,6 +226,21 @@ class Builder extends Package
 		)
 
 		return deferred.promise
+
+
+	loadStats: (modules) ->
+		result = {}
+		for name, _path of modules
+			stat = fs.statSync(_path)
+			if name == '/test/Stats.coffee' && 0
+				console.log new Date(stat.atime)
+				console.log new Date(new Date(stat.atime).valueOf() * 1000)
+			result[name] =
+				atime: (new Date(stat.atime)).getTime()
+				mtime: (new Date(stat.mtime)).getTime()
+				ctime: (new Date(stat.ctime)).getTime()
+
+		return result
 
 
 	loadMain: ->
