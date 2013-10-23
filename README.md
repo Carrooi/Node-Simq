@@ -456,11 +456,20 @@ This will remove all result js and css files with temp files.
 
 ## Tests
 
+You have to got installed globally these modules:
+* [mocha](https://npmjs.org/package/mocha)
+* [phantomjs](https://npmjs.org/package/phantomjs)
+* [mocha-phantomjs](https://npmjs.org/package/mocha-phantomjs)
+
 ```
 $ npm test
 ```
 
 ## Changelog list
+
+* 5.0.5
+	+ Some directories were not in git so some tests failed
+	+ Added some info about tests
 
 * 5.0.4
 	+ Better error messages
