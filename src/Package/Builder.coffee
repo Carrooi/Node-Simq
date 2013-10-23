@@ -87,6 +87,9 @@ class Builder extends Package
 					stats = JSON.stringify(@loadStats(modules))
 					result += "\nrequire.__setStats(#{stats});"
 
+				version = Info.fromFile(__filename).getVersion()
+
+				result += "\nrequire.version = '#{version}';"
 				result += "\ndelete require.__setStats;"
 
 				deferred.resolve(result)

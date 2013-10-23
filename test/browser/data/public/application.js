@@ -95,6 +95,8 @@
       }
       return require(name, parent);
     };
+    this.require.simq = true;
+    this.require.version = 1;
     this.require.resolve = function(name, parent) {
       if (parent == null) {
         parent = null;
@@ -443,6 +445,41 @@
 	}
 	return result;
 	};
+
+}, '/test/Info.coffee': function(exports, module) {
+
+	/** node globals **/
+	var require = function(name) {return window.require(name, '/test/Info.coffee');};
+	require.resolve = function(name, parent) {if (parent === null) {parent = '/test/Info.coffee';} return window.require.resolve(name, parent);};
+	require.define = function(bundle) {window.require.define(bundle);};
+	require.cache = window.require.cache;
+	var __filename = '/test/Info.coffee';
+	var __dirname = '/test';
+	var process = {cwd: function() {return '/';}, argv: ['node', '/test/Info.coffee'], env: {}};
+
+	/** code **/
+	(function() {
+	  var require;
+	
+	  require = window.require;
+	
+	  describe('Info', function() {
+	    beforeEach(function() {
+	      return require.release();
+	    });
+	    afterEach(function() {
+	      return require.release();
+	    });
+	    it('should be true', function() {
+	      return expect(require.simq).to.be["true"];
+	    });
+	    return it('should contain version of simq', function() {
+	      return expect(require.version).to.be.a('string');
+	    });
+	  });
+	
+	}).call(this);
+	
 
 }, '/test/Libraries.coffee': function(exports, module) {
 
@@ -10986,7 +11023,8 @@
 , 'another': function(exports, module) { module.exports = window.require('another/lib/Another.js'); }
 
 });
-require.__setStats({"advanced/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"one/index.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"two/index.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"three/index.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"other/data.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"another/lib/buf.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Application.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Bootstrap.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Random.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Two.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/WithEvents.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/views/message.eco":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/test/Libraries.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/test/Require.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/test/Stats.coffee":{"atime":1382560232000,"mtime":1382560231000,"ctime":1382560231000},"/test/Styles.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/setup.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"events":{"atime":1382547837000,"mtime":1382163028000,"ctime":1382288163000},"/libs/jquery.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"advanced/other.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"any/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"any/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"advanced/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"other/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"other/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"another/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"another/lib/Another.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000}});
+require.__setStats({"advanced/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"one/index.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"two/index.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"three/index.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"other/data.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"another/lib/buf.js":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Application.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Bootstrap.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Random.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/Two.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/WithEvents.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/app/views/message.eco":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/test/Info.coffee":{"atime":1382562541000,"mtime":1382562537000,"ctime":1382562537000},"/test/Libraries.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/test/Require.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/test/Stats.coffee":{"atime":1382561947000,"mtime":1382561946000,"ctime":1382561946000},"/test/Styles.coffee":{"atime":1382550194000,"mtime":1382550104000,"ctime":1382550104000},"/setup.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"events":{"atime":1382547837000,"mtime":1382163028000,"ctime":1382288163000},"/libs/jquery.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"advanced/other.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"any/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"any/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"advanced/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"other/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"other/index.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"another/package.json":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000},"another/lib/Another.js":{"atime":1382550193000,"mtime":1382550104000,"ctime":1382550104000}});
+require.version = '5.1.0';
 delete require.__setStats;
 
 /** run section **/

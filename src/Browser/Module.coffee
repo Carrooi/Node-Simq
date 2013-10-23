@@ -77,6 +77,12 @@ if !@require
 		return require(name, parent)
 
 
+	@require.simq = true
+
+
+	@require.version = 1
+
+
 	@require.resolve = (name, parent = null) ->
 		return resolve(name, parent)
 
