@@ -385,7 +385,11 @@ your configuration.
 Now you can get needed information.
 
 ```
-var date = require.getStats('/name/of/some/module');	// Date object
+var stats = require.getStats('/name/of/some/module');
+
+console.log('atime: ' + stats.atime.getTime());
+console.log('mtime: ' + stats.mtime.getTime());
+console.log('ctime: ' + stats.ctime.getTime());
 ```
 
 Keep in mind, that `atime` is changed every time, you access module with `require` method.
@@ -490,6 +494,9 @@ $ npm test
 ```
 
 ## Changelog list
+
+* 5.1.1
+	* Misunderstanding in docs
 
 * 5.1.0
 	+ Some directories were not in git so some tests failed
