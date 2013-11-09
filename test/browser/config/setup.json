@@ -37,6 +37,6 @@
 		"jquerify": true
 	},
 	"debugger": {
-		"filesStats": true
+		"minify": false
 	}
 }

@@ -368,21 +368,7 @@ It is better to minify your files in production version. Only thing what you wil
 
 ## Files stats
 
-You may want to know some stats data of your modules (`atime`, `mtime`, `ctime`). You just need to allow this feature in
-your configuration.
-
-```
-{
-	"packages": {
-
-	},
-	"debugger": {
-		"filesStats": true
-	}
-}
-```
-
-Now you can get needed information.
+You can get some stats information (`atime`, `mtime`, `ctime`) about your modules.
 
 ```
 var stats = require.getStats('/name/of/some/module');
@@ -393,6 +379,19 @@ console.log('ctime: ' + stats.ctime.getTime());
 ```
 
 Keep in mind, that `atime` is changed every time, you access module with `require` method.
+
+If you want to disable this options, you have to disable option `filesStats` in your config file.
+
+```
+{
+	"packages": {
+
+	},
+	"debugger": {
+		"filesStats": false
+	}
+}
+```
 
 ## Skip packages
 
@@ -498,6 +497,7 @@ $ npm test
 * 5.1.2
 	+ Optimization in tests
 	+ method require.__setStats is not removed now
+	+ filesStats option is now true in default
 
 * 5.1.1
 	* Misunderstanding in docs

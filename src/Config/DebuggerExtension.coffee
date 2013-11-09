@@ -5,7 +5,7 @@ class DebuggerExtension extends Extension
 
 	defaults:
 		minify: true
-		filesStats: false
+		filesStats: true
 
 
 	loadConfiguration: ->
