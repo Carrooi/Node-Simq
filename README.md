@@ -497,6 +497,7 @@ $ npm test
 
 * 5.1.2
 	+ Optimization in tests
+	+ method require.__setStats is not removed now
 
 * 5.1.1
 	* Misunderstanding in docs

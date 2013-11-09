@@ -90,7 +90,6 @@ class Builder extends Package
 				version = Info.fromFile(__filename).getVersion()
 
 				result += "\nrequire.version = '#{version}';"
-				result += "\ndelete require.__setStats;"
 
 				deferred.resolve(result)
 			).fail( (err) ->
