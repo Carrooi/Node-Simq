@@ -1,7 +1,38 @@
 {
-	"includes": [
-		"./test.json"
-	],
+	"packages": {
+		"test": {
+			"application": "./public/application.js",
+			"base": "data",
+			"modules": [
+				"./app/*",
+				"./test/*",
+				"./setup.js",
+				"events",
+				"./libs/jquery.js",
+				"advanced/other.js"
+			],
+			"run": [
+				"- ./libs/one.js",
+				"/app/Two",
+				"- ./libs/three.js"
+			],
+			"libraries": {
+				"begin": [
+					"./libs/prepare.js"
+				],
+				"end": [
+					"./libs/end.coffee"
+				]
+			},
+			"aliases": {
+				"app": "/app/Application"
+			},
+			"style": {
+				"in": "./styles/style.less",
+				"out": "./public/style.css"
+			}
+		}
+	},
 	"template": {
 		"jquerify": true
 	},

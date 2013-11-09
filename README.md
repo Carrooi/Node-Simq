@@ -495,6 +495,9 @@ $ npm test
 
 ## Changelog list
 
+* 5.1.2
+	+ Optimization in tests
+
 * 5.1.1
 	* Misunderstanding in docs
 
