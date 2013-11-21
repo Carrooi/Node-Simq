@@ -126,8 +126,8 @@
         });
       });
       it('should create default server on another port', function(done) {
-        server = commands.server(null, null, null, 8000);
-        return http.get('http://localhost:8000', function(res) {
+        server = commands.server(null, null, null, 8080);
+        return http.get('http://localhost:8080', function(res) {
           var data;
           data = [];
           res.setEncoding('utf8');

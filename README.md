@@ -495,8 +495,11 @@ $ npm test
 
 ## Changelog list
 
+* 5.1.2
+	+ Changed port of testing server
+
 * 5.1.1
-	* Misunderstanding in docs
+	+ Misunderstanding in docs
 
 * 5.1.0
 	+ Some directories were not in git so some tests failed
