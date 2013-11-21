@@ -496,6 +496,7 @@ $ npm test
 
 * 5.1.3
 	+ Changed port of testing server
+	+ Modules are called in window context
 
 * 5.1.2
 	+ Optimization in tests

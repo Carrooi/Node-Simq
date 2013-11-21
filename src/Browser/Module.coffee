@@ -24,7 +24,7 @@ if !@require
 				parent: null
 				children: null
 
-			modules[fullName].apply(modules[fullName], [m.exports, m])
+			modules[fullName].apply(window, [m.exports, m])
 
 			m.loaded = true
 
