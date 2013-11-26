@@ -497,6 +497,7 @@ $ npm test
 * 5.2.0
 	+ Updated dependencies
 	+ Updated sandbox
+	+ Removing project git files after create command
 
 * 5.1.3
 	+ Changed port of testing server

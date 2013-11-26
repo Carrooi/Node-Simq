@@ -6,6 +6,7 @@ mime = require 'mime'
 Compiler = require 'source-compiler'
 Q = require 'q'
 watch = require 'watch'
+Finder = require 'fs-finder'
 EventEmitter = require('events').EventEmitter
 
 class Commands extends EventEmitter
@@ -107,6 +108,10 @@ class Commands extends EventEmitter
 			if err
 				deferred.reject(new Error 'There is some error with creating new application.')
 			else
+				files = Finder.from(_path).showSystemFiles().findFiles('.<gitkeep|gitignore>')
+				for file in files
+					fs.unlinkSync(file)
+
 				deferred.resolve()
 		)
 		return deferred.promise
