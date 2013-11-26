@@ -49,7 +49,7 @@
         return commands.create('test').then(function() {
           var files;
           files = Finder.findFiles(dir + '/test/*');
-          expect(files).to.be.eql([dir + '/test/config/setup.json', dir + '/test/css/style.less', dir + '/test/package.json', dir + '/test/public/application.js', dir + '/test/public/index.html']);
+          expect(files).to.be.eql([dir + '/test/config/setup.json', dir + '/test/css/style.less', dir + '/test/package.json', dir + '/test/public/application.js', dir + '/test/public/index.html', dir + '/test/public/style.css']);
           return rimraf(dir + '/test', function() {
             return done();
           });

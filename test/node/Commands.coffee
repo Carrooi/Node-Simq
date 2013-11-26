@@ -42,6 +42,7 @@ describe 'Commands', ->
 					dir + '/test/package.json'
 					dir + '/test/public/application.js'
 					dir + '/test/public/index.html'
+					dir + '/test/public/style.css'
 				])
 				rimraf(dir + '/test', -> done())
 			).done()
