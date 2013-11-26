@@ -494,7 +494,7 @@ $ npm test
 
 ## Changelog list
 
-* 5.2.0
+* 5.1.4
 	+ Updated dependencies
 	+ Updated sandbox
 	+ Removing project git files after create command
