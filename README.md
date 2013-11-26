@@ -494,6 +494,9 @@ $ npm test
 
 ## Changelog list
 
+* 5.2.0
+	+ Updated dependencies
+
 * 5.1.3
 	+ Changed port of testing server
 	+ Modules are called in window context
