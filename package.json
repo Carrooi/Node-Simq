@@ -28,26 +28,26 @@
 		"simq": "./bin/simq"
 	},
 	"dependencies": {
-		"watch": "~0.8.0",
-		"uglify-js": "~2.4.0",
-		"clean-css": "~2.0.2",
-		"optimist": "~0.6.0",
-		"ncp": "~0.4.2",
-		"q": "~0.9.7",
-		"express": "~3.4.0",
-		"mime": "~1.2.11",
-		"easy-configuration": "~1.6.6",
-		"fs-finder": "~1.7.4",
-		"source-compiler": "~2.0.3",
-		"recursive-merge": "~1.2.0",
-		"flatten-required": "~1.1.1",
-		"module-info": "~1.2.2",
-		"escape-regexp": "~0.0.1"
+		"watch": "0.8.0",
+		"uglify-js": "2.4.0",
+		"clean-css": "2.0.2",
+		"optimist": "0.6.0",
+		"ncp": "0.4.2",
+		"q": "0.9.7",
+		"express": "3.4.0",
+		"mime": "1.2.11",
+		"easy-configuration": "1.6.6",
+		"fs-finder": "1.7.4",
+		"source-compiler": "2.0.3",
+		"recursive-merge": "1.2.0",
+		"flatten-required": "1.1.1",
+		"module-info": "1.2.2",
+		"escape-regexp": "0.0.1"
 	},
 	"devDependencies": {
-		"chai": "~1.8.0",
-		"mocha": "~1.14.0",
-		"rimraf": "~2.2.2"
+		"chai": "1.8.0",
+		"mocha": "1.14.0",
+		"rimraf": "2.2.2"
 	},
 	"scripts": {
 		"test": "cd ./test; echo \"Testing in node:\"; mocha ./node/index.js --reporter spec --timeout 10000; echo \"Testing in browser:\"; node ./browser/prepare.js; mocha-phantomjs ./browser/index.html;"
