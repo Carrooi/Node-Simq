@@ -483,11 +483,6 @@ This will remove all result js and css files with temp files.
 
 ## Tests
 
-You have to got installed globally these modules:
-* [mocha](https://npmjs.org/package/mocha)
-* [phantomjs](https://npmjs.org/package/phantomjs)
-* [mocha-phantomjs](https://npmjs.org/package/mocha-phantomjs)
-
 ```
 $ npm test
 ```
