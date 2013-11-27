@@ -46,10 +46,12 @@
 	},
 	"devDependencies": {
 		"chai": "1.8.1",
+		"rimraf": "2.2.2",
 		"mocha": "1.14.0",
-		"rimraf": "2.2.2"
+		"mocha-phantomjs": "3.1.6",
+		"phantomjs": "1.9.2-4"
 	},
 	"scripts": {
-		"test": "cd ./test; echo \"Testing in node:\"; mocha ./node/index.js --reporter spec --timeout 10000; echo \"Testing in browser:\"; node ./browser/prepare.js; mocha-phantomjs ./browser/index.html;"
+		"test": "cd ./test; echo \"Testing in node:\"; node ../node_modules/mocha/bin/mocha ./node/index.js --reporter spec --timeout 10000; echo \"Testing in browser:\"; node ./browser/prepare.js; node ../node_modules/mocha-phantomjs/bin/mocha-phantomjs -p ../node_modules/phantomjs/bin/phantomjs ./browser/index.html;"
 	}
 }

@@ -496,6 +496,7 @@ $ npm test
 
 * 5.1.5
 	+ Updated dependencies
+	+ Modules for tests does not need to be installed globally
 
 * 5.1.4
 	+ Updated dependencies
