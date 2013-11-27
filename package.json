@@ -45,7 +45,7 @@
 		"escape-regexp": "0.0.1"
 	},
 	"devDependencies": {
-		"chai": "1.8.0",
+		"chai": "1.8.1",
 		"mocha": "1.14.0",
 		"rimraf": "2.2.2"
 	},
