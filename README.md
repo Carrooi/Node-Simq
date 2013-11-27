@@ -492,7 +492,10 @@ You have to got installed globally these modules:
 $ npm test
 ```
 
-## Changelog list
+## Changelog
+
+* 5.1.3
+	+ Updated dependencies
 
 * 5.1.2
 	+ Optimization in tests
