@@ -1,7 +1,7 @@
 {
 	"name": "simq",
 	"description": "Simple require for javascript (browser)",
-	"version": "5.1.5",
+	"version": "5.2.0",
 	"author": {
 		"name": "David Kudera",
 		"email": "sakren@gmail.com"
@@ -52,6 +52,7 @@
 		"phantomjs": "1.9.2-4"
 	},
 	"scripts": {
-		"test": "cd ./test; echo \"Testing in node:\"; node ../node_modules/mocha/bin/mocha ./node/index.js --reporter spec --timeout 10000; echo \"Testing in browser:\"; node ./browser/prepare.js; node ../node_modules/mocha-phantomjs/bin/mocha-phantomjs -p ../node_modules/phantomjs/bin/phantomjs ./browser/index.html;"
+		"test": "node ./node_modules/mocha/bin/mocha ./test/node/index.js --reporter spec --timeout 10000;",
+		"test-browser": "node ./test/browser/prepare.js; node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -p ./node_modules/phantomjs/bin/phantomjs ./test/browser/index.html;"
 	}
 }

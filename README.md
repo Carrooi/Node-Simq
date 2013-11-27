@@ -486,16 +486,20 @@ This will remove all result js and css files with temp files.
 
 ## Tests
 
+There are two groups of tests. Tests for node and for the browser side code.
+
 ```
 $ npm test
+$ npm run-script test-browser
 ```
 
 ## Changelog
 
-* 5.1.5
+* 5.2.0
 	+ Updated dependencies
 	+ Modules for tests does not need to be installed globally
 	+ Added [fury](https://badge.fury.io/) and [gemnasium](https://gemnasium.com) badges
+	+ Tests for node and browser are separated
 
 * 5.1.4
 	+ Updated dependencies
