@@ -42,6 +42,7 @@ describe 'Commands', ->
 					dir + '/test/package.json'
 					dir + '/test/public/application.js'
 					dir + '/test/public/index.html'
+					dir + '/test/public/style.css'
 				])
 				rimraf(dir + '/test', -> done())
 			).done()
@@ -112,9 +113,9 @@ describe 'Commands', ->
 			)
 
 		it 'should create default server on another port', (done) ->
-			server = commands.server(null, null, null, 8000)
+			server = commands.server(null, null, null, 8080)
 
-			http.get('http://localhost:8000', (res) ->
+			http.get('http://localhost:8080', (res) ->
 				data = []
 				res.setEncoding('utf8')
 				res.on 'data', (chunk) -> data.push(chunk)

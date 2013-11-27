@@ -234,9 +234,6 @@ class Builder extends Package
 		result = {}
 		for name, _path of modules
 			stat = fs.statSync(_path)
-			if name == '/test/Stats.coffee' && 0
-				console.log new Date(stat.atime)
-				console.log new Date(new Date(stat.atime).valueOf() * 1000)
 			result[name] =
 				atime: (new Date(stat.atime)).getTime()
 				mtime: (new Date(stat.mtime)).getTime()

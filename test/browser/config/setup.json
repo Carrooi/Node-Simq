@@ -35,8 +35,5 @@
 	},
 	"template": {
 		"jquerify": true
-	},
-	"debugger": {
-		"minify": false
 	}
 }

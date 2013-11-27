@@ -497,13 +497,22 @@ $ npm test
 * 5.1.3
 	+ Updated dependencies
 
+* 5.1.4
+	+ Updated dependencies
+	+ Updated sandbox
+	+ Removing project git files after create command
+
+* 5.1.3
+	+ Changed port of testing server
+	+ Modules are called in window context
+
 * 5.1.2
 	+ Optimization in tests
 	+ method require.__setStats is not removed now
 	+ filesStats option is now true in default
 
 * 5.1.1
-	* Misunderstanding in docs
+	+ Misunderstanding in docs
 
 * 5.1.0
 	+ Some directories were not in git so some tests failed
