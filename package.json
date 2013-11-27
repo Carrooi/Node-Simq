@@ -34,7 +34,7 @@
 		"optimist": "0.6.0",
 		"ncp": "0.4.2",
 		"q": "0.9.7",
-		"express": "3.4.0",
+		"express": "3.4.4",
 		"mime": "1.2.11",
 		"easy-configuration": "1.6.6",
 		"fs-finder": "1.7.4",
