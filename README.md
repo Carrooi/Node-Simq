@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/sakren/node-simq.png)](https://gemnasium.com/sakren/node-simq)
+
 # SimQ - Common js module loader for browser (Simple reQuire)
 
 Join and minify all your javascript files into one (even remote ones) and use them in browser just like in node server.
@@ -492,6 +494,7 @@ $ npm test
 * 5.1.5
 	+ Updated dependencies
 	+ Modules for tests does not need to be installed globally
+	+ Added [gemnasium](https://gemnasium.com) badge
 
 * 5.1.4
 	+ Updated dependencies
