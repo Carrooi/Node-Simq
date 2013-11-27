@@ -494,7 +494,7 @@ $ npm test
 
 ## Changelog
 
-* 5.1.3
+* 5.1.5
 	+ Updated dependencies
 
 * 5.1.4
