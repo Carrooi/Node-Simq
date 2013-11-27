@@ -6,9 +6,7 @@ node_js:
   - "0.10"
 
 before_install: true
-install: sudo npm install .
 before_script: true
-script: npm test
 after_success: true
 after_failure: true
 after_script: true
