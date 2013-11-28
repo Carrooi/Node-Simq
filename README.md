@@ -487,11 +487,10 @@ This will remove all result js and css files with temp files.
 
 ## Tests
 
-There are two groups of tests. Tests for node and for the browser side code.
+This command will run two testing "groups": for node and for browser.
 
 ```
 $ npm test
-$ npm run-script test-browser
 ```
 
 ## Changelog
