@@ -7,7 +7,6 @@
 				"./app/*",
 				"./test/*",
 				"./setup.js",
-				"events",
 				"./libs/jquery.js",
 				"advanced/other.js"
 			],

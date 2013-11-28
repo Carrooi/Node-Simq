@@ -73,7 +73,7 @@ describe 'require', ->
 			expect(data).to.include.keys(['name'])
 			expect(data.name).to.be.equal('any')
 
-		it 'should load node core module', ->
+		it.skip 'should load node core module', ->
 			events = new require('events').EventEmitter
 			expect(events).to.satisfy( (events) -> return Object.prototype.toString.call(events) == '[object Function]')
 
@@ -91,7 +91,7 @@ describe 'require', ->
 		it 'should load npm module with another main file', ->
 			expect(require('another')).to.be.equal('SimQ')
 
-		it 'should test module which uses core module', (done) ->
+		it.skip 'should test module which uses core module', (done) ->
 			obj = new (require('/app/WithEvents'))
 			obj.on 'call', (message) ->
 				expect(message).to.be.equal('hello')
