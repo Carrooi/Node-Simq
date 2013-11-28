@@ -1,5 +1,6 @@
 [![NPM version](https://badge.fury.io/js/simq.png)](http://badge.fury.io/js/simq)
 [![Dependency Status](https://gemnasium.com/sakren/node-simq.png)](https://gemnasium.com/sakren/node-simq)
+[![Build Status](https://travis-ci.org/sakren/node-simq.png?branch=master)](https://travis-ci.org/sakren/node-simq)
 
 # SimQ - Common js module loader for browser (Simple reQuire)
 
@@ -498,7 +499,7 @@ $ npm test
 * 5.2.0
 	+ Updated dependencies
 	+ Modules for tests does not need to be installed globally
-	+ Added [fury](https://badge.fury.io/) and [gemnasium](https://gemnasium.com) badges
+	+ Added [fury](https://badge.fury.io/), [gemnasium](https://gemnasium.com) and [travis](https://travis-ci.org/) badges
 	+ Tests for node and browser are separated
 	+ Throwing exception when core module was not found (node globalPaths is empty) + tests temporary disabled
 
