@@ -54,7 +54,7 @@ describe 'Package/Package.baseNamespace', ->
 				dir + '/modules/other/index.js'
 			])
 
-		it 'should add core module', ->
+		it.skip 'should add core module', ->
 			pckg.addModule('events')
 			expect(pckg.modules).to.have.length.above(0)
 			expect(pckg.modules[0]).not.to.be.null

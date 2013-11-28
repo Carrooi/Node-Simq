@@ -289,6 +289,7 @@ Directory to this module needs to contain `package.json` file.
 ## Node core modules
 
 You can define all core modules (like `events`) if you want to use them in browser.
+Be careful with this, because in some cases, simq can not see node's global paths and include these modules.
 
 ```
 {
@@ -500,6 +501,7 @@ $ npm run-script test-browser
 	+ Modules for tests does not need to be installed globally
 	+ Added [fury](https://badge.fury.io/) and [gemnasium](https://gemnasium.com) badges
 	+ Tests for node and browser are separated
+	+ Throwing exception when core module was not found (node globalPaths is empty) + tests temporary disabled
 
 * 5.1.4
 	+ Updated dependencies

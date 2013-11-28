@@ -150,6 +150,8 @@ class Package
 			if _path != null
 				found = true
 				@modules.push(_path)
+			else if require('../../data.json').supportedCores.indexOf(name) != -1
+				throw new Error "Core module #{name} was not found."
 
 		# own modules from project
 		if name[0] == '.' && found == false
