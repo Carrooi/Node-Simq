@@ -8,7 +8,9 @@ class PackageExtension extends Extension
 	defaultsPackage:
 		skip: false
 		target: null
-		packagePath: '.'
+		packagePath: null	# deprecated
+		paths:
+			package: '.'
 		application: null	# deprecated
 		base: null
 		style:
@@ -35,6 +37,9 @@ class PackageExtension extends Extension
 			if pckg.application != null
 				throw new Error 'Config: application option is deprecated. Please use target and take a look in the new documentation.'
 
+			if pckg.packagePath != null
+				throw new Error 'Config: packagePath option is deprecated. Please use paths.package.'
+
 			if pckg.coreModules != null
 				throw new Error 'Config: coreModules section is deprecated. Please take a look in new documentation.'
 
@@ -53,6 +58,7 @@ class PackageExtension extends Extension
 				pckg.style = null
 
 			delete pckg.application
+			delete pckg.packagePath
 			delete pckg.coreModules
 			delete pckg.fsModules
 			delete pckg.libraries

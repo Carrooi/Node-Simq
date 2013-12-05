@@ -17,7 +17,8 @@ describe 'Configurator', ->
 			expect(config.packages.application).to.be.eql(
 				skip: false
 				target: null
-				packagePath: '.'
+				paths:
+					package: '.'
 				base: null
 				style: null
 				modules: []

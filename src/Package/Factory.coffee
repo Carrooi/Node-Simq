@@ -7,7 +7,7 @@ class Factory
 		pckg = new Package(basePath)
 		pckg.skip = config.skip
 		pckg.base = config.base
-		pckg.packagePath = config.packagePath
+		pckg.paths = config.paths
 		pckg.autoNpmModules = config.autoNpmModules
 
 		if config.target != null

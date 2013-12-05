@@ -19,7 +19,7 @@ class Package
 
 	target: null
 
-	packagePath: '.'
+	paths: null
 
 	base: null
 
@@ -40,6 +40,9 @@ class Package
 
 	constructor: (@basePath) ->
 		@basePath = path.resolve(@basePath)
+
+		@paths =
+			package: '.'
 
 		@modules = []
 		@aliases = {}
@@ -84,7 +87,7 @@ class Package
 
 	getPackageInfo: ->
 		if @info == null
-			@info = new Info(@getPath(@packagePath))
+			@info = new Info(@getPath(@paths.package))
 
 		return @info
 

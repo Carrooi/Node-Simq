@@ -161,7 +161,7 @@ describe 'Package/Package.baseNamespace', ->
 				dir + '/libs/begin/6.js'
 			])
 
-	describe '#packagePath', ->
+	describe '#paths', ->
 		it 'should set different path to package.json file', ->
-			pckg.packagePath = './otherPackage'
+			pckg.paths.package = './otherPackage'
 			expect(pckg.getPackageInfo().getName()).to.be.equal('other-package')

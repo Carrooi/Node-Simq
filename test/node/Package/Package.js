@@ -135,9 +135,9 @@
         return expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js', dir + '/libs/begin/2.js', dir + '/libs/begin/3.js', dir + '/libs/begin/4.js', dir + '/libs/begin/6.js']);
       });
     });
-    return describe('#packagePath', function() {
+    return describe('#paths', function() {
       return it('should set different path to package.json file', function() {
-        pckg.packagePath = './otherPackage';
+        pckg.paths["package"] = './otherPackage';
         return expect(pckg.getPackageInfo().getName()).to.be.equal('other-package');
       });
     });

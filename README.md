@@ -496,6 +496,10 @@ $ npm test
 
 ## Changelog
 
+* 5.4.0
+	+ Option `packagePath` removed
+	+ Added option `paths.package`
+
 * 5.3.0
 	+ `Application` option renamed to `target` (BC break!)
 	+ Updated dependencies
