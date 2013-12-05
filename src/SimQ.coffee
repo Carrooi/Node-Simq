@@ -81,7 +81,7 @@ class SimQ
 
 		@buildPackage(name).then( (data) =>
 			if data.js != null
-				fs.writeFileSync(@packages[name].application, data.js)
+				fs.writeFileSync(@packages[name].target, data.js)
 
 			if data.css != null
 				fs.writeFileSync(@packages[name].style.out, data.css)
@@ -121,7 +121,7 @@ class SimQ
 
 		result = []
 		for name, pckg of @packages
-			if pckg.application != null
+			if pckg.target != null
 				result.push(@buildPackageToFile(name))
 
 		Q.all(result).then( (data) =>

@@ -33,7 +33,7 @@
         expect(pckg.basePath).to.be.equal(dir);
         expect(pckg.skip).to.be["false"];
         expect(pckg.base).to.be["null"];
-        expect(pckg.application).to.be["null"];
+        expect(pckg.target).to.be["null"];
         expect(pckg.style).to.be["null"];
         expect(pckg.modules).to.be.eql([]);
         return expect(pckg.run).to.be.eql([]);
@@ -41,7 +41,7 @@
       it('should create package with result application path', function() {
         var pckg;
         pckg = createPackage('advanced/config');
-        return expect(pckg.application).to.be.equal(dir + '/public/application.js');
+        return expect(pckg.target).to.be.equal(dir + '/public/application.js');
       });
       it('should create package with styles', function() {
         var pckg;

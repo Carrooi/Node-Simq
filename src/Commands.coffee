@@ -50,8 +50,8 @@ class Commands extends EventEmitter
 			if pckg.skip == false
 				pckg.name = name
 				((pckg) =>
-					if pckg.application != null
-						_path = path.relative(@simq.basePath, pckg.application)
+					if pckg.target != null
+						_path = path.relative(@simq.basePath, pckg.target)
 						_path = path.normalize(base + '/./' + _path)
 						app.get(_path, (req, res) =>
 							@simq.buildPackage(pckg.name).then( (data) ->
@@ -84,7 +84,7 @@ class Commands extends EventEmitter
 
 		ignore = new Array
 		for name, pckg of @simq.packages
-			if pckg.application != null then ignore.push(pckg.application)
+			if pckg.target != null then ignore.push(pckg.target)
 			if pckg.style != null then ignore.push(pckg.style.out)
 
 		watch.watchTree(@simq.basePath, {},  (file, curr, prev) =>
@@ -119,8 +119,8 @@ class Commands extends EventEmitter
 
 	clean: (cacheDirectory = null) ->
 		for name, pckg of @simq.packages
-			if pckg.application != null && fs.existsSync(pckg.application)
-				fs.unlinkSync(pckg.application)
+			if pckg.target != null && fs.existsSync(pckg.target)
+				fs.unlinkSync(pckg.target)
 
 			if pckg.style != null && fs.existsSync(pckg.style.out)
 				fs.unlinkSync(pckg.style.out)

@@ -230,7 +230,7 @@
       it('should create server with package (js)', function(done) {
         var pckg;
         pckg = simq.addPackage('app');
-        pckg.setApplication('./public/application.js');
+        pckg.setTarget('./public/application.js');
         pckg.addModule('./app/Application.coffee');
         server = commands.server();
         return http.get('http://localhost:3000/public/application.js', function(res) {
@@ -250,7 +250,7 @@
       it('should create server with package (js) and prefix', function(done) {
         var pckg;
         pckg = simq.addPackage('app');
-        pckg.setApplication('./public/application.js');
+        pckg.setTarget('./public/application.js');
         pckg.addModule('./app/Application.coffee');
         server = commands.server('package');
         return http.get('http://localhost:3000/package/public/application.js', function(res) {

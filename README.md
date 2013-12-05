@@ -61,7 +61,7 @@ The name `packages` also suggests, that you can got more independent packages in
 {
 	"packages": {
 		"nameOfYourFirstPackage": {
-			"application": "./path/to/the/result/javascript/file.js"
+			"target": "./path/to/the/result/javascript/file.js"
 			"modules": [
 				"./my/first/module.coffee",
 				"./my/second/module.js",
@@ -496,7 +496,8 @@ $ npm test
 
 ## Changelog
 
-* 5.2.1
+* 5.3.0
+	+ `Application` option renamed to `target` (BC break!)
 	+ Updated dependencies
 	+ Optimized tests
 

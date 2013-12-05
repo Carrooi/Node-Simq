@@ -19,10 +19,10 @@
       pckg = new Package(path.resolve(dir + '/../../'));
       return pckg.base = 'data/package';
     });
-    describe('#setApplication()', function() {
+    describe('#setTarget()', function() {
       return it('should set path for result js file', function() {
-        pckg.setApplication('./public/application.js');
-        return expect(pckg.application).to.be.equal(dir + '/public/application.js');
+        pckg.setTarget('./public/application.js');
+        return expect(pckg.target).to.be.equal(dir + '/public/application.js');
       });
     });
     describe('#setStyle()', function() {

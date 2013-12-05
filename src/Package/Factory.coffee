@@ -8,8 +8,8 @@ class Factory
 		pckg.skip = config.skip
 		pckg.base = config.base
 
-		if config.application != null
-			pckg.setApplication(config.application)
+		if config.target != null
+			pckg.setTarget(config.target)
 
 		if config.style != null
 			pckg.setStyle(config.style.in, config.style.out, config.style.dependencies)

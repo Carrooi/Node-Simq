@@ -16,6 +16,7 @@ describe 'Configurator', ->
 			expect(config.packages).to.include.keys(['application'])
 			expect(config.packages.application).to.be.eql(
 				skip: false
+				target: null
 				application: null
 				base: null
 				style: null
@@ -32,7 +33,7 @@ describe 'Configurator', ->
 
 		it 'should load configuration with includes', ->
 			config = getConfig('advanced/config')
-			expect(config.packages.application.application).to.be.equal('./public/application.js')
+			expect(config.packages.application.target).to.be.equal('./public/application.js')
 
 		it 'should load configuration with styles', ->
 			styles = getConfig('styles/styles').packages.application.style

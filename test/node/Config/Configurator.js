@@ -23,6 +23,7 @@
         expect(config.packages).to.include.keys(['application']);
         return expect(config.packages.application).to.be.eql({
           skip: false,
+          target: null,
           application: null,
           base: null,
           style: null,
@@ -44,7 +45,7 @@
       it('should load configuration with includes', function() {
         var config;
         config = getConfig('advanced/config');
-        return expect(config.packages.application.application).to.be.equal('./public/application.js');
+        return expect(config.packages.application.target).to.be.equal('./public/application.js');
       });
       it('should load configuration with styles', function() {
         var styles;

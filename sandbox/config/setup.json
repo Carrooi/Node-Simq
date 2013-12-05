@@ -11,7 +11,7 @@
 	},
 	"packages": {
 		"application": {
-			"application": "./public/application.js",
+			"target": "./public/application.js",
 			"style": {
 				"in": "./css/style.less",
 				"out": "./public/style.css"

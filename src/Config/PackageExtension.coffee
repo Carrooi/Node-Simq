@@ -7,7 +7,8 @@ class PackageExtension extends Extension
 
 	defaultsPackage:
 		skip: false
-		application: null
+		target: null
+		application: null	# deprecated
 		base: null
 		style:
 			in: null
@@ -28,6 +29,9 @@ class PackageExtension extends Extension
 
 		for name, pckg of config
 			config[name] = @configurator.merge(pckg, @defaultsPackage)
+
+			if pckg.application != null
+				throw new Error 'Config: application option is deprecated. Please use target and take a look in the new documentation.'
 
 			if pckg.coreModules != null
 				throw new Error 'Config: coreModules section is deprecated. Please take a look in new documentation.'

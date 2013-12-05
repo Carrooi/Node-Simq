@@ -13,10 +13,10 @@ describe 'Package/Package', ->
 		pckg = new Package(dir)
 	)
 
-	describe '#setApplication()', ->
+	describe '#setTarget()', ->
 		it 'should set path for result js file', ->
-			pckg.setApplication('./public/application.js')
-			expect(pckg.application).to.be.equal(dir + '/public/application.js')
+			pckg.setTarget('./public/application.js')
+			expect(pckg.target).to.be.equal(dir + '/public/application.js')
 
 	describe '#setStyle()', ->
 		it 'should set paths for styles without dependent files', ->

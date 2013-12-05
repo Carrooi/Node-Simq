@@ -1,7 +1,7 @@
 {
 	"packages": {
 		"test": {
-			"application": "./public/application.js",
+			"target": "./public/application.js",
 			"base": "data",
 			"modules": [
 				"./app/*",

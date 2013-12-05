@@ -192,7 +192,7 @@ describe 'Commands', ->
 
 		it 'should create server with package (js)', (done) ->
 			pckg = simq.addPackage('app')
-			pckg.setApplication('./public/application.js')
+			pckg.setTarget('./public/application.js')
 			pckg.addModule('./app/Application.coffee')
 
 			server = commands.server()
@@ -209,7 +209,7 @@ describe 'Commands', ->
 
 		it 'should create server with package (js) and prefix', (done) ->
 			pckg = simq.addPackage('app')
-			pckg.setApplication('./public/application.js')
+			pckg.setTarget('./public/application.js')
 			pckg.addModule('./app/Application.coffee')
 
 			server = commands.server('package')

@@ -17,7 +17,7 @@ class Package
 
 	skip: false
 
-	application: null
+	target: null
 
 	base: null
 
@@ -100,8 +100,8 @@ class Package
 		return result.filter( (el, pos) -> return result.indexOf(el) == pos)
 
 
-	setApplication: (@application) ->
-		@application = @getPath(@application)
+	setTarget: (@target) ->
+		@target = @getPath(@target)
 		return @
 
 

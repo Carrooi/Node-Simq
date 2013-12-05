@@ -86,7 +86,7 @@ describe 'SimQ', ->
 			pckg.addModule('./modules/1.js')
 			pckg.addToAutorun('/modules/1')
 			pckg.addToAutorun('- ./libs/begin/4.js')
-			pckg.setApplication('public/application.js')
+			pckg.setTarget('public/application.js')
 			simq.buildToFiles().then( (data) ->
 				data = fs.readFileSync(dir + '/public/application.js', encoding: 'utf8')
 
