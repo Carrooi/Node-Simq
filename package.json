@@ -53,7 +53,8 @@
 	},
 	"scripts": {
 		"pretest": "node ./test/browser/prepare.js",
-		"test": "node ./node_modules/mocha/bin/mocha ./test/node/index.js --reporter spec --timeout 10000",
-		"posttest": "node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -p ./node_modules/phantomjs/bin/phantomjs ./test/browser/index.html"
+		"test": "npm run test-node && npm run test-browser",
+		"test-node": "mocha ./test/node/index.js --reporter spec --timeout 10000",
+		"test-browser": "mocha-phantomjs -p ./node_modules/phantomjs/bin/phantomjs ./test/browser/index.html"
 	}
 }

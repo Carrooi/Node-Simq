@@ -498,6 +498,7 @@ $ npm test
 
 * 5.2.1
 	+ Updated dependencies
+	+ Optimized tests
 
 * 5.2.0
 	+ Updated dependencies
