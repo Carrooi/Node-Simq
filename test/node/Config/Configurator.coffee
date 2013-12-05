@@ -19,6 +19,7 @@ describe 'Configurator', ->
 				target: null
 				paths:
 					package: '.'
+					npmModules: './node_modules'
 				base: null
 				style: null
 				modules: []

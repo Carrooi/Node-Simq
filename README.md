@@ -499,8 +499,9 @@ $ npm test
 * 5.4.0
 	+ Option `packagePath` removed
 	+ Added option `paths.package`
+	+ Added option `paths.npmModules`
 
-* 5.3.0
+* 5.3.0 (actually 5.2.1 - mistake, sorry)
 	+ `Application` option renamed to `target` (BC break!)
 	+ Updated dependencies
 	+ Optimized tests

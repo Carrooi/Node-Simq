@@ -136,9 +136,15 @@
       });
     });
     return describe('#paths', function() {
-      return it('should set different path to package.json file', function() {
+      it('should set different path to package.json file', function() {
         pckg.paths["package"] = './otherPackage';
         return expect(pckg.getPackageInfo().getName()).to.be.equal('other-package');
+      });
+      return it('should set different path for npm modules', function() {
+        pckg.paths.npmModules = './otherPackage/node_modules';
+        return expect(function() {
+          return pckg.addModule('another_path');
+        }).to.not["throw"]();
       });
     });
   });

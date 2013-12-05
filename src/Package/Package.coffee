@@ -43,6 +43,7 @@ class Package
 
 		@paths =
 			package: '.'
+			npmModules: './node_modules'
 
 		@modules = []
 		@aliases = {}
@@ -60,11 +61,11 @@ class Package
 			if typeof dependencies == 'object' && @autoNpmModules
 				basePath = @getBasePath()
 
-				if !fs.existsSync(basePath + '/node_modules')
+				if !fs.existsSync(@getPath(@paths.npmModules))
 					throw new Error "Npm modules not found. Did you run 'npm install .' command?"
 
 				for name of dependencies
-					_path = basePath + '/node_modules/' + name
+					_path = @getPath(@paths.npmModules + '/' + name)
 					if !fs.existsSync(_path)
 						throw new Error "Npm module '#{name}' not found. Did you run 'npm install .' command?"
 
@@ -175,7 +176,7 @@ class Package
 
 		# npm modules in node_modules directory
 		if found == false
-			_path = @getPath('./node_modules/' + name)
+			_path = @getPath(@paths.npmModules + '/' + name)
 			if fs.existsSync(_path)
 				found = true
 				@modules.push(_path)
@@ -184,7 +185,7 @@ class Package
 				if paths.length > 0
 					found = true
 					for _path in paths
-						_path = path.relative(@getBasePath() + '/node_modules', _path)
+						_path = path.relative(@getPath(@paths.npmModules), _path)
 						@addModule(_path)
 
 		if found == false

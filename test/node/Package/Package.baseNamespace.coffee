@@ -165,3 +165,7 @@ describe 'Package/Package.baseNamespace', ->
 		it 'should set different path to package.json file', ->
 			pckg.paths.package = './otherPackage'
 			expect(pckg.getPackageInfo().getName()).to.be.equal('other-package')
+
+		it 'should set different path for npm modules', ->
+			pckg.paths.npmModules = './otherPackage/node_modules'
+			expect( -> pckg.addModule('another_path')).to.not.throw()
