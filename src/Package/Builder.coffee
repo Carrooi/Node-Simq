@@ -32,7 +32,7 @@ class Builder extends Package
 
 
 	check: ->
-		if !fs.existsSync(@pckg.getBasePath() + '/package.json')
+		if !fs.existsSync(@pckg.getPath(@pckg.paths.package))
 			throw new Error 'Package has not got package.json file.'
 
 		@pckg.prepare()
