@@ -500,6 +500,7 @@ $ npm test
 	+ `Application` option renamed to `target` (BC break!)
 	+ Updated dependencies
 	+ Optimized tests
+	+ Added `autoNpmModules` option
 
 * 5.2.0
 	+ Updated dependencies

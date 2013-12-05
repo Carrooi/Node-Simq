@@ -15,6 +15,7 @@ class PackageExtension extends Extension
 			out: null
 			dependencies: null
 		modules: []
+		autoNpmModules: true
 		coreModules: null	# deprecated
 		fsModules: null		# deprecated
 		aliases: {}

@@ -25,6 +25,8 @@ class Package
 
 	modules: null
 
+	autoNpmModules: true
+
 	aliases: null
 
 	run: null
@@ -50,7 +52,7 @@ class Package
 				@addModule(main)
 
 			dependencies = @getPackageInfo().getData().dependencies
-			if typeof dependencies == 'object'
+			if typeof dependencies == 'object' && @autoNpmModules
 				basePath = @getBasePath()
 
 				if !fs.existsSync(basePath + '/node_modules')

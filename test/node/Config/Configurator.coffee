@@ -21,6 +21,7 @@ describe 'Configurator', ->
 				base: null
 				style: null
 				modules: []
+				autoNpmModules: true
 				aliases: {}
 				run: []
 			)
