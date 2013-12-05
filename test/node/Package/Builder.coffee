@@ -35,6 +35,21 @@ describe 'Package/Builder', ->
 				done()
 			).done()
 
+		it 'should build modules with custom package.json path', (done) ->
+			pckg.paths.package = './otherPackage/package.json'
+			builder.buildModules().then( (data) ->
+				expect(data).to.have.string('"name": "other-package"')
+				done()
+			).done()
+
+		it 'should build modules with custom node_modules path', (done) ->
+			pckg.paths.npmModules = './otherPackage/node_modules'
+			pckg.addModule('another_path')
+			builder.buildModules().then( (data) ->
+				expect(data).to.have.string('another_path')
+				done()
+			).done()
+
 	describe '#buildAutorun()', ->
 		it 'should build autorun section', (done) ->
 			pckg.addModule('./modules/1.js')

@@ -10,7 +10,7 @@ class PackageExtension extends Extension
 		target: null
 		packagePath: null	# deprecated
 		paths:
-			package: '.'
+			package: './package.json'
 			npmModules: './node_modules'
 		application: null	# deprecated
 		base: null

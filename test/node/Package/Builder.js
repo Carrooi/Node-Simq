@@ -35,10 +35,25 @@
           return done();
         }).done();
       });
-      return it('should return an error for wrong coffee file', function(done) {
+      it('should return an error for wrong coffee file', function(done) {
         pckg.addModule('./modules/with-error.coffee');
         return builder.buildModules().fail(function(err) {
           expect(err).to.be.an["instanceof"](Error);
+          return done();
+        }).done();
+      });
+      it('should build modules with custom package.json path', function(done) {
+        pckg.paths["package"] = './otherPackage/package.json';
+        return builder.buildModules().then(function(data) {
+          expect(data).to.have.string('"name": "other-package"');
+          return done();
+        }).done();
+      });
+      return it('should build modules with custom node_modules path', function(done) {
+        pckg.paths.npmModules = './otherPackage/node_modules';
+        pckg.addModule('another_path');
+        return builder.buildModules().then(function(data) {
+          expect(data).to.have.string('another_path');
           return done();
         }).done();
       });

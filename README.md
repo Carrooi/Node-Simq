@@ -497,7 +497,8 @@ $ npm test
 ## Changelog
 
 * 5.4.1
-	+ Bug with custom package paths
+	+ Bug with custom package and node modules paths
+	+ Improved including node modules
 
 * 5.4.0
 	+ Option `packagePath` removed

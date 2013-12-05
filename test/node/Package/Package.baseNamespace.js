@@ -134,7 +134,7 @@
     });
     return describe('#paths', function() {
       it('should set different path to package.json file', function() {
-        pckg.paths["package"] = './otherPackage';
+        pckg.paths["package"] = './otherPackage/package.json';
         return expect(pckg.getPackageInfo().getName()).to.be.equal('other-package');
       });
       return it('should set different path for npm modules', function() {

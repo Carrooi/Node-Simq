@@ -25,7 +25,7 @@
           skip: false,
           target: null,
           paths: {
-            "package": '.',
+            "package": './package.json',
             npmModules: './node_modules'
           },
           base: null,

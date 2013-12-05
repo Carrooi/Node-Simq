@@ -25,12 +25,27 @@
       return builder = new Builder(pckg);
     });
     describe('#buildModules()', function() {
-      return it('should build one module from absolute path', function(done) {
+      it('should build one module from absolute path', function(done) {
         pckg.addModule(dir + '/modules/1.js');
         return builder.buildModules().then(function(data) {
           expect(data).to.have.string("'/modules/2.js'");
           expect(data).to.have.string("'/modules/3.js'");
           expect(data).to.have.string("'module'");
+          return done();
+        }).done();
+      });
+      it('should build modules with custom package.json path', function(done) {
+        pckg.paths["package"] = './otherPackage/package.json';
+        return builder.buildModules().then(function(data) {
+          expect(data).to.have.string('"name": "other-package"');
+          return done();
+        }).done();
+      });
+      return it('should build modules with custom node_modules path', function(done) {
+        pckg.paths.npmModules = './otherPackage/node_modules';
+        pckg.addModule('another_path');
+        return builder.buildModules().then(function(data) {
+          expect(data).to.have.string('another_path');
           return done();
         }).done();
       });

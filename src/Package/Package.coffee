@@ -42,7 +42,7 @@ class Package
 		@basePath = path.resolve(@basePath)
 
 		@paths =
-			package: '.'
+			package: './package.json'
 			npmModules: './node_modules'
 
 		@modules = []
@@ -59,7 +59,6 @@ class Package
 
 			dependencies = @getPackageInfo().getData().dependencies
 			if typeof dependencies == 'object' && @autoNpmModules
-				basePath = @getBasePath()
 
 				if !fs.existsSync(@getPath(@paths.npmModules))
 					throw new Error "Npm modules not found. Did you run 'npm install .' command?"
@@ -88,7 +87,7 @@ class Package
 
 	getPackageInfo: ->
 		if @info == null
-			@info = new Info(@getPath(@paths.package))
+			@info = new Info(path.dirname(@getPath(@paths.package)))
 
 		return @info
 
@@ -178,8 +177,16 @@ class Package
 		if found == false
 			_path = @getPath(@paths.npmModules + '/' + name)
 			if fs.existsSync(_path)
-				found = true
-				@modules.push(_path)
+				if fs.statSync(_path).isFile()
+					found = true
+					@modules.push(_path)
+				else
+					paths = Finder.from(_path).findFiles('*.js')
+					if paths.length > 0
+						found = true
+						for _path in paths
+							_path = path.relative(@getPath(@paths.npmModules), _path)
+							@addModule(_path)
 			else
 				paths = Finder.findFiles(_path)
 				if paths.length > 0
