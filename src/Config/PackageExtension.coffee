@@ -8,6 +8,7 @@ class PackageExtension extends Extension
 	defaultsPackage:
 		skip: false
 		target: null
+		packagePath: '.'
 		application: null	# deprecated
 		base: null
 		style:
@@ -51,6 +52,7 @@ class PackageExtension extends Extension
 			if pckg.style.in == null || pckg.style.out == null
 				pckg.style = null
 
+			delete pckg.application
 			delete pckg.coreModules
 			delete pckg.fsModules
 			delete pckg.libraries

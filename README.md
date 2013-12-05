@@ -501,6 +501,7 @@ $ npm test
 	+ Updated dependencies
 	+ Optimized tests
 	+ Added `autoNpmModules` option
+	+ Added `packagePath` option
 
 * 5.2.0
 	+ Updated dependencies

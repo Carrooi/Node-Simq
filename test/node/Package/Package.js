@@ -98,7 +98,7 @@
         return expect(pckg.modules).to.be.eql([dir + '/node_modules/module/any/index.json']);
       });
     });
-    return describe('#addToAutorun()', function() {
+    describe('#addToAutorun()', function() {
       it('should add module to autorun', function() {
         pckg.addModule('./modules/1.js');
         pckg.addToAutorun('/modules/1.js');
@@ -133,6 +133,12 @@
       return it('should add all js libraries from relative path', function() {
         pckg.addToAutorun('- ./libs/begin/*.js<$>');
         return expect(pckg.run).to.be.eql([dir + '/libs/begin/1.js', dir + '/libs/begin/2.js', dir + '/libs/begin/3.js', dir + '/libs/begin/4.js', dir + '/libs/begin/6.js']);
+      });
+    });
+    return describe('#packagePath', function() {
+      return it('should set different path to package.json file', function() {
+        pckg.packagePath = './otherPackage';
+        return expect(pckg.getPackageInfo().getName()).to.be.equal('other-package');
       });
     });
   });

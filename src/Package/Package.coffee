@@ -19,6 +19,8 @@ class Package
 
 	target: null
 
+	packagePath: '.'
+
 	base: null
 
 	style: null
@@ -82,7 +84,7 @@ class Package
 
 	getPackageInfo: ->
 		if @info == null
-			@info = new Info(@getBasePath())
+			@info = new Info(@getPath(@packagePath))
 
 		return @info
 

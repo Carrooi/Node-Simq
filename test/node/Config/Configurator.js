@@ -24,7 +24,7 @@
         return expect(config.packages.application).to.be.eql({
           skip: false,
           target: null,
-          application: null,
+          packagePath: '.',
           base: null,
           style: null,
           modules: [],
