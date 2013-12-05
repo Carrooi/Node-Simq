@@ -496,6 +496,9 @@ $ npm test
 
 ## Changelog
 
+* 5.2.1
+	+ Updated dependencies
+
 * 5.2.0
 	+ Updated dependencies
 	+ Modules for tests does not need to be installed globally
