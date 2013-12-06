@@ -530,6 +530,7 @@ $ npm test
 
 * 5.5.0
 	+ Added logger
+	+ Added options `ignore.package` and `ignore.main`
 
 * 5.4.1
 	+ Bug with custom package and node modules paths

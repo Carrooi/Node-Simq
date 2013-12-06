@@ -28,6 +28,10 @@
             "package": './package.json',
             npmModules: './node_modules'
           },
+          ignore: {
+            "package": false,
+            main: false
+          },
           base: null,
           style: null,
           modules: [],

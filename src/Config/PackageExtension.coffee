@@ -12,6 +12,9 @@ class PackageExtension extends Extension
 		paths:
 			package: './package.json'
 			npmModules: './node_modules'
+		ignore:
+			package: false
+			main: false
 		application: null	# deprecated
 		base: null
 		style:

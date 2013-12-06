@@ -23,6 +23,8 @@ class Package
 
 	paths: null
 
+	ignore: null
+
 	base: null
 
 	style: null
@@ -49,6 +51,10 @@ class Package
 			package: './package.json'
 			npmModules: './node_modules'
 
+		@ignore =
+			package: false
+			main: false
+
 		@modules = []
 		@aliases = {}
 		@run = []
@@ -63,11 +69,14 @@ class Package
 
 	prepare: ->
 		if @initialized == false
-			@addModule(@getPackageInfo().getPackagePath())
-			main = @getPackageInfo().getMainFile()
-			if main != null
-				@log "Adding #{main} module"
-				@addModule(main)
+			if !@ignore.package
+				@addModule(@getPackageInfo().getPackagePath())
+
+			if !@ignore.main
+				main = @getPackageInfo().getMainFile()
+				if main != null
+					@log "Adding #{main} module"
+					@addModule(main)
 
 			dependencies = @getPackageInfo().getData().dependencies
 			if typeof dependencies == 'object' && @autoNpmModules
