@@ -11,8 +11,11 @@ class Logger
 	running: true
 
 
-	constructor: (_path) ->
-		@path = if _path == 'console' then _path else path.resolve(_path)
+	constructor: (_path = null) ->
+		if _path == null
+			@running = false
+		else
+			@path = if _path == 'console' then _path else path.resolve(_path)
 
 
 	log: (message) ->

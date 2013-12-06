@@ -17,7 +17,7 @@ class Commands extends EventEmitter
 	logger: null
 
 
-	constructor: (@simq, @logger = null) ->
+	constructor: (@simq) ->
 
 
 	log: (message) ->

@@ -46,6 +46,7 @@ class SimQ
 			@packages[name] = pckg
 
 		@packages[name].name = name
+		@packages[name].logger = @logger
 
 		return @packages[name]
 

@@ -27,8 +27,7 @@ basePath = process.cwd()
 cacheDirectory = null
 
 simq = new SimQ(basePath)
-logger = new Logger
-commands = new Commands(simq, logger)
+commands = new Commands(simq)
 
 if argv.command in ['server', 'build', 'watch']
 	configPath = basePath + '/' + (if argv.c then argv.c else './config/setup.json')
@@ -36,6 +35,11 @@ if argv.command in ['server', 'build', 'watch']
 
 	configurator = new Configurator(configPath)
 	config = configurator.load()
+
+	logger = new Logger(if config.debugger.log != false then config.debugger.log else null)
+
+	simq.logger = logger
+	commands.logger = logger
 
 	commands.on 'build', (simq) ->
 		configurator.invalidate()
@@ -52,8 +56,6 @@ if argv.command in ['server', 'build', 'watch']
 		simq.jquerify = config.template.jquerify
 		simq.minify = config.debugger.minify
 		simq.stats = config.debugger.filesStats
-
-		logger.running = config.debugger.log != false
 
 		for name, pckg of config.packages
 			pckg = Factory.create(basePath, pckg)

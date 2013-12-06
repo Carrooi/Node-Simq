@@ -39,6 +39,8 @@ class Package
 
 	initialized: false
 
+	logger: null
+
 
 	constructor: (@basePath) ->
 		@basePath = path.resolve(@basePath)
@@ -52,15 +54,24 @@ class Package
 		@run = []
 
 
+	log: (message) ->
+		if @logger != null
+			return @logger.log(message)
+
+		return message
+
+
 	prepare: ->
 		if @initialized == false
 			@addModule(@getPackageInfo().getPackagePath())
 			main = @getPackageInfo().getMainFile()
 			if main != null
+				@log "Adding #{main} module"
 				@addModule(main)
 
 			dependencies = @getPackageInfo().getData().dependencies
 			if typeof dependencies == 'object' && @autoNpmModules
+				@log "Adding npm dependencies"
 
 				if !fs.existsSync(@getPath(@paths.npmModules))
 					throw new Error "Npm modules not found. Did you run 'npm install .' command?"
@@ -71,9 +82,13 @@ class Package
 						throw new Error "Npm module '#{name}' not found. Did you run 'npm install .' command?"
 
 					pckg = new Info(_path)
-					@addModule(pckg.getPackagePath())
+
+					name = pckg.getPackagePath()
+					@log "Adding #{name} module"
+					@addModule(name)
 					main = pckg.getMainFile()
 					if main != null
+						@log "Adding #{main} module"
 						@addModule(main)
 
 			@initialized = true
