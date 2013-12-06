@@ -17,6 +17,8 @@ class Builder extends Package
 
 	pckg: null
 
+	logger: null
+
 	jquerify: false
 
 	minify: false
@@ -31,6 +33,13 @@ class Builder extends Package
 			throw new Error 'Package must be an instance of Package/Package'
 
 
+	log: (message) ->
+		if @logger != null
+			return @logger.log(message)
+
+		return message
+
+
 	check: ->
 		if !fs.existsSync(@pckg.getPath(@pckg.paths.package))
 			throw new Error 'Package has not got package.json file.'
@@ -39,6 +48,8 @@ class Builder extends Package
 
 
 	build: ->
+		@log "Building package #{@pckg.name}"
+
 		deferred = Q.defer()
 
 		Q.all([
@@ -51,7 +62,9 @@ class Builder extends Package
 				result += '\n\n/** run section **/\n\n' + data[1]
 
 			if @minify == true
+				@log 'Minifying javascript'
 				result = uglifyJs.minify(result, fromString: true).code
+				@log 'Minifying styles'
 				data[2] = cleanCss.process(data[2])
 
 			deferred.resolve(
@@ -66,6 +79,8 @@ class Builder extends Package
 
 
 	buildModules: ->
+		@log 'Building modules'
+
 		@check()
 
 		deferred = Q.defer()
@@ -103,6 +118,8 @@ class Builder extends Package
 
 
 	buildAutorun: ->
+		@log 'Building autorun'
+
 		@check()
 
 		deferred = Q.defer()
@@ -121,6 +138,8 @@ class Builder extends Package
 
 
 	buildStyles: ->
+		@log 'Building styles'
+
 		@check()
 
 		if @pckg.style == null
@@ -131,6 +150,7 @@ class Builder extends Package
 		if @pckg.style.dependencies != null
 			options.dependents = @pckg.style.dependencies
 
+		@log "Compiling styles from #{@pckg.style.in}"
 		Compiler.compileFile(@pckg.style.in, options).then( (data) ->
 			deferred.resolve(data)
 		).fail( (err) ->
@@ -144,6 +164,7 @@ class Builder extends Package
 		deferred = Q.defer()
 
 		if fs.existsSync(_path)
+			@log "Added file #{_path} to autorun"
 			Compiler.compileFile(_path).then( (data) =>
 				p = path.relative(@pckg.getBasePath(), _path)
 				data = "/** #{p} **/\n#{data}"
@@ -152,6 +173,7 @@ class Builder extends Package
 				deferred.reject(err)
 			)
 		else
+			@log "Adding module #{_path} to autorun"
 			deferred.resolve("/** #{_path} **/\nrequire('#{_path}');")
 
 		return deferred.promise
@@ -169,7 +191,9 @@ class Builder extends Package
 			for file in data.files
 				# module in package
 				if @pckg.getPackageInfo().isFileInModule(file)
-					result['/' + @pckg.getPackageInfo().getModuleName(file, true)] = file
+					name = '/' + @pckg.getPackageInfo().getModuleName(file, true)
+					@log "Added module #{name} from #{file}"
+					result[name] = file
 
 				else
 					dir = path.dirname(file)
@@ -183,18 +207,23 @@ class Builder extends Package
 						if name.match(new RegExp(baseName + '$')) == null
 							fullName = info.getName() + '/' + path.relative(info.getPath(), file)
 							@pckg.addAlias(fullName, name)
+							@log "Created alias #{name} for #{fullName}"
+							@log "Added npm module #{fullName} from #{file}"
 							result[fullName] = file
 						else
+							@log "Added npm module #{name} from #{file}"
 							result[name] = file
 
 
-					# core module
+						# core module
 					else
 						name = path.basename(file, path.extname(file))
+						@log "Added node core module #{name} + from #{file}"
 						result[name] = file
 
 			for name, _path in data.core
 				if _path != null
+					@log "Added node core module #{name} from #{_path}"
 					result[name] = _path
 
 			deferred.resolve(result)
@@ -209,6 +238,8 @@ class Builder extends Package
 		deferred = Q.defer()
 
 		Compiler.compileFile(_path, {precompile: true, jquerify: @jquerify}).then( (result) =>
+			@log "Compiled module #{name}"
+
 			type = path.extname(_path)
 
 			if @autoModule.indexOf(type) != -1
@@ -231,6 +262,8 @@ class Builder extends Package
 
 
 	loadStats: (modules) ->
+		@log 'Loading modules\' stats'
+
 		result = {}
 		for name, _path of modules
 			stat = fs.statSync(_path)

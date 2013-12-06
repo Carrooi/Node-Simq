@@ -413,6 +413,38 @@ your config file.
 }
 ```
 
+## Logging
+
+There are to options how to log all actions in simq: logging into file or into console. Setup is in your config file in
+debugger section.
+
+Path to file log is relative to directory where simq command was called. This is not affected with `base` option in
+configuration.
+
+Into console:
+```
+{
+	"packages": {
+
+	},
+	"debugger": {
+		"log": "console"
+	}
+}
+```
+
+Into file:
+```
+{
+	"packages": {
+
+	},
+	"debugger": {
+		"log": "./path/to/log/file.log"
+	}
+}
+```
+
 ## Caching
 
 In large applications or in applications with typescript (explanation above) it is good to turn on cache. SimQ using
@@ -495,6 +527,9 @@ $ npm test
 ```
 
 ## Changelog
+
+* 5.5.0
+	+ Added logger
 
 * 5.4.1
 	+ Bug with custom package and node modules paths

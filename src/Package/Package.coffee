@@ -15,6 +15,8 @@ class Package
 
 	basePath: null
 
+	name: ''
+
 	skip: false
 
 	target: null

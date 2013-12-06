@@ -17,6 +17,8 @@ class SimQ
 
 	stats: false
 
+	logger: null
+
 
 	constructor: (@basePath) ->
 		@packages = {}
@@ -43,6 +45,8 @@ class SimQ
 
 			@packages[name] = pckg
 
+		@packages[name].name = name
+
 		return @packages[name]
 
 
@@ -66,6 +70,7 @@ class SimQ
 			throw new Error 'Package ' + name + ' is not registered.'
 
 		builder = new Builder(@packages[name])
+		builder.logger = @logger
 		builder.jquerify = @jquerify
 		builder.minify = @minify
 		builder.stats = @stats
