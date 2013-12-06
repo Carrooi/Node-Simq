@@ -191,7 +191,7 @@ class Builder extends Package
 			for file in data.files
 				# module in package
 				if @pckg.getPackageInfo().isFileInModule(file)
-					name = '/' + @pckg.getPackageInfo().getModuleName(file, true)
+					name = '/' + path.relative(@pckg.getBasePath(), @pckg.getPackageInfo().getModuleName(file, true))
 					@log "Added module #{name} from #{file}"
 					result[name] = file
 
