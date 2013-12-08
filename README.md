@@ -528,6 +528,9 @@ $ npm test
 
 ## Changelog
 
+* 5.5.1
+	+ Circular references are handled just like in node environment
+
 * 5.5.0
 	+ Added logger
 	+ Added options `ignore.package` and `ignore.main`

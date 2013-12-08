@@ -9,6 +9,8 @@ if !@require
 
 	cache = {}
 
+	creating = []
+
 
 	require = (name, parent = null) ->
 		fullName = resolve(name, parent)
@@ -24,16 +26,22 @@ if !@require
 				parent: null
 				children: null
 
-			modules[fullName].apply(window, [m.exports, m])
+			# circular reference detection
+			if arrayIndexOf(creating, fullName) == -1
+				creating.push(fullName)
+				modules[fullName].apply(window, [m.exports, m])
+				creating.splice(arrayIndexOf(creating, fullName))
+
+				cache[fullName] = m
 
 			m.loaded = true
-
-			cache[fullName] = m
+		else
+			m = cache[fullName]
 
 		if typeof stats[fullName] == 'undefined' then stats[fullName] = {atime: null, mtime: null, ctime: null}
 		stats[fullName].atime = new Date
 
-		return cache[fullName].exports
+		return m.exports
 
 
 	resolve = (name, parent = null) ->
@@ -73,6 +81,20 @@ if !@require
 		return null
 
 
+	arrayIndexOf = (array, search) ->
+		if typeof Array.prototype.indexOf != 'undefined'
+			return array.indexOf(search)
+
+		if array.length == 0
+			return -1
+
+		for element, i in array
+			if element == search
+				return i
+
+		return -1
+
+
 	@require = (name, parent = null) ->
 		return require(name, parent)
 
@@ -87,9 +109,12 @@ if !@require
 		return resolve(name, parent)
 
 
-	@require.define = (bundle) ->
-		for name, m of bundle
-			modules[name] = m
+	@require.define = (bundleOrName, obj = null) ->
+		if typeof bundleOrName == 'string'
+			modules[bundleOrName] = obj
+		else
+			for name, m of bundleOrName
+				modules[name] = m
 
 
 	@require.release = ->

@@ -101,6 +101,18 @@ describe 'require', ->
 		it 'should load module with require to relative module in it', ->
 			expect(require('/app/Bootstrap')).to.be.equal('Bootstrap - Application')
 
+		it 'should load circular modules', ->
+			require.define('circular/first', (exports, m) ->
+				expect(require('circular/second')).to.be.equal('second')
+				m.exports = 'first'
+			)
+			require.define('circular/second', (exports, m) ->
+				expect(require('circular/first')).to.be.eql({})
+				m.exports = 'second'
+			)
+
+			expect(require 'circular/first').to.be.equal('first')
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})
