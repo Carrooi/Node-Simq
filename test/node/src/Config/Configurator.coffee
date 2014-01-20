@@ -1,9 +1,9 @@
 expect = require('chai').expect
 path = require 'path'
 
-Configurator = require '../../../lib/Config/Configurator'
+Configurator = require '../../../../lib/Config/Configurator'
 
-dir = path.resolve(__dirname + '/../../data/package/config')
+dir = path.resolve(__dirname + '/../../../data/package/config')
 
 getConfig = (name) -> return (new Configurator(dir + '/' + name + '.json')).load()
 

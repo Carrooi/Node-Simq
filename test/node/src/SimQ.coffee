@@ -2,10 +2,10 @@ expect = require('chai').expect
 path = require 'path'
 fs = require 'fs'
 
-SimQ = require '../../lib/SimQ'
-Package = require '../../lib/Package/Package'
+SimQ = require '../../../lib/SimQ'
+Package = require '../../../lib/Package/Package'
 
-dir = path.resolve(__dirname + '/../data/package')
+dir = path.resolve(__dirname + '/../../data/package')
 simq = null
 
 describe 'SimQ', ->

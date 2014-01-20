@@ -8,11 +8,11 @@
 
   fs = require('fs');
 
-  SimQ = require('../../lib/SimQ');
+  SimQ = require('../../../lib/SimQ');
 
-  Package = require('../../lib/Package/Package');
+  Package = require('../../../lib/Package/Package');
 
-  dir = path.resolve(__dirname + '/../data/package');
+  dir = path.resolve(__dirname + '/../../data/package');
 
   simq = null;
 

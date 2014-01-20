@@ -6,9 +6,9 @@
 
   path = require('path');
 
-  Configurator = require('../../../lib/Config/Configurator');
+  Configurator = require('../../../../lib/Config/Configurator');
 
-  dir = path.resolve(__dirname + '/../../data/package/config');
+  dir = path.resolve(__dirname + '/../../../data/package/config');
 
   getConfig = function(name) {
     return (new Configurator(dir + '/' + name + '.json')).load();

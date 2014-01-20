@@ -6,12 +6,12 @@ fs = require 'fs'
 Compiler = require 'source-compiler'
 http = require 'http'
 
-SimQ = require '../../lib/SimQ'
-Commands = require '../../lib/Commands'
-Factory = require '../../lib/Package/Factory'
-Configurator = require '../../lib/Config/Configurator'
+SimQ = require '../../../lib/SimQ'
+Commands = require '../../../lib/Commands'
+Factory = require '../../../lib/Package/Factory'
+Configurator = require '../../../lib/Config/Configurator'
 
-dir = path.resolve(__dirname + '/../data')
+dir = path.resolve(__dirname + '/../../data')
 
 simq = null
 commands = null
