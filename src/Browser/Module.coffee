@@ -52,22 +52,24 @@ if !@require
 			if num != -1 then parent = parent.substr(0, num)
 
 			name = parent + '/' + name
-			parts = name.split('/')
-			result = []
-			prev = null
 
-			for part in parts
-				if part == '.' || part == ''
-					continue
-				else if part == '..' && prev
-					result.pop()
-				else
-					result.push(part)
+		parts = name.split('/')
+		result = []
+		prev = null
 
-				prev = part
+		for part in parts
+			if part == '.' || part == ''
+				continue
+			else if part == '..' && prev
+				result.pop()
+			else
+				result.push(part)
 
-			name = result.join('/')
-			name = '/' + name if parent[0] == '/'
+			prev = part
+
+		name = result.join('/')
+		if (original[0] == '/') || (parent != null && parent[0] == '/')
+			name = '/' + name
 
 		if typeof modules[name] != 'undefined'
 			return name
