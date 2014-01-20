@@ -2,6 +2,8 @@
 [![Dependency Status](https://gemnasium.com/sakren/node-simq.png)](https://gemnasium.com/sakren/node-simq)
 [![Build Status](https://travis-ci.org/sakren/node-simq.png?branch=master)](https://travis-ci.org/sakren/node-simq)
 
+[![Donate](http://b.repl.ca/v1/donate-PayPal-brightgreen.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
+
 # SimQ - Common js module loader for browser (Simple reQuire)
 
 Join and minify all your javascript files into one (even remote ones) and use them in browser just like in node server.
