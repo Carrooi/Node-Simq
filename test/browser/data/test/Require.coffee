@@ -47,6 +47,9 @@ describe 'require', ->
 		it 'should resolve name for package file withoud extension', ->
 			expect(require.resolve('/package')).to.be.equal('/package.json')
 
+		it 'should throw an error if module with given path does not exists', ->
+			expect( -> require.resolve('./any-random-name')).to.throw(Error, 'Module ./any-random-name was not found.')
+
 	describe '#require()', ->
 		it 'should load simple module', ->
 			expect(require('/app/Application.coffee')).to.be.equal('Application')

@@ -14,8 +14,6 @@ if !@require
 
 	require = (name, parent = null) ->
 		fullName = resolve(name, parent)
-		if fullName == null
-			throw new Error 'Module ' + name + ' was not found.'
 
 		if typeof cache[fullName] == 'undefined'
 			m =
@@ -45,6 +43,8 @@ if !@require
 
 
 	resolve = (name, parent = null) ->
+		original = name
+
 		if parent != null && name[0] == '.'
 
 			# get directory path
@@ -78,7 +78,7 @@ if !@require
 		for ext in SUPPORTED
 			return name + '/index.' + ext if typeof modules[name + '/index.' + ext] != 'undefined'
 
-		return null
+		throw new Error "Module #{original} was not found."
 
 
 	arrayIndexOf = (array, search) ->
