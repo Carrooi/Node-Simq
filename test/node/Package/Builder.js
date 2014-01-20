@@ -84,7 +84,7 @@
           expect(err).to.be.an["instanceof"](SyntaxException);
           expect(err.message).to.be.equal('missing closing `}`');
           expect(err.line).to.be.equal(1);
-          expect(err.column).to.be.equal(0);
+          expect(err.column).to.be.equal(1);
           return done();
         }).done();
       });
