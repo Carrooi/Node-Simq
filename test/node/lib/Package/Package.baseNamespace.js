@@ -8,15 +8,16 @@
 
   Info = require('module-info');
 
-  Package = require('../../../lib/Package/Package');
+  Package = require('../../../../lib/Package/Package');
 
-  dir = path.resolve(__dirname + '/../../data/package');
+  dir = path.resolve(__dirname + '/../../../data/package');
 
   pckg = null;
 
-  describe('Package/Package', function() {
+  describe('Package/Package.baseNamespace', function() {
     beforeEach(function() {
-      return pckg = new Package(dir);
+      pckg = new Package(path.resolve(dir + '/../..'));
+      return pckg.base = 'data/package';
     });
     describe('#setTarget()', function() {
       return it('should set path for result js file', function() {
@@ -100,23 +101,19 @@
     });
     describe('#addToAutorun()', function() {
       it('should add module to autorun', function() {
-        pckg.addModule('./modules/1.js');
-        pckg.addToAutorun('/modules/1.js');
-        return expect(pckg.run).to.be.eql(['/modules/1.js']);
+        pckg.addModule('module/test.js');
+        pckg.addToAutorun('/module/test.js');
+        return expect(pckg.run).to.be.eql(['/module/test.js']);
       });
       it('should add module to autorun without extension', function() {
-        pckg.addModule('./modules/1.js');
-        pckg.addToAutorun('/modules/1');
-        return expect(pckg.run).to.be.eql(['/modules/1']);
+        pckg.addModule('module/test.js');
+        pckg.addToAutorun('/module/test');
+        return expect(pckg.run).to.be.eql(['/module/test']);
       });
       it('should add module to autorun without exact file path', function() {
-        pckg.addModule('./modules/other/index.js');
-        pckg.addToAutorun('/modules/other');
-        return expect(pckg.run).to.be.eql(['/modules/other']);
-      });
-      it('should add npm module to autorun', function() {
-        pckg.addModule('module/test.js');
-        return pckg.addToAutorun('module/test');
+        pckg.addModule('module/any/index.json');
+        pckg.addToAutorun('/module/any');
+        return expect(pckg.run).to.be.eql(['/module/any']);
       });
       it('should add library from absolute path', function() {
         pckg.addToAutorun('- ' + dir + '/libs/begin/1.js');

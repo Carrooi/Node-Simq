@@ -2,19 +2,18 @@ expect = require('chai').expect
 path = require 'path'
 Info = require 'module-info'
 
-Package = require '../../../lib/Package/Package'
-Builder = require '../../../lib/Package/Builder'
+Package = require '../../../../lib/Package/Package'
+Builder = require '../../../../lib/Package/Builder'
 
-SyntaxException = require 'source-compiler/Exceptions/SyntaxException'
-
-dir = path.resolve(__dirname + '/../../data/package')
+dir = path.resolve(__dirname + '/../../../data/package')
 pckg = null
 builder = null
 
-describe 'Package/Builder', ->
+describe 'Package/Builder.baseNamespace', ->
 
 	beforeEach( ->
-		pckg = new Package(dir)
+		pckg = new Package(path.resolve(dir + '/../..'))
+		pckg.base = 'data/package'
 		builder = new Builder(pckg)
 	)
 
@@ -25,13 +24,6 @@ describe 'Package/Builder', ->
 				expect(data).to.have.string("'/modules/2.js'")
 				expect(data).to.have.string("'/modules/3.js'")
 				expect(data).to.have.string("'module'")
-				done()
-			).done()
-
-		it 'should return an error for wrong coffee file', (done) ->
-			pckg.addModule('./modules/with-error.coffee')
-			builder.buildModules().fail( (err) ->
-				expect(err).to.be.an.instanceof(Error)
 				done()
 			).done()
 
@@ -58,24 +50,6 @@ describe 'Package/Builder', ->
 			builder.buildAutorun().then( (data) ->
 				expect(data).to.have.string("require('/modules/1');")
 				expect(data).to.have.string('// 4')
-				done()
-			).done()
-
-	describe '#buildStyles()', ->
-		it 'should build styles', (done) ->
-			pckg.setStyle('./css/style.less', './public/style.css')
-			builder.buildStyles().then( (data) ->
-				expect(data).to.be.equal('body {\n  color: #000000;\n}\n')
-				done()
-			).done()
-
-		it 'should return an error for bad style', (done) ->
-			pckg.setStyle('./css/with-errors.less', './public/style.css')
-			builder.buildStyles().fail( (err) ->
-				expect(err).to.be.an.instanceof(SyntaxException)
-				expect(err.message).to.be.equal('missing closing `}`')
-				expect(err.line).to.be.equal(1)
-				expect(err.column).to.be.equal(1)
 				done()
 			).done()
 
