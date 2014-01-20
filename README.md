@@ -336,6 +336,27 @@ You just need to set paths to these libraries in run section and not in librarie
 }
 ```
 
+## Standalone builds
+
+By default, require object is exposed into window object so you can use it also in your .html files, not just in your
+compiled .js files.
+
+This behavior can be of course changed, which is useful for example if you want to publish standalone package (or library)
+but this package is written with node modular style.
+
+`./config/setup.json`:
+```
+{
+	"debugger": {
+		"expose": false
+	}
+}
+```
+
+Now there will be no require function in `window` object and also non of your modules (you can not require them), so
+next step is to create new module, for example `./lib/prepare.js` in which you will expose all your desired modules
+into `window` object. Last thing you need to do is to add this `./lib/prepare.js` module into `autorun` section.
+
 ## Base namespace
 
 If you have got more packages in your application, then writing some paths may be boring. Good example is when you rewriting

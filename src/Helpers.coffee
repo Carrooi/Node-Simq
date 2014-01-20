@@ -10,10 +10,10 @@ class Helpers
 		dir = path.dirname(name)
 
 		globals =
-			require: "function(name) {return window.require(name, '#{name}');}"
-			'-- require.resolve': "function(name, parent) {if (parent === null) {parent = '#{name}';} return window.require.resolve(name, parent);}"
-			'-- require.define': "function(bundle) {window.require.define(bundle);}"
-			'-- require.cache': "window.require.cache"
+			require: "function(name) {return __r__c__.require(name, '#{name}');}"
+			'-- require.resolve': "function(name, parent) {if (parent === null) {parent = '#{name}';} return __r__c__.require.resolve(name, parent);}"
+			'-- require.define': "function(bundle) {__r__c__.require.define(bundle);}"
+			'-- require.cache': "__r__c__.require.cache"
 			__filename: "'#{name}'"
 			__dirname: "'#{dir}'"
 			process: "{cwd: function() {return '/';}, argv: ['node', '#{name}'], env: {}}"

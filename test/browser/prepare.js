@@ -18,7 +18,9 @@ commands.on('build', function(simq) {
 
 	simq.release();
 	simq.jquerify = config.template.jquerify;
+	simq.minify = config.debugger.minify;
 	simq.stats = config.debugger.filesStats;
+	simq.expose = config.debugger.expose;
 
 	for (var name in config.packages) {
 		if (config.packages.hasOwnProperty(name)) {
