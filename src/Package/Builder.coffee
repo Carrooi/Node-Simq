@@ -65,7 +65,7 @@ class Builder extends Package
 				@log 'Minifying javascript'
 				result = uglifyJs.minify(result, fromString: true).code
 				@log 'Minifying styles'
-				data[2] = cleanCss.process(data[2])
+				data[2] = cleanCss().minify(data[2])
 
 			deferred.resolve(
 				js: result
