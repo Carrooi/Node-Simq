@@ -119,6 +119,12 @@ describe 'require', ->
 
 			expect(require 'circular/first').to.be.equal('first')
 
+		it 'data from configurable module should be already in window', ->
+			expect(window.__configurable__module__).to.be.true
+
+		it 'should load module with alias from configurable module', ->
+			expect(require('shortcut')).to.be.equal('shortcut')
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})
