@@ -577,6 +577,14 @@ $ npm test
 
 ## Changelog
 
+* 5.6.0
+	+ Added support for configurable modules [[#14](https://github.com/sakren/node-simq/issues/14)]
+	+ Normalizing all paths in `require.resolve` (previously it was only for relative paths)
+	+ `require.resolve` throws an error if path does not exists (like in node.js) [[#19](https://github.com/sakren/node-simq/issues/19)]
+	+ Added support for standalone builds
+	+ Improvements in documentation
+	+ Updated dependencies
+
 * 5.5.1
 	+ Circular references are handled just like in node environment
 
