@@ -1,2 +1,2 @@
-for name, value of window._test
-	window._test[name] = 'hello'
+for name, value of @_test
+	@_test[name] = 'hello'

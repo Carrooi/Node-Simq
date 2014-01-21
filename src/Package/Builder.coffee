@@ -173,7 +173,8 @@ class Builder extends Package
 			@log "Added file #{_path} to autorun"
 			Compiler.compileFile(_path).then( (data) =>
 				p = path.relative(@pckg.getBasePath(), _path)
-				data = "/** #{p} **/\n#{data}"
+				data = data.replace(/\n/g, '\n\t')
+				data = "/** #{p} **/\n(function() {\n\t#{data}\n}).call(window);"
 				deferred.resolve(data)
 			).fail( (err) ->
 				deferred.reject(err)
