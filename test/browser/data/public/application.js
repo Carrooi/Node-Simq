@@ -10870,8 +10870,8 @@
 	, 'another': function(exports, module) { module.exports = __r__c__.require('another/lib/Another.js'); }
 	
 	});
-	__r__c__.require.__setStats({"advanced/index.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"one/index.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"two/index.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"three/index.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"other/data.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"another/lib/buf.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Application.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Bootstrap.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Random.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Two.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/WithEvents.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/views/message.eco":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Info.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Libraries.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Require.coffee":{"atime":1390303390000,"mtime":1390303368000,"ctime":1390303368000},"/test/Stats.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Styles.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/setup.js":{"atime":1390303390000,"mtime":1390205708000,"ctime":1390205708000},"/libs/jquery.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"/libs/callShortcut.coffee":{"atime":1390303286000,"mtime":1390303286000,"ctime":1390303286000},"advanced/other.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"configurable/src/init.coffee":{"atime":1390296498000,"mtime":1390296497000,"ctime":1390296497000},"configurable/src/shortcut.coffee":{"atime":1390296498000,"mtime":1390296497000,"ctime":1390296497000},"configurable/index.js":{"atime":1390303390000,"mtime":1390296497000,"ctime":1390296497000},"configurable/package.json":{"atime":1390296498000,"mtime":1390296497000,"ctime":1390296497000},"/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"/index.js":{"atime":1390303390000,"mtime":1390205708000,"ctime":1390205708000},"any/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"any/index.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"advanced/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"other/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"other/index.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"another/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"another/lib/Another.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000}});
-	__r__c__.require.version = '5.6.0';
+	__r__c__.require.__setStats({"advanced/index.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"one/index.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"two/index.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"three/index.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"other/data.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"another/lib/buf.js":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Application.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Bootstrap.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Random.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/Two.coffee":{"atime":1390304451000,"mtime":1390304450000,"ctime":1390304450000},"/app/WithEvents.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/app/views/message.eco":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Info.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Libraries.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Require.coffee":{"atime":1390303614000,"mtime":1390303612000,"ctime":1390303612000},"/test/Stats.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/test/Styles.coffee":{"atime":1390294069000,"mtime":1390205708000,"ctime":1390205708000},"/setup.js":{"atime":1390303390000,"mtime":1390205708000,"ctime":1390205708000},"/libs/jquery.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"/libs/callShortcut.coffee":{"atime":1390303614000,"mtime":1390303612000,"ctime":1390303612000},"advanced/other.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"configurable/src/init.coffee":{"atime":1390296498000,"mtime":1390296497000,"ctime":1390296497000},"configurable/src/shortcut.coffee":{"atime":1390296498000,"mtime":1390296497000,"ctime":1390296497000},"configurable/index.js":{"atime":1390303390000,"mtime":1390296497000,"ctime":1390296497000},"configurable/package.json":{"atime":1390296498000,"mtime":1390296497000,"ctime":1390296497000},"/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"/index.js":{"atime":1390303390000,"mtime":1390205708000,"ctime":1390205708000},"any/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"any/index.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"advanced/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"other/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"other/index.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"another/package.json":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000},"another/lib/Another.js":{"atime":1390294068000,"mtime":1390205708000,"ctime":1390205708000}});
+	__r__c__.require.version = '5.6.1';
 	
 	window.require = __r__c__.require;
 	
@@ -10881,29 +10881,37 @@
 	__r__c__.require('configurable/src/init');
 	
 	/** libs/prepare.js **/
-	window._test = {
-		initialized: true
-	};
+	(function() {
+		window._test = {
+			initialized: true
+		};
+	}).call(window);
 	
 	/** libs/one.js **/
-	window._test.one = true;
+	(function() {
+		window._test.one = true;
+	}).call(window);
 	
 	/** /app/Two **/
 	__r__c__.require('/app/Two');
 	
 	/** libs/three.js **/
-	window._test.three = true;
+	(function() {
+		window._test.three = true;
+	}).call(window);
 	
 	/** libs/end.coffee **/
 	(function() {
-	  var name, value, _ref;
-	
-	  _ref = window._test;
-	  for (name in _ref) {
-	    value = _ref[name];
-	    window._test[name] = 'hello';
-	  }
-	
-	}).call(this);
-	
+		(function() {
+		  var name, value, _ref;
+		
+		  _ref = this._test;
+		  for (name in _ref) {
+		    value = _ref[name];
+		    this._test[name] = 'hello';
+		  }
+		
+		}).call(this);
+		
+	}).call(window);
 }).call({});
