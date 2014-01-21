@@ -577,6 +577,9 @@ $ npm test
 
 ## Changelog
 
+* 5.6.2
+	+ Libraries were not called in window context
+
 * 5.6.1
 	+ Bug with node modules required from another module
 
