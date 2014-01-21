@@ -43,6 +43,8 @@ class Package
 
 	logger: null
 
+	supportedCores: null
+
 
 	constructor: (@basePath) ->
 		@basePath = path.resolve(@basePath)
@@ -58,6 +60,8 @@ class Package
 		@modules = []
 		@aliases = {}
 		@run = []
+
+		@supportedCores = require('../../data.json').supportedCores
 
 
 	log: (message) ->
@@ -75,7 +79,6 @@ class Package
 			if !@ignore.main
 				main = @getPackageInfo().getMainFile()
 				if main != null
-					@log "Adding #{main} module"
 					@addModule(main)
 
 			dependencies = @getPackageInfo().getData().dependencies
@@ -91,13 +94,13 @@ class Package
 						throw new Error "Npm module '#{name}' not found. Did you run 'npm install .' command?"
 
 					pckg = new Info(_path)
-
 					name = pckg.getPackagePath()
-					@log "Adding #{name} module"
+
 					@addModule(name)
+					@registerNodeModule(name)
+
 					main = pckg.getMainFile()
 					if main != null
-						@log "Adding #{main} module"
 						@addModule(main)
 
 			@initialized = true
@@ -156,7 +159,34 @@ class Package
 		return @
 
 
+	registerNodeModule: (_path) ->
+		if fs.statSync(_path).isFile()
+			pckg = Info.fromFile(_path)
+		else
+			pckg = new Info(_path)
+
+		if typeof (addition = pckg.getData().simq) != 'undefined'
+			if typeof addition.modules != 'undefined'
+				for subModule in addition.modules
+					if @supportedCores.indexOf(subModule) == -1
+						subModule = path.join(pckg.getPath(), subModule)
+
+					@addModule(subModule)
+
+			if typeof addition.aliases != 'undefined'
+				for aliasName, fullName of addition.aliases
+					fullName = path.join(pckg.getName(), fullName)
+					@addAlias(fullName, aliasName)
+
+			if typeof addition.run != 'undefined'
+				for run in addition.run
+					run = path.join(pckg.getName(), run)
+					@addToAutorun(run)
+
+
 	addModule: (name) ->
+		@log "Adding #{name} module"
+
 		found = false
 
 		# modules registered with absolute path
@@ -183,7 +213,7 @@ class Package
 			if _path != null
 				found = true
 				@modules.push(_path)
-			else if require('../../data.json').supportedCores.indexOf(name) != -1
+			else if @supportedCores.indexOf(name) != -1
 				throw new Error "Core module #{name} was not found."
 
 		# own modules from project
@@ -207,6 +237,7 @@ class Package
 					found = true
 					@modules.push(_path)
 				else
+					@registerNodeModule(_path)
 					paths = Finder.from(_path).findFiles('*.js')
 					if paths.length > 0
 						found = true

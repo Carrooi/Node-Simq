@@ -8,11 +8,11 @@
 
   Info = require('module-info');
 
-  Package = require('../../../lib/Package/Package');
+  Package = require('../../../../lib/Package/Package');
 
-  Builder = require('../../../lib/Package/Builder');
+  Builder = require('../../../../lib/Package/Builder');
 
-  dir = path.resolve(__dirname + '/../../data/package');
+  dir = path.resolve(__dirname + '/../../../data/package');
 
   pckg = null;
 

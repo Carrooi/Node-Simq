@@ -2,6 +2,8 @@
 [![Dependency Status](https://gemnasium.com/sakren/node-simq.png)](https://gemnasium.com/sakren/node-simq)
 [![Build Status](https://travis-ci.org/sakren/node-simq.png?branch=master)](https://travis-ci.org/sakren/node-simq)
 
+[![Donate](http://b.repl.ca/v1/donate-PayPal-brightgreen.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
+
 # SimQ - Common js module loader for browser (Simple reQuire)
 
 Join and minify all your javascript files into one (even remote ones) and use them in browser just like in node server.
@@ -56,7 +58,7 @@ There are several sections in your config files, but the main one is section `pa
 about your modules and external libraries which will be packed into your final javascript or css file.
 The name `packages` also suggests, that you can got more independent packages in one application.
 
-`./config/setup.json`:
+config:
 ```
 {
 	"packages": {
@@ -119,12 +121,15 @@ If you are using some CSS framework, you can let SimQ to handle these files too.
 
 You just need to define `input` and `output` file.
 
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"style": {
-			"in": "./css/style.less",
-			"out": "./css/style.css"
+	"packages": {
+		"nameOfYourFirstModule": {
+			"style": {
+				"in": "./css/style.less",
+				"out": "./css/style.css"
+			}
 		}
 	}
 }
@@ -139,6 +144,7 @@ section and you can use them just like every other module (see below).
 
 There is also configuration which can save you few characters and wrap your eco templates automatically into jquery.
 
+config:
 ```
 {
 	"packages": {
@@ -179,7 +185,7 @@ $ simq server
 
 Server has got it's own setup in your config file. You can set port of your server (default is 3000) and custom routes.
 
-`./config/setup.json`:
+config:
 ```
 {
 	"server": {
@@ -258,11 +264,14 @@ var moment = require('moment');
 Maybe you will want to shorten some frequently used modules like jQuery. For example our jquery is in ./lib/jquery directory,
 so every time we want to use jquery, we have to write `require('/lib/jquery/jquery')`. Solution for this is to use aliases.
 
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"aliases": {
-			"jquery": "/lib/jquery/jquery"
+	"packages": {
+		"nameOfYourFirstModule": {
+			"aliases": {
+				"jquery": "/lib/jquery/jquery"
+			}
 		}
 	}
 }
@@ -274,13 +283,15 @@ Now you can use `require('jquery')`.
 
 Maybe you have got some modules somewhere else in your disk.
 
-`./config/setup.json`:
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"modules": [
-			"/module/which/is/not/in/my/project"
-		]
+	"packages": {
+		"nameOfYourFirstModule": {
+			"modules": [
+				"/module/which/is/not/in/my/project"
+			]
+		}
 	}
 }
 ```
@@ -292,12 +303,15 @@ Directory to this module needs to contain `package.json` file.
 You can define all core modules (like `events`) if you want to use them in browser.
 Be careful with this, because in some cases, simq can not see node's global paths and include these modules.
 
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"modules": [
-			"events"
-		]
+	"packages": {
+		"nameOfYourFirstModule": {
+			"modules": [
+				"events"
+			]
+		}
 	}
 }
 ```
@@ -308,13 +322,16 @@ It would be great if some modules can be started automatically after script is l
 one Bootstrap.js module, which do not export anything but just loads for example Application.js module and prepare your
 application. With this in most cases you don't have to got any javascript code in your HTML files!
 
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"run": [
-			"/app/setup",
-			"/app/Bootstrap"
-		]
+	"packages": {
+		"nameOfYourFirstModule": {
+			"run": [
+				"/app/setup",
+				"/app/Bootstrap"
+			]
+		}
 	}
 }
 ```
@@ -322,17 +339,41 @@ application. With this in most cases you don't have to got any javascript code i
 You may also need for some reason your libraries (not modules) in exact position (for example right before running module /app/Bootstrap).
 You just need to set paths to these libraries in run section and not in libraries section, prepended with `- `.
 
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"run": [
-			"/app/setup",
-			"- ./libs/some/setup.js",
-			"/app/Bootstrap"
-		]
+	"packages": {
+		"nameOfYourFirstModule": {
+			"run": [
+				"/app/setup",
+				"- ./libs/some/setup.js",
+				"/app/Bootstrap"
+			]
+		}
 	}
 }
 ```
+
+## Standalone builds
+
+By default, require object is exposed into window object so you can use it also in your .html files, not just in your
+compiled .js files.
+
+This behavior can be of course changed, which is useful for example if you want to publish standalone package (or library)
+but this package is written with node modular style.
+
+config:
+```
+{
+	"debugger": {
+		"expose": false
+	}
+}
+```
+
+Now there will be no require function in `window` object and also non of your modules (you can not require them), so
+next step is to create new module, for example `./lib/prepare.js` in which you will expose all your desired modules
+into `window` object. Last thing you need to do is to add this `./lib/prepare.js` module into `autorun` section.
 
 ## Base namespace
 
@@ -340,18 +381,19 @@ If you have got more packages in your application, then writing some paths may b
 your application and when you have got your new js files for example in `./_NEW_` directory. It is not good to write
 anything like this: `require('_NEW_/app/Bootstrap')`. So you can set base "namespace" of every package.
 
-`./config/setup.json`:
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"base": "./_NEW_/"
+	"packages": {
+		"nameOfYourFirstModule": {
+			"base": "./_NEW_/"
+		}
 	}
 }
 ```
 
 ## Changing config path
 
-`terminal`:
 ```
 $ simq build --config my/own/path/to/config.json
 ```
@@ -360,6 +402,7 @@ $ simq build --config my/own/path/to/config.json
 
 It is better to minify your files in production version. Only thing what you will need to do, is add new section to your config file.
 
+config:
 ```
 {
 	"packages": {
@@ -387,6 +430,7 @@ Keep in mind, that `atime` is changed every time, you access module with `requir
 
 If you want to disable this options, you have to disable option `filesStats` in your config file.
 
+config:
 ```
 {
 	"packages": {
@@ -404,11 +448,13 @@ If you want to temporary disable some packages from processing by SimQ, you can 
 your config file.
 
 
-`./config/setup.json`:
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"skip": true
+	"packages": {
+		"nameOfYourFirstModule": {
+			"skip": true
+		}
 	}
 }
 ```
@@ -450,7 +496,7 @@ Into file:
 In large applications or in applications with typescript (explanation above) it is good to turn on cache. SimQ using
 [cache-storage](https://npmjs.org/package/cache-storage) module.
 
-`./config/setup.json`:
+config:
 ```
 {
 	"cache": {
@@ -468,15 +514,18 @@ must be invalidated. If you also want to use cache in styles, you have to define
 Luckily you don't have to write every file on your own, but let [fs-finder](https://npmjs.org/package/fs-finder) do
 the job for you.
 
+config:
 ```
 {
-	"nameOfYourFirstModule": {
-		"style": {
-			"in": "./css/style.less",
-			"out": "./css/style.css",
-			"dependencies": [
-				"./css/<*.less$>"
-			]
+	"packages": {
+		"nameOfYourFirstModule": {
+			"style": {
+				"in": "./css/style.less",
+				"out": "./css/style.css",
+				"dependencies": [
+					"./css/<*.less$>"
+				]
+			}
 		}
 	}
 }
@@ -527,6 +576,14 @@ $ npm test
 ```
 
 ## Changelog
+
+* 5.6.0
+	+ Added support for configurable modules [[#14](https://github.com/sakren/node-simq/issues/14)]
+	+ Normalizing all paths in `require.resolve` (previously it was only for relative paths)
+	+ `require.resolve` throws an error if path does not exists (like in node.js) [[#19](https://github.com/sakren/node-simq/issues/19)]
+	+ Added support for standalone builds
+	+ Improvements in documentation
+	+ Updated dependencies
 
 * 5.5.1
 	+ Circular references are handled just like in node environment

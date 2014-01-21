@@ -2,9 +2,9 @@ expect = require('chai').expect
 path = require 'path'
 Info = require 'module-info'
 
-Package = require '../../../lib/Package/Package'
+Package = require '../../../../lib/Package/Package'
 
-dir = path.resolve(__dirname + '/../../data/package')
+dir = path.resolve(__dirname + '/../../../data/package')
 pckg = null
 
 describe 'Package/Package', ->

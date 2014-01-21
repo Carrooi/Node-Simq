@@ -8,13 +8,13 @@
 
   Info = require('module-info');
 
-  Package = require('../../../lib/Package/Package');
+  Package = require('../../../../lib/Package/Package');
 
-  Builder = require('../../../lib/Package/Builder');
+  Builder = require('../../../../lib/Package/Builder');
 
   SyntaxException = require('source-compiler/Exceptions/SyntaxException');
 
-  dir = path.resolve(__dirname + '/../../data/package');
+  dir = path.resolve(__dirname + '/../../../data/package');
 
   pckg = null;
 
@@ -84,7 +84,7 @@
           expect(err).to.be.an["instanceof"](SyntaxException);
           expect(err.message).to.be.equal('missing closing `}`');
           expect(err.line).to.be.equal(1);
-          expect(err.column).to.be.equal(0);
+          expect(err.column).to.be.equal(1);
           return done();
         }).done();
       });

@@ -1,8 +1,8 @@
-require('./Package/Package');
-require('./Package/Package.baseNamespace');
-require('./Package/Builder');
-require('./Package/Builder.baseNamespace');
-require('./SimQ');
-require('./Config/Configurator');
-require('./Package/Factory');
-require('./Commands');
+require('./lib/Package/Package');
+require('./lib/Package/Package.baseNamespace');
+require('./lib/Package/Builder');
+require('./lib/Package/Builder.baseNamespace');
+require('./lib/SimQ');
+require('./lib/Config/Configurator');
+require('./lib/Package/Factory');
+require('./lib/Commands');

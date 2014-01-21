@@ -8,7 +8,8 @@
 				"./test/*",
 				"./setup.js",
 				"./libs/jquery.js",
-				"advanced/other.js"
+				"advanced/other.js",
+				"configurable"
 			],
 			"run": [
 				"- ./libs/one.js",
@@ -34,5 +35,8 @@
 	},
 	"template": {
 		"jquerify": true
+	},
+	"debugger": {
+		"minify": false
 	}
 }

@@ -16,15 +16,15 @@
 
   http = require('http');
 
-  SimQ = require('../../lib/SimQ');
+  SimQ = require('../../../lib/SimQ');
 
-  Commands = require('../../lib/Commands');
+  Commands = require('../../../lib/Commands');
 
-  Factory = require('../../lib/Package/Factory');
+  Factory = require('../../../lib/Package/Factory');
 
-  Configurator = require('../../lib/Config/Configurator');
+  Configurator = require('../../../lib/Config/Configurator');
 
-  dir = path.resolve(__dirname + '/../data');
+  dir = path.resolve(__dirname + '/../../data');
 
   simq = null;
 

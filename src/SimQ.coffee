@@ -19,6 +19,8 @@ class SimQ
 
 	logger: null
 
+	expose: true
+
 
 	constructor: (@basePath) ->
 		@packages = {}
@@ -75,6 +77,7 @@ class SimQ
 		builder.jquerify = @jquerify
 		builder.minify = @minify
 		builder.stats = @stats
+		builder.expose = @expose
 
 		return builder.build()
 

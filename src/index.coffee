@@ -56,6 +56,7 @@ if argv.command in ['server', 'build', 'watch']
 		simq.jquerify = config.template.jquerify
 		simq.minify = config.debugger.minify
 		simq.stats = config.debugger.filesStats
+		simq.expose = config.debugger.expose
 
 		for name, pckg of config.packages
 			pckg = Factory.create(basePath, pckg)

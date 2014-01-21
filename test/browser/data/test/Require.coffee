@@ -47,6 +47,12 @@ describe 'require', ->
 		it 'should resolve name for package file withoud extension', ->
 			expect(require.resolve('/package')).to.be.equal('/package.json')
 
+		it 'should normalize absolute path', ->
+			expect(require.resolve('/app/../app/../app/Application')).to.be.equal('/app/Application.coffee')
+
+		it 'should throw an error if module with given path does not exists', ->
+			expect( -> require.resolve('./any-random-name')).to.throw(Error, 'Module ./any-random-name was not found.')
+
 	describe '#require()', ->
 		it 'should load simple module', ->
 			expect(require('/app/Application.coffee')).to.be.equal('Application')
@@ -112,6 +118,12 @@ describe 'require', ->
 			)
 
 			expect(require 'circular/first').to.be.equal('first')
+
+		it 'data from configurable module should be already in window', ->
+			expect(window.__configurable__module__).to.be.true
+
+		it 'should load module with alias from configurable module', ->
+			expect(require('shortcut')).to.be.equal('shortcut')
 
 	describe 'cache', ->
 		it 'should be empty', ->

@@ -2,10 +2,10 @@ expect = require('chai').expect
 path = require 'path'
 Info = require 'module-info'
 
-Package = require '../../../lib/Package/Package'
-Builder = require '../../../lib/Package/Builder'
+Package = require '../../../../lib/Package/Package'
+Builder = require '../../../../lib/Package/Builder'
 
-dir = path.resolve(__dirname + '/../../data/package')
+dir = path.resolve(__dirname + '/../../../data/package')
 pckg = null
 builder = null
 
