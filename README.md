@@ -577,6 +577,9 @@ $ npm test
 
 ## Changelog
 
+* 5.6.1
+	+ Bug with node modules required from another module
+
 * 5.6.0
 	+ Added support for configurable modules [[#14](https://github.com/sakren/node-simq/issues/14)]
 	+ Normalizing all paths in `require.resolve` (previously it was only for relative paths)
