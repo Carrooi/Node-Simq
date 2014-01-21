@@ -125,6 +125,9 @@ describe 'require', ->
 		it 'should load module with alias from configurable module', ->
 			expect(require('shortcut')).to.be.equal('shortcut')
 
+		it 'should call node module from another module', ->
+			expect(require('/libs/callShortcut')).to.be.equal('shortcut')
+
 	describe 'cache', ->
 		it 'should be empty', ->
 			expect(require.cache).to.be.eql({})

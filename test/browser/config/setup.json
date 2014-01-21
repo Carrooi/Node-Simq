@@ -8,6 +8,7 @@
 				"./test/*",
 				"./setup.js",
 				"./libs/jquery.js",
+				"./libs/callShortcut.coffee",
 				"advanced/other.js",
 				"configurable"
 			],
