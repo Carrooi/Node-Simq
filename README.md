@@ -577,6 +577,10 @@ $ npm test
 
 ## Changelog
 
+* 5.6.3
+	+ Optimized packages.ignore options
+	+ Bug with minifying styles when there were no styles [[#20](https://github.com/sakren/node-simq/issues/20)]
+
 * 5.6.2
 	+ Libraries were not called in window context
 
