@@ -21,8 +21,8 @@ describe 'Configurator', ->
 					package: './package.json'
 					npmModules: './node_modules'
 				ignore:
-					package: false
-					main: false
+					packageFiles: false
+					mainFiles: false
 				base: null
 				style: null
 				modules: []

@@ -54,8 +54,8 @@ class Package
 			npmModules: './node_modules'
 
 		@ignore =
-			package: false
-			main: false
+			packageFiles: false
+			mainFiles: false
 
 		@modules = []
 		@aliases = {}
@@ -73,10 +73,10 @@ class Package
 
 	prepare: ->
 		if @initialized == false
-			if !@ignore.package
+			if !@ignore.packageFiles
 				@addModule(@getPackageInfo().getPackagePath())
 
-			if !@ignore.main
+			if !@ignore.mainFiles
 				main = @getPackageInfo().getMainFile()
 				if main != null
 					@addModule(main)
@@ -94,14 +94,14 @@ class Package
 						throw new Error "Npm module '#{name}' not found. Did you run 'npm install .' command?"
 
 					pckg = new Info(_path)
-					name = pckg.getPackagePath()
 
-					@addModule(name)
-					@registerNodeModule(name)
+					if @ignore.packageFiles == false
+						@addModule(pckg.getPackagePath())
 
-					main = pckg.getMainFile()
-					if main != null
+					if @ignore.mainFiles == false && (main = pckg.getMainFile()) != null
 						@addModule(main)
+
+					@registerNodeModule(pckg.getPath())
 
 			@initialized = true
 
@@ -195,9 +195,12 @@ class Package
 				found = true
 				if fs.statSync(name).isDirectory()
 					pckg = new Info(name)
-					main = pckg.getMainFile()
-					if main != null then @modules.push(main)
-					@modules.push(pckg.getPackagePath())
+
+					if @ignore.mainFiles == false && (main = pckg.getMainFile()) != null
+						@modules.push(main)
+
+					if @ignore.packageFiles == false
+						@modules.push(pckg.getPackagePath())
 				else
 					@modules.push(name)
 			else

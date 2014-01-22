@@ -13,8 +13,10 @@ class PackageExtension extends Extension
 			package: './package.json'
 			npmModules: './node_modules'
 		ignore:
-			package: false
-			main: false
+			package: null	# deprecated
+			main: null		# deprecated
+			packageFiles: false
+			mainFiles: false
 		application: null	# deprecated
 		base: null
 		style:
@@ -50,6 +52,12 @@ class PackageExtension extends Extension
 			if pckg.fsModules != null
 				throw new Error 'Config: fsModules section is deprecated. Please take a look in new documentation.'
 
+			if pckg.ignore.package != null
+				throw new Error 'Config: ignore.package is deprecated. Please use ignore.packageFiles instead.'
+
+			if pckg.ignore.main != null
+				throw new Error 'Config: ignore.main is deprecated. Please use ignore.mainFiles instead.'
+
 			for lib, i in pckg.libraries.begin
 				pckg.libraries.begin[i] = '- ' + lib
 			for lib, i in pckg.libraries.end
@@ -66,6 +74,8 @@ class PackageExtension extends Extension
 			delete pckg.coreModules
 			delete pckg.fsModules
 			delete pckg.libraries
+			delete pckg.ignore.package
+			delete pckg.ignore.main
 
 		return config
 

@@ -29,8 +29,8 @@
             npmModules: './node_modules'
           },
           ignore: {
-            "package": false,
-            main: false
+            packageFiles: false,
+            mainFiles: false
           },
           base: null,
           style: null,
