@@ -64,7 +64,7 @@ class Builder extends Package
 				result += '\n\n/** run section **/\n\n' + data[1]
 
 			result = result.replace(/\n/g, '\n\t')
-			result = "(function() {\n\tvar __r__c__ = this;\n\t#{result}\n}).call({});"
+			result = "(function() {\n\tvar __r__c__ = {};\n\t#{result}\n}).call(this);"
 
 			if @minify == true
 				@log 'Minifying javascript'
@@ -109,10 +109,8 @@ class Builder extends Package
 					stats = JSON.stringify(@loadStats(modules))
 					result += "\n__r__c__.require.__setStats(#{stats});"
 
-				version = Info.fromFile(__filename).getVersion()
-				expose = if @expose == true then '\n\nwindow.require = __r__c__.require;' else ''
-
-				result += "\n__r__c__.require.version = '#{version}';#{expose}"
+				if @expose == true
+					result += '\n\nwindow.require = __r__c__.require;'
 
 				deferred.resolve(result)
 			).fail( (err) ->
@@ -175,8 +173,7 @@ class Builder extends Package
 			@log "Added file #{_path} to autorun"
 			Compiler.compileFile(_path).then( (data) =>
 				p = path.relative(@pckg.getBasePath(), _path)
-				data = data.replace(/\n/g, '\n\t')
-				data = "/** #{p} **/\n(function() {\n\t#{data}\n}).call(window);"
+				data = "/** #{p} **/\n#{data}"
 				deferred.resolve(data)
 			).fail( (err) ->
 				deferred.reject(err)
@@ -297,6 +294,7 @@ class Builder extends Package
 				deferred.reject(err)
 			else
 				data = data.replace(/\s+$/, '').replace(/;$/, '')
+				data = data.replace(/\%version\%/, Info.fromFile(__filename).getVersion())
 				deferred.resolve(data)
 		)
 
