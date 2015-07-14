@@ -583,6 +583,10 @@ $ npm test
 
 ## Changelog
 
+* 5.6.5
+	+ Move under Carrooi organization
+	+ Abandon project
+
 * 5.6.4
 	+ Much better expansion of other libraries
 
