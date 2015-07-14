@@ -1,6 +1,6 @@
 [![NPM version](https://badge.fury.io/js/simq.png)](http://badge.fury.io/js/simq)
-[![Dependency Status](https://gemnasium.com/sakren/node-simq.png)](https://gemnasium.com/sakren/node-simq)
-[![Build Status](https://travis-ci.org/sakren/node-simq.png?branch=master)](https://travis-ci.org/sakren/node-simq)
+[![Dependency Status](https://gemnasium.com/Carrooi/Node-Simq.png)](https://gemnasium.com/Carrooi/Node-Simq)
+[![Build Status](https://travis-ci.org/Carrooi/Node-Simq.png?branch=master)](https://travis-ci.org/Carrooi/Node-Simq)
 
 [![Donate](http://b.repl.ca/v1/donate-PayPal-brightgreen.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
 
@@ -582,7 +582,7 @@ $ npm test
 
 * 5.6.3
 	+ Optimized packages.ignore options
-	+ Bug with minifying styles when there were no styles [[#20](https://github.com/sakren/node-simq/issues/20)]
+	+ Bug with minifying styles when there were no styles [[#20](https://github.com/Carrooi/Node-Simq/issues/20)]
 
 * 5.6.2
 	+ Libraries were not called in window context
@@ -591,9 +591,9 @@ $ npm test
 	+ Bug with node modules required from another module
 
 * 5.6.0
-	+ Added support for configurable modules [[#14](https://github.com/sakren/node-simq/issues/14)]
+	+ Added support for configurable modules [[#14](https://github.com/Carrooi/Node-Simq/issues/14)]
 	+ Normalizing all paths in `require.resolve` (previously it was only for relative paths)
-	+ `require.resolve` throws an error if path does not exists (like in node.js) [[#19](https://github.com/sakren/node-simq/issues/19)]
+	+ `require.resolve` throws an error if path does not exists (like in node.js) [[#19](https://github.com/Carrooi/Node-Simq/issues/19)]
 	+ Added support for standalone builds
 	+ Improvements in documentation
 	+ Updated dependencies
