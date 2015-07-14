@@ -4,6 +4,12 @@
 
 [![Donate](http://b.repl.ca/v1/donate-PayPal-brightgreen.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
 
+## Help
+
+Unfortunately I don't have any more time to maintain this repository :-(
+
+![sad cat](https://raw.githubusercontent.com/sakren/sakren.github.io/master/images/sad-kitten.jpg)
+
 # SimQ - Common js module loader for browser (Simple reQuire)
 
 Join and minify all your javascript files into one (even remote ones) and use them in browser just like in node server.
