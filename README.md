@@ -1,8 +1,14 @@
-[![NPM version](https://badge.fury.io/js/simq.png)](http://badge.fury.io/js/simq)
-[![Dependency Status](https://gemnasium.com/sakren/node-simq.png)](https://gemnasium.com/sakren/node-simq)
-[![Build Status](https://travis-ci.org/sakren/node-simq.png?branch=master)](https://travis-ci.org/sakren/node-simq)
+[![NPM version](https://img.shields.io/npm/v/simq.svg?style=flat-square)](http://badge.fury.io/js/simq)
+[![Dependency Status](https://img.shields.io/gemnasium/Carrooi/Node-Simq.svg?style=flat-square)](https://gemnasium.com/Carrooi/Node-Simq)
+[![Build Status](https://img.shields.io/travis/Carrooi/Node-Simq.svg?style=flat-square)](https://travis-ci.org/Carrooi/Node-Simq)
 
-[![Donate](http://b.repl.ca/v1/donate-PayPal-brightgreen.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
+[![Donate](https://img.shields.io/badge/donate-PayPal-brightgreen.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
+
+## Help
+
+Unfortunately I don't have any more time to maintain this repository :-(
+
+![sad cat](https://raw.githubusercontent.com/sakren/sakren.github.io/master/images/sad-kitten.jpg)
 
 # SimQ - Common js module loader for browser (Simple reQuire)
 
@@ -577,12 +583,16 @@ $ npm test
 
 ## Changelog
 
+* 5.6.5
+	+ Move under Carrooi organization
+	+ Abandon project
+
 * 5.6.4
 	+ Much better expansion of other libraries
 
 * 5.6.3
 	+ Optimized packages.ignore options
-	+ Bug with minifying styles when there were no styles [[#20](https://github.com/sakren/node-simq/issues/20)]
+	+ Bug with minifying styles when there were no styles [[#20](https://github.com/Carrooi/Node-Simq/issues/20)]
 
 * 5.6.2
 	+ Libraries were not called in window context
@@ -591,9 +601,9 @@ $ npm test
 	+ Bug with node modules required from another module
 
 * 5.6.0
-	+ Added support for configurable modules [[#14](https://github.com/sakren/node-simq/issues/14)]
+	+ Added support for configurable modules [[#14](https://github.com/Carrooi/Node-Simq/issues/14)]
 	+ Normalizing all paths in `require.resolve` (previously it was only for relative paths)
-	+ `require.resolve` throws an error if path does not exists (like in node.js) [[#19](https://github.com/sakren/node-simq/issues/19)]
+	+ `require.resolve` throws an error if path does not exists (like in node.js) [[#19](https://github.com/Carrooi/Node-Simq/issues/19)]
 	+ Added support for standalone builds
 	+ Improvements in documentation
 	+ Updated dependencies
