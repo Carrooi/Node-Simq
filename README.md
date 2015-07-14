@@ -1,8 +1,8 @@
-[![NPM version](https://badge.fury.io/js/simq.png)](http://badge.fury.io/js/simq)
-[![Dependency Status](https://gemnasium.com/Carrooi/Node-Simq.png)](https://gemnasium.com/Carrooi/Node-Simq)
-[![Build Status](https://travis-ci.org/Carrooi/Node-Simq.png?branch=master)](https://travis-ci.org/Carrooi/Node-Simq)
+[![NPM version](https://img.shields.io/npm/v/simq.svg?style=flat-square)](http://badge.fury.io/js/simq)
+[![Dependency Status](https://img.shields.io/gemnasium/Carrooi/Node-Simq.svg?style=flat-square)](https://gemnasium.com/Carrooi/Node-Simq)
+[![Build Status](https://img.shields.io/travis/Carrooi/Node-Simq.svg?style=flat-square)](https://travis-ci.org/Carrooi/Node-Simq)
 
-[![Donate](http://b.repl.ca/v1/donate-PayPal-brightgreen.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
+[![Donate](https://img.shields.io/badge/donate-PayPal-brightgreen.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
 
 ## Help
 
