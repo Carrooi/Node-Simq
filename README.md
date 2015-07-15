@@ -4,7 +4,7 @@
 
 [![Donate](https://img.shields.io/badge/donate-PayPal-brightgreen.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTJNKVQLQJ6NG)
 
-## Help
+## Abandoned
 
 Unfortunately I don't have any more time to maintain this repository :-(
 
@@ -582,6 +582,9 @@ $ npm test
 ```
 
 ## Changelog
+
+* 5.6.6
+	+ Abandon project
 
 * 5.6.5
 	+ Move under Carrooi organization
